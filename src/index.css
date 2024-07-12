@@ -27,6 +27,10 @@
     src: url('/src/assets/fonts/NanumSquare/NanumSquareRoundB.ttf') format('truetype');
   }
   
+  .font-NanumSquareRoundB {
+    font-family: 'NanumSquareRoundB', sans-serif;
+  }
+
   @font-face {
     font-family: 'NanumSquareRoundEB';
     src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundEB.ttf') format('truetype');
