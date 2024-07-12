@@ -1,10 +1,12 @@
 import React from 'react';
-import Navbar from '../components/Navbar.tsx'; 
+import Navbar from '../components/Navbar';
 
 const SignupPage = () => {
-    return <div>
+  return (
+    <div>
       <Navbar />
-    </div>;
-  }
+    </div>
+  );
+};
 
 export default SignupPage;
