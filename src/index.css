@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'NanumSquareB';
-    src: url('/src/assets/fonts/NanumSquare/NanumSquareB.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'NanumSquareEB';
-    src: url('/src/assets/fonts/NanumSquare/NanumSquareEB.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'NanumSquareL';
-    src: url('/src/assets/fonts/NanumSquare/NanumSquareL.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'NanumSquareR';
-    src: url('/src/assets/fonts/NanumSquareRound/NanumSquareR.ttf') format('truetype');
-  }
+  font-family: 'NanumSquareB';
+  src: url('/src/assets/fonts/NanumSquare/NanumSquareB.ttf') format('truetype');
+}
 
-  @font-face {
-    font-family: 'NanumSquareRoundB';
-    src: url('/src/assets/fonts/NanumSquare/NanumSquareRoundB.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'NanumSquareRoundEB';
-    src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundEB.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'NanumSquareRoundL';
-    src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundL.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'NanumSquareRoundR';
-    src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundR.ttf') format('truetype');
-  }
+@font-face {
+  font-family: 'NanumSquareEB';
+  src: url('/src/assets/fonts/NanumSquare/NanumSquareEB.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NanumSquareL';
+  src: url('/src/assets/fonts/NanumSquare/NanumSquareL.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NanumSquareR';
+  src: url('/src/assets/fonts/NanumSquareRound/NanumSquareR.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NanumSquareRoundB';
+  src: url('/src/assets/fonts/NanumSquare/NanumSquareRoundB.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NanumSquareRoundEB';
+  src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundEB.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NanumSquareRoundL';
+  src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundL.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NanumSquareRoundR';
+  src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundR.ttf') format('truetype');
+}
