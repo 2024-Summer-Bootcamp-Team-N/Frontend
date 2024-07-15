@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import LogoWhite from '../assets/img/LogoWhite.svg';
 //import { link } from 'react-router-dom';
 interface LoginProps {
   onSignupClick: () => void;
@@ -36,9 +37,12 @@ function Login({ onSignupClick, onClose }: LoginProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-0">
+    <div className="flex flex-col h-screen justify-center items-center">
+      <div className="flex mb-[85%]">
+        <img src={LogoWhite} alt="Logo" className="flex object-cover w-[650px] h-[auto] " />
+      </div>
       <div
-        className="relative w-[410px] h-[375px] bg-white rounded-lg opacity-95 font-nanumSquareRoundR"
+        className="absolute justify-center items-center w-[410px] h-[375px] bg-white rounded-lg opacity-95 font-nanumSquareRoundR"
         onClick={(e) => e.stopPropagation()}
         style={{
           filter: 'drop-shadow(0px 2px 5px rgba(50,50,93,0.25)) drop-shadow(0px 1px 3px rgba(0,0,0,0.3))',
