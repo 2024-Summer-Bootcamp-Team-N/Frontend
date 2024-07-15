@@ -3,7 +3,7 @@ import Signup from '../components/Signup';
 import Login from '../components/Login';
 import Main from '../assets/img/Main.svg'; // 배경 이미지 import
 import LogoWhite from '../assets/img/LogoWhite.svg'; // 로고 이미지 import
-import Navbar from '../components/Navbar.tsx'; 
+import Navbar from '../components/Navbar.tsx';
 
 function LoginPage() {
   const [showSignupModal, setShowSignupModal] = useState(false);
