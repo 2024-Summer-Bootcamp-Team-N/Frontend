@@ -1,8 +1,8 @@
-import Navbar from '../components/Navbar.tsx'; 
+import Paper from '../components/ContractPaper.tsx'; 
 
 const MapPage = () => {
   return <div>
-      <Navbar />
+      <Paper />
     </div>;
 };
 
