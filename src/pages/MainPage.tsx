@@ -9,7 +9,7 @@ import SearchBtnBottom from '../assets/img/SearchBtnBottom.svg';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar.tsx'; 
+import Navbar from '../components/Navbar.tsx';
 
 const MainPage = () => {
   useEffect(() => {
@@ -27,7 +27,11 @@ const MainPage = () => {
         <img src={Main} className="w-[1920px] h-[1917.21px] absolute left-0 top-[-390px] object-cover" alt="Main" />
         <Link to="/login">
           <button className="w-[199px] h-[78px] absolute left-[860px] top-[819px] opacity-75 rounded-[62.5px] bg-white cursor-pointer relative">
-            <img src={SearchBtnTop} alt="내 집 찾기 버튼" className="w-full h-full object-cover absolute top-0 left-0" />
+            <img
+              src={SearchBtnTop}
+              alt="내 집 찾기 버튼"
+              className="w-full h-full object-cover absolute top-0 left-0"
+            />
             <div className="flex justify-start items-center w-[104px] absolute left-[60px] top-[22px]">
               <p className="flex-grow-0 flex-shrink-0 text-2xl font-NanumSquareRoundB text-center text-[#000c1e]/80">
                 내 집 찾기
