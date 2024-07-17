@@ -19,12 +19,12 @@
 
 @font-face {
   font-family: 'NanumSquareR';
-  src: url('/src/assets/fonts/NanumSquareRound/NanumSquareR.ttf') format('truetype');
+  src: url('/src/assets/fonts/NanumSquare/NanumSquareR.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'NanumSquareRoundB';
-  src: url('/src/assets/fonts/NanumSquare/NanumSquareRoundB.ttf') format('truetype');
+  src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundB.ttf') format('truetype');
 }
 
 @font-face {

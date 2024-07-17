@@ -4,12 +4,12 @@ import Login from '../components/Login';
 import Main from '../assets/img/Main.svg'; // 배경 이미지 import
 import Navbar from '../components/Navbar.tsx';
 
-function LoginPage() {
-  const [showSignupModal, setShowSignupModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(true); // 페이지 로드 시 로그인 모달 표시
+function SignupPage() {
+  const [showSignupModal, setShowSignupModal] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false); // 페이지 로드 시 로그인 모달 표시
 
   useEffect(() => {
-    setShowLoginModal(true); // 페이지 로드 시 로그인 모달 표시
+    setShowSignupModal(true); // 페이지 로드 시 로그인 모달 표시
   }, []);
 
   const handleSignupClick = () => {
@@ -36,4 +36,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignupPage;

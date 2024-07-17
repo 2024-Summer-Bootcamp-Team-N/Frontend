@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import LogoWhite from '../assets/img/LogoWhite.svg';
 interface SignupProps {
   onClose: () => void;
 }
@@ -48,16 +48,19 @@ function Signup({ onClose }: SignupProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-0">
+    <div className="flex flex-col h-screen justify-center items-center">
+      <div className="flex mb-[80%]">
+        <img src={LogoWhite} alt="Logo" className="flex object-cover w-[650px] h-[auto] " />
+      </div>
       <div
-        className="relative w-[456px] h-[auto] bg-white rounded-lg opacity-95 font-nanumSquareRoundR"
+        className="absolute justify-center items-center mt-[140px] w-[456px] h-[auto] bg-white rounded-lg opacity-95 font-nanumSquareRoundR"
         onClick={(e) => e.stopPropagation()}
         style={{
           filter: 'drop-shadow(0px 2px 5px rgba(50,50,93,0.25)) drop-shadow(0px 1px 3px rgba(0,0,0,0.3))',
         }}
       >
         <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-8 gap-2">
-          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4 gap-2">
+          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4[px] gap-2">
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
               ID
             </label>
@@ -70,9 +73,9 @@ function Signup({ onClose }: SignupProps) {
                 onChange={(e) => setId(e.target.value)}
               />
             </div>
-            {Errors.id && <p className="text-red-500 text-sm">{Errors.id}</p>}
           </div>
-          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4 gap-2">
+          {Errors.id && <p className="text-red-500 text-sm">{Errors.id}</p>}
+          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4[px] gap-2">
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
               Name
             </label>
@@ -85,9 +88,9 @@ function Signup({ onClose }: SignupProps) {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            {Errors.name && <p className="text-red-500 text-sm">{Errors.name}</p>}
           </div>
-          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4 gap-2">
+          {Errors.name && <p className="text-red-500 text-sm">{Errors.name}</p>}
+          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4[px] gap-2">
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
               Password
             </label>
@@ -100,8 +103,8 @@ function Signup({ onClose }: SignupProps) {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            {Errors.password && <p className="text-red-500 text-sm">{Errors.password}</p>}
           </div>
+          {Errors.password && <p className="text-red-500 text-sm">{Errors.password}</p>}
           <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[41px] rounded-lg bg-white border border-[#d9d9d9] mt-[4px]">
             <input
               type="password"
@@ -113,6 +116,7 @@ function Signup({ onClose }: SignupProps) {
           </div>
           {Errors.confirmPassword && <p className="text-red-500 text-sm">{Errors.confirmPassword}</p>}
         </div>
+
         <div className="flex justify-start items-center w-[362px] mx-auto mt-6 gap-4">
           <div
             className="flex justify-center items-center flex-grow relative overflow-hidden gap-2 p-3 h-[40px] mb-[40px] rounded-lg bg-[#00a1e7] border border-[#00a1e7]"
