@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Main from '../assets/img/Main.svg';
 import Main1 from '../assets/img/Main1.svg';
 import Main2 from '../assets/img/Main2.svg';

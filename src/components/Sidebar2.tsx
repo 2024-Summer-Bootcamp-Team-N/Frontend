@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
-
+import Graph1 from '../assets/img/Graph1.svg';
+import Graph2 from '../assets/img/Graph2.svg';
+import Avatar from '../assets/img/Avatar.svg';
 interface Sidebar2Props {
   onClose: () => void;
 }
@@ -19,17 +21,10 @@ const Sidebar2 = ({ onClose }: Sidebar2Props) => {
   }, [onClose]);
 
   return (
-    <div className="flex flex-col sidebar2-modal fixed bottom-0 right-[424px] w-[424px] h-[886px] bg-white border-[1.5px] border-[#EBEBEB]">
-      <div className="flex w-[424px] h-[276px] items-center overflow-hidden bg-[#e0e0e0]">
-        <img
-          src="매물이미지.jpeg"
-          alt="추가예정"
-          className="flex flex-col items-center w-full h-full border-[2px] flex object-cover"
-        />
-        <button
-          onClick={onClose}
-          className="absolute -ml-[2px] -left-10 top-7 bg-[#fefefe] opacity-70 hover:bg-gray-200"
-        >
+    <div className="flex flex-col sidebar2-modal fixed bottom-0 right-[424px] w-[424px] h-[886px] bg-white border-[1.5px] border-[#EBEBEB] overflow-y-auto">
+      <div className="flex w-full h-full items-center  bg-[#e0e0e0]">
+        <img src={Avatar} alt="매물 사진" className="flex flex-col items-center w-full h-full border-[2px]" />
+        <button onClick={onClose} className="absolute top-1 opacity-70">
           <svg
             width={42}
             height={42}
@@ -45,13 +40,13 @@ const Sidebar2 = ({ onClose }: Sidebar2Props) => {
               strokeWidth="2.59259"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="opacity-100"
+              className="opacity-100 z-50"
             />
           </svg>
         </button>
       </div>
       <div>
-        <div className="flex flex-row justify-start w-[424px] h-[54px] bg-white border border-[#ebebeb]">
+        <div className="flex flex-row justify-start w-full h-[54px] bg-white border border-[#ebebeb]">
           <div className="flex flex-col ml-[13px] h-full">
             <p className="w-[109px] h-full text-[15px] font-bold text-center mt-[14px] text-black">매물정보</p>
             <svg
@@ -69,7 +64,7 @@ const Sidebar2 = ({ onClose }: Sidebar2Props) => {
         </div>
       </div>
       <div className="flex justify-center items-center w-full p-4">
-        <table className="table-auto border-collapse bg-white text-[15px] font-nanumSquareRoundB w-full">
+        <table className="table-auto border-collapse bg-white text-[14px] font-nanumSquareRoundB w-full">
           <tbody>
             <tr className="border-t border-b ">
               <td className="border-t text-left bg-[#FAFAFA] text-[#848484] p-[7px]">소재지</td>
@@ -128,6 +123,8 @@ const Sidebar2 = ({ onClose }: Sidebar2Props) => {
           </tbody>
         </table>
       </div>
+      <img src={Graph1} className="flex w-full" alt="그래프" />
+      <img src={Graph2} className="flex w-full" alt="그래프" />
     </div>
   );
 };
