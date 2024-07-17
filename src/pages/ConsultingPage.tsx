@@ -1,11 +1,9 @@
-// src/pages/ConsultingPage.tsx
-import React from 'react';
-import Consulting from '../components/Consulting';
-import Avatar from '../assets/img/Avatar.svg';
+import Navbar2 from '../components/Navbar2';
+
 const ConsultingPage = () => {
   return (
     <div className="flex flex-col h-screen">
-      <Consulting />
+      <Navbar2 />
     </div>
   );
 };
