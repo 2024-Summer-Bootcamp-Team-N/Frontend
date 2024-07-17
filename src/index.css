@@ -36,7 +36,7 @@
   font-family: 'NanumSquareRoundL';
   src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundL.ttf') format('truetype');
 }
-
+  
 @font-face {
   font-family: 'NanumSquareRoundR';
   src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundR.ttf') format('truetype');
