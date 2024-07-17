@@ -15,11 +15,11 @@ const MapPage = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full">
+      <div className="flex flex-col w-full h-screen">
         <div className="flex w-full h-[72px]">
           <Navbar2 />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex w-full h-full justify-center items-center">
           {isSidebarOpen && <Sidebar onClose={handleCloseSidebar} />} {/* Sidebar를 열고 닫는 기능을 추가 */}
           <div onClick={handleOpenSidebar} className="cursor-pointer">
             <button
