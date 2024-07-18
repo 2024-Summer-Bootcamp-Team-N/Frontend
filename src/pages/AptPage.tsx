@@ -67,13 +67,13 @@ const AptPage = () => {
             <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
           </button>
         </Link>
-        <Link to="house">
+        <Link to="/house">
           <button className="relative w-[130px] h-[61px] flex items-center justify-center">
             빌라 ∙ 주택
             <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
           </button>
         </Link>
-        <Link to="room">
+        <Link to="/room">
           <button className="relative w-[130px] h-[61px] flex items-center justify-center">
             원룸 ∙ 투룸
             <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
