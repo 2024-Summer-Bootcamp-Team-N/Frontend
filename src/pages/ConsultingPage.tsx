@@ -1,6 +1,8 @@
 import React from 'react';
 import Avatar from '../assets/img/Avatar.svg';
 import Navbar2 from '../components/Navbar2.tsx';
+import Questions from '../assets/img/Questions.svg';
+import { Link } from 'react-router-dom';
 const ConsultingPage: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-screen">
@@ -33,10 +35,15 @@ const ConsultingPage: React.FC = () => {
           </div>
           <div className="relative group">
             <button className="mt-4 font-nanumSquareRoundR">💡 이런 질문을 해보세요!</button>
-            {Avatar && (
-              <>
-                <img className="absolute invisible group-hover:visible" alt="호버질문" src={Avatar} />
-              </>
+            {Questions && (
+              <div className="relative invisible group-hover:visible group-hover:flex">
+                <img
+                  className="h-auto transition-transform duration-300 ease-in-out"
+                  alt="호버질문"
+                  src={Questions}
+                  style={{ width: '300px', height: 'auto' }} // 이미지 크기를 조절할 수 있습니다.
+                />
+              </div>
             )}
           </div>
         </div>
@@ -58,7 +65,7 @@ const ConsultingPage: React.FC = () => {
             </div>
             <div className="flex flex-row justify-end w-full p-4 space-y-4 overflow-y-auto flex-grow">
               <div className="flex max-w-[40%] py-3 px-4 bg-[#357FFF] rounded-2xl">
-                <p className="text-lg font-nanumSquareRoundR text-white">시그니엘.aㅇㅁㄹㄴㅁㅇ</p>
+                <p className="text-lg font-nanumSquareRoundR text-white">시그니엘.</p>
               </div>
             </div>
             <div className="flex flex-row w-full p-4 space-y-4 overflow-y-auto flex-grow">
@@ -67,16 +74,15 @@ const ConsultingPage: React.FC = () => {
                 <p className="flex w-full ml-[10px] font-nanumSquareRoundR text-[#8e8d94]">집피티</p>
                 <div className="flex max-w-[40%] py-3 px-4 bg-[#F5F5F5] rounded-2xl">
                   <p className="text-lg font-nanumSquareRoundR text-black">
-                    짧아도 글 감싸도록 말풍선 최대width만고정함.
+                    해당 지역은 전월세전환율이 ~입니다. 월세가 전세보다 상대적으로 불리한 조건일수도 있어요. 전세도
+                    고려해보시면 좋을듯요 or 월세로 입주하는건 좋은 선택인 것 같아요.
                   </p>
                 </div>
               </div>
             </div>
             <div className="flex flex-row justify-end w-full p-4 space-y-4 overflow-y-auto flex-grow">
               <div className="flex max-w-[40%] py-3 px-4 bg-[#357FFF] rounded-2xl">
-                <p className="text-lg font-nanumSquareRoundR text-white">
-                  이제dddddddddddddddddddddddddddㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
-                </p>
+                <p className="text-lg font-nanumSquareRoundR text-white">시그니엘.</p>
               </div>
             </div>
             <div className="flex flex-row justify-start w-full p-4 space-y-4 overflow-y-auto flex-grow">
@@ -122,27 +128,32 @@ const ConsultingPage: React.FC = () => {
               </div>
             </div>
             <div className="flex flex-row">
-              <button className="flex flex-row ml-2 p-2 bg-[#FEFEFE] text-[#555] font-nanumSquareRoundEB rounded-lg">
-                <div className="flex flex-col">
-                  계약하기
-                  <svg width={66} height={3} viewBox="0 0 58 3" preserveAspectRatio="none">
-                    <path d="M-0.00390625 1.5H58.0047" stroke="#555" stroke-width="1.5" />
-                  </svg>
-                </div>
-                <div className="flex items-center">
-                  <svg
-                    className="flex my-1.5 ml-0.5"
-                    width={16}
-                    height={16}
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="xMidYMid meet"
-                  >
-                    <path d="M12.175 7L6.575 1.4L8 0L16 8L8 16L6.575 14.6L12.175 9L0 9L0 7L12.175 7Z" fill="#555555" />
-                  </svg>
-                </div>
-              </button>
+              <Link to="/contract">
+                <button className="flex flex-row ml-2 p-2 bg-[#FEFEFE] text-[#555] font-nanumSquareRoundEB rounded-lg">
+                  <div className="flex flex-col">
+                    계약하기
+                    <svg width={66} height={3} viewBox="0 0 58 3" preserveAspectRatio="none">
+                      <path d="M-0.00390625 1.5H58.0047" stroke="#555" stroke-width="1.5" />
+                    </svg>
+                  </div>
+                  <div className="flex items-center">
+                    <svg
+                      className="flex my-1.5 ml-0.5"
+                      width={16}
+                      height={16}
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      preserveAspectRatio="xMidYMid meet"
+                    >
+                      <path
+                        d="M12.175 7L6.575 1.4L8 0L16 8L8 16L6.575 14.6L12.175 9L0 9L0 7L12.175 7Z"
+                        fill="#555555"
+                      />
+                    </svg>
+                  </div>
+                </button>
+              </Link>
             </div>
           </div>
         </div>

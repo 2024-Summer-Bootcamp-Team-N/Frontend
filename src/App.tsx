@@ -23,6 +23,7 @@ function App() {
         <Route path="/storage" element={<StoragePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/consulting" element={<ConsultingPage />} />
+        <Route path="/contract" element={<ContractPage />} />
       </Routes>
     </BrowserRouter>
   );

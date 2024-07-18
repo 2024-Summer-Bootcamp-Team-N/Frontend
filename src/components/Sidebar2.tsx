@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import Graph1 from '../assets/img/Graph1.svg';
-import Graph2 from '../assets/img/Graph2.svg';
-import Avatar from '../assets/img/Avatar.svg';
+// import Graph1 from '../assets/img/Graph1.svg';
+// import Graph2 from '../assets/img/Graph2.svg';
+import Inside from '../assets/img/Inside.svg';
 interface Sidebar2Props {
   onClose: () => void;
 }
@@ -22,8 +22,8 @@ const Sidebar2 = ({ onClose }: Sidebar2Props) => {
 
   return (
     <div className="flex flex-col sidebar2-modal fixed bottom-0 right-[424px] w-[424px] h-[886px] bg-white border-[1.5px] border-[#EBEBEB] overflow-y-auto">
-      <div className="flex w-full h-full items-center  bg-[#e0e0e0]">
-        <img src={Avatar} alt="매물 사진" className="flex flex-col items-center w-full h-full border-[2px]" />
+      <div className="flex w-auto h-auto items-center  bg-[#e0e0e0]">
+        <img src={Inside} alt="매물 사진" className="flex flex-col items-center w-full h-full " />
         <button onClick={onClose} className="absolute top-1 opacity-70">
           <svg
             width={42}
@@ -123,8 +123,8 @@ const Sidebar2 = ({ onClose }: Sidebar2Props) => {
           </tbody>
         </table>
       </div>
-      <img src={Graph1} className="flex w-full" alt="그래프" />
-      <img src={Graph2} className="flex w-full" alt="그래프" />
+      {/* <img src={Graph1} className="flex w-full" alt="그래프" />
+      <img src={Graph2} className="flex w-full" alt="그래프" /> */}
     </div>
   );
 };
