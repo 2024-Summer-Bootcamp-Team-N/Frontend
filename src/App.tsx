@@ -7,6 +7,7 @@ import OfficePage from './pages/OfficePage';
 import HousePage from './pages/HousePage';
 import RoomPage from './pages/RoomPage';
 import StoragePage from './pages/StoragePage';
+import SignupPage from './pages/SignupPage';
 import ConsultingPage from './pages/ConsultingPage';
 
 function App() {
