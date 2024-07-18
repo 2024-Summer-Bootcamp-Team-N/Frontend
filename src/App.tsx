@@ -5,7 +5,7 @@ import LoginPage from './pages/LoginPage';
 import MapPage from './pages/MapPage';
 import SignupPage from './pages/SignupPage';
 import StoragePage from './pages/StoragePage';
-import SignupPage from './pages/SignupPage';
+//import SignupPage from './pages/SignupPage';
 import ConsultingPage from './pages/ConsultingPage';
 
 function App() {
