@@ -3,7 +3,7 @@ import LogoBlue from '../assets/img/LogoBlue.svg';
 
 const Navbar2 = () => {
   return (
-    <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 flex border-b-[2px] border-[#EBEBEB] items-center p-1.5 font-NanumSquareRoundB">
+    <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 flex border-b-[1.5px] border-[#EBEBEB] items-center p-1.5 font-NanumSquareRoundB">
       <div className="flex justify-between w-full px-4">
         <div className="flex">
           <Link to="/">
