@@ -1,79 +1,54 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import MapPlus from '../assets/img/MapPlus.svg';
-import MapMinus from '../assets/img/MapMinus.svg';
 import RegionOption from '../assets/img/RegionOption.svg';
 import SellingOption from '../assets/img/SellingOption.svg';
 import InactiveOption from '../assets/img/InactiveOption.svg';
 import ActiveOption from '../assets/img/ActiveOption.svg';
-import Navbar2 from '../components/Navbar2.tsx';
-import SellingType from '../components/SellingType.tsx';
+import Navbar2 from '../components/Navbar2';
+import SellingTypeModal from '../components/SellingTypeModal';
+import ParkingNumberModal from '../components/ParkingNumberModal';
+import RoomNumberModal from '../components/RoomNumberModal';
+import RegionModal from '../components/RegionModal';
+import Map from '../components/Map';
+import SellingOption2 from '../assets/img/SellingOption2.svg';
 
 const AptPage = () => {
   const [isActive, setIsActive] = useState(false);
+  const [activeModal, setActiveModal] = useState<'sellingType' | 'parkingNumber' | 'roomNumber' | 'region' | null>(
+    null,
+  );
+
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
     setIsActive(!isActive);
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleButtonClick = () => {
-    setIsModalOpen(true);
+  const handleButtonClick = (modal: 'sellingType' | 'parkingNumber' | 'roomNumber' | 'region') => {
+    setActiveModal(modal);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setActiveModal(null);
   };
 
   useEffect(() => {
-    // Kakao Maps API script 태그 생성
-    const kakaoMapScript = document.createElement('script');
-    kakaoMapScript.async = false;
-    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&autoload=false`;
-    document.head.appendChild(kakaoMapScript);
-
-    // Kakao Maps API 로드 후 실행될 함수
-    const onLoadKakaoAPI = () => {
-      if (window.kakao && window.kakao.maps) {
-        window.kakao.maps.load(() => {
-          const container = document.getElementById('map') as HTMLElement;
-          const options = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3,
-          };
-
-          // 지도 생성
-          const map = new window.kakao.maps.Map(container, options);
-
-          // ZoomControl 함수 정의
-          const zoomIn = () => {
-            map.setLevel(map.getLevel() - 1);
-          };
-
-          const zoomOut = () => {
-            map.setLevel(map.getLevel() + 1);
-          };
-
-          // ZoomControl 버튼 클릭 이벤트 처리
-          (window as any).zoomIn = zoomIn;
-          (window as any).zoomOut = zoomOut;
-        });
-      } else {
-        console.error('Kakao Maps API failed to load.');
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        handleCloseModal();
       }
     };
 
-    kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
+    if (activeModal) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
 
-    // Cleanup 함수: 컴포넌트 언마운트 시 호출됨
     return () => {
-      kakaoMapScript.removeEventListener('load', onLoadKakaoAPI);
-      document.head.removeChild(kakaoMapScript);
-      (window as any).zoomIn = undefined;
-      (window as any).zoomOut = undefined;
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [activeModal]);
 
   return (
     <div className="flex flex-col min-h-screen w-full h-full overflow-hidden bg-white">
@@ -106,57 +81,64 @@ const AptPage = () => {
         </Link>
       </div>
       {/* options */}
-      <div className="flex w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[16px] text-black">
-        <button className="relative flex ml-[30px]">
+      <div className="flex relative w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[16px] text-black">
+        <button className="relative flex ml-[30px]" onClick={() => handleButtonClick('region')}>
+          <img src={RegionOption} alt="지역 설정" />
           <div className="absolute flex w-full h-full flex-row justify-end items-center">
             <p className="flex w-[75px] h-[30px] items-center">시/도</p>
             <p className="flex w-[90px] h-[30px] items-center">시/군/구</p>
             <p className="flex w-[75px] h-[30px] items-center mr-[5px]">읍/면/동</p>
           </div>
-          <img src={RegionOption} alt="지역 설정" />
         </button>
+        {activeModal === 'region' && <RegionModal ref={modalRef} isOpen={true} onClose={handleCloseModal} />}
         <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
-        <button className="relative flex mr-[10px]" onClick={handleButtonClick}>
-          <img src={SellingOption} alt="거래 유형" />
-          <p className="absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] text-black">
-            월세
+        <button className="relative flex mr-[10px]" onClick={() => handleButtonClick('sellingType')}>
+          <img src={activeModal === 'sellingType' ? SellingOption2 : SellingOption} alt="거래 유형" />
+          <p
+            className={`absolute flex w-full h-full ml-[20px] items-center font-[NanumSquareRoundB] text-[16px] ${
+              activeModal === 'sellingType' ? 'text-[#357FFF]' : 'text-black'
+            }`}
+          >
+            거래유형
           </p>
         </button>
-        <SellingType isOpen={isModalOpen} onClose={handleCloseModal} />
-        <button className="relative flex mr-[10px]" onClick={handleClick}>
-          <img src={SellingOption} alt="옵션" />
-          <p className="absolute flex w-full h-full ml-[20px] items-center font-[NanumSquareRoundB] text-[16px] text-black">
+        {activeModal === 'sellingType' && <SellingTypeModal ref={modalRef} isOpen={true} onClose={handleCloseModal} />}
+        <button className="relative flex mr-[10px]" onClick={() => handleButtonClick('parkingNumber')}>
+          <img src={activeModal === 'parkingNumber' ? SellingOption2 : SellingOption} alt="옵션" />
+          <p
+            className={`absolute flex w-full h-full ml-[20px] items-center font-[NanumSquareRoundB] text-[16px] ${
+              activeModal === 'parkingNumber' ? 'text-[#357FFF]' : 'text-black'
+            }`}
+          >
             주차대수
           </p>
         </button>
-        <button className="relative flex" onClick={handleClick}>
-          <img src={SellingOption} alt="옵션" />
-          <p className="absolute flex w-full h-full ml-[37px] items-center font-[NanumSquareRoundB] text-[16px] text-black">
+        {activeModal === 'parkingNumber' && <ParkingNumberModal isOpen={true} onClose={handleCloseModal} />}
+        <button className="relative flex" onClick={() => handleButtonClick('roomNumber')}>
+          <img src={activeModal === 'roomNumber' ? SellingOption2 : SellingOption} alt="옵션" />
+          <p
+            className={`absolute flex w-full h-full ml-[37px] items-center font-[NanumSquareRoundB] text-[16px] ${
+              activeModal === 'roomNumber' ? 'text-[#357FFF]' : 'text-black'
+            }`}
+          >
             방수
           </p>
         </button>
+        {activeModal === 'roomNumber' && <RoomNumberModal isOpen={true} onClose={handleCloseModal} />}
         <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
         <button className="relative flex mr-[10px]" onClick={handleClick}>
           <img src={isActive ? ActiveOption : InactiveOption} alt="옵션" />
           <p
-            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${isActive ? 'text-[#357FFF]' : 'text-black'}`}
+            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
+              isActive ? 'text-[#357FFF]' : 'text-black'
+            }`}
           >
             단기임대
           </p>
         </button>
       </div>
       {/* 지도 표시 영역 */}
-      <div id="map" className="flex flex-row flex-grow w-full h-full">
-        {/* ZoomControl */}
-        <div className="flex flex-col custom_zoomcontrol z-10 mt-[20px] ml-[20px]">
-          <button onClick={() => window.zoomIn()} className="flex">
-            <img src={MapPlus} alt="확대" />
-          </button>
-          <button onClick={() => window.zoomOut()} className="flex">
-            <img src={MapMinus} alt="축소" />
-          </button>
-        </div>
-      </div>
+      <Map />
     </div>
   );
 };
