@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import MapPlus from '../assets/img/MapPlus.svg';
 import MapMinus from '../assets/img/MapMinus.svg';
+import Sidebar from './Sidebar.tsx';
 
 const Map = () => {
   useEffect(() => {
@@ -52,6 +53,16 @@ const Map = () => {
     };
   }, []);
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleOpenSidebar = () => {
+    setIsSidebarOpen(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <div id="map" className="flex flex-row flex-grow w-full h-full">
       {/* ZoomControl */}
@@ -61,6 +72,16 @@ const Map = () => {
         </button>
         <button onClick={() => (window as any).zoomOut()} className="flex">
           <img src={MapMinus} alt="축소" />
+        </button>
+        {isSidebarOpen && <Sidebar onClose={handleCloseSidebar} />}
+        <button
+          onClick={handleOpenSidebar}
+          className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
+          style={{
+            boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',
+          }}
+        >
+          <p className="flex text-[13px] font-bold text-black">매물</p>
         </button>
       </div>
     </div>

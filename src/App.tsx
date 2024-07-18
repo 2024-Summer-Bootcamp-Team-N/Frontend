@@ -8,6 +8,7 @@ import HousePage from './pages/HousePage';
 import RoomPage from './pages/RoomPage';
 import StoragePage from './pages/StoragePage';
 import SignupPage from './pages/SignupPage';
+import ConsultingPage from './pages/ConsultingPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/room" element={<RoomPage />} />
         <Route path="/storage" element={<StoragePage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/consulting" element={<ConsultingPage />} />
       </Routes>
     </BrowserRouter>
   );
