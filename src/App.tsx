@@ -5,8 +5,8 @@ import LoginPage from './pages/LoginPage';
 import MapPage from './pages/MapPage';
 import SignupPage from './pages/SignupPage';
 import StoragePage from './pages/StoragePage';
-import SignupPage from './pages/SignupPage';
 import ConsultingPage from './pages/ConsultingPage';
+import ContractPage from './pages/ContractPage'
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
         <Route path="/storage" element={<StoragePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/consulting" element={<ConsultingPage />} />
+        <Route path="/contract" element={<ContractPage/>} />
       </Routes>
     </BrowserRouter>
   );
