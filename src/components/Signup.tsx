@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoWhite from '../assets/img/LogoWhite.svg';
+import axios from 'axios';
 interface SignupProps {
   onClose: () => void;
 }
@@ -40,13 +41,40 @@ function Signup({ onClose }: SignupProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (validate()) {
-      onClose();
-      navigate('/map'); // MapPage로 이동
+      try {
+        const response = await axios.post('http://localhost:8000/api/v1/users/signup', {
+          auth_id: id,
+          name,
+          password,
+          confirm_password: confirmPassword,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log(response.data); // 서버에서 반환한 응답 데이터
+
+        onClose();
+        navigate('/map'); // 회원가입 후 이동할 페이지 경로
+      } catch (error) {
+        if (error.response) {
+          console.error('Error response data:', error.response.data);
+          console.error('Error response status:', error.response.status);
+          console.error('Error response headers:', error.response.headers);
+          // 서버에서 반환한 에러 메시지를 사용자에게 표시
+          setErrors({ ...errors, server: error.response.data });
+        } else if (error.request) {
+          console.error('Error request:', error.request);
+        } else {
+          console.error('Error message:', error.message);
+        }
+        console.error('Error config:', error.config);
+      }
     }
   };
-
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <div className="flex mb-[80%]">

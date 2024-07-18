@@ -36,8 +36,16 @@
   font-family: 'NanumSquareRoundL';
   src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundL.ttf') format('truetype');
 }
-
+  
 @font-face {
   font-family: 'NanumSquareRoundR';
   src: url('/src/assets/fonts/NanumSquareRound/NanumSquareRoundR.ttf') format('truetype');
+}
+
+.custom-slider-thumb::-webkit-slider-thumb {
+  pointer-events: auto;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  -webkit-appearance: none;
 }
