@@ -8,7 +8,7 @@ const Navbar = () => {
         <img src={LogoBlue} alt="Logo" className="mt-0.5 mr-5" />
       </Link>
       <div className="flex-grow "></div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mr-[40px]">
         <Link to="/map" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
           내 집 찾기
         </Link>
