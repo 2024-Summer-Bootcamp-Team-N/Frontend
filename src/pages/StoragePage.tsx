@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Navleft from "../assets/img/navigate_before.svg";
-import Navright from "../assets/img/navigate_next.svg";
-import Navbar2 from "../components/Navbar2";
+import Navleft from '../assets/img/NavigateBefore.svg';
+import Navright from '../assets/img/NavigateNext.svg';
+import Navbar2 from '../components/Navbar2';
 
 const StoragePage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(1);
@@ -33,9 +33,7 @@ const StoragePage: React.FC = () => {
         <button onClick={handlePrevious} className="px-1">
           <img src={Navleft} alt="left" className="flex w-[90px] h-[90px] object-cover" />
         </button>
-        <div className={getBoxClass(currentIndex)}>
-          {boxes[currentIndex].label}
-        </div>
+        <div className={getBoxClass(currentIndex)}>{boxes[currentIndex].label}</div>
         <button onClick={handleNext} className="px-1">
           <img src={Navright} alt="right" className="flex w-[90px] h-[90px] object-cover" />
         </button>

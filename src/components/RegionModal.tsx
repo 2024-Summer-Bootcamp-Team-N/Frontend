@@ -18,9 +18,9 @@ const RegionModal = forwardRef<HTMLDivElement, RegionModalProps>(({ isOpen, onCl
   return (
     <div
       ref={ref}
-      className="fixed flex flex-col w-[370px] h-[430px] mt-[550px] ml-[100px] bg-white border border-[#dfdfdf] z-10"
+      className="fixed flex flex-col w-[370px] h-[440px] mt-[550px] ml-[100px] bg-white border border-[#dfdfdf] z-10"
     >
-      <div className="flex w-[370px] h-[60px] border-b border-[#F5F5F5] justify-center items-center">
+      <div className="flex w-[370px] h-[80px] border-b border-[#F5F5F5] justify-center items-center">
         <img src={MapIcon} alt="지도 아이콘" className="mb-[3px]" />
         <p className="font-[NanumSquareEB] text-[19.2px] text-black">주소 입력</p>
       </div>
@@ -71,7 +71,10 @@ const RegionModal = forwardRef<HTMLDivElement, RegionModalProps>(({ isOpen, onCl
           </div>
         </div>
         <div className="flex w-[370px] h-[60px] justify-center items-center">
-          <button className="justify-center items-center w-[56.15px] h-[30.79px] rounded-[18px] bg-[#357fff]">
+          <button
+            className="justify-center items-center w-[56.15px] h-[30.79px] rounded-[18px] bg-[#357fff]"
+            onClick={onClose}
+          >
             <p className="text-[16px] font-[NanumSquareB] text-white">확인</p>
           </button>
         </div>

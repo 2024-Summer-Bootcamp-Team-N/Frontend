@@ -11,6 +11,7 @@ import RoomNumberModal from '../components/RoomNumberModal';
 import RegionModal from '../components/RegionModal';
 import Map from '../components/Map';
 import SellingOption2 from '../assets/img/SellingOption2.svg';
+import SearchBtn from '../assets/img/SearchBtn.svg';
 
 const AptPage = () => {
   const [isActive, setIsActive] = useState(false);
@@ -126,7 +127,7 @@ const AptPage = () => {
         </button>
         {activeModal === 'roomNumber' && <RoomNumberModal isOpen={true} onClose={handleCloseModal} />}
         <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
-        <button className="relative flex mr-[10px]" onClick={handleClick}>
+        <button className="relative flex" onClick={handleClick}>
           <img src={isActive ? ActiveOption : InactiveOption} alt="옵션" />
           <p
             className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
@@ -134,6 +135,13 @@ const AptPage = () => {
             }`}
           >
             단기임대
+          </p>
+        </button>
+        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
+        <button className="relative flex mr-[10px]">
+          <img src={SearchBtn} alt="매물찾기" />
+          <p className="absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] text-white">
+            매물찾기
           </p>
         </button>
       </div>

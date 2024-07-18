@@ -75,12 +75,12 @@ const RoomNumber = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             <p className={`text-[14px] font-[NanumSquareB]`}>3개</p>
           </button>
           <button
-            className={`flex w-[70px] h-[36.95px] justify-center items-center ml-[24px] mt-[12px] rounded-[54.34px] ${
+            className={`flex w-[80px] h-[36.95px] justify-center items-center ml-[24px] mt-[12px] rounded-[54.34px] ${
               selectedOption === 'four' ? 'bg-[#357FFF] text-white' : 'bg-[#F5F5F5] text-[#979797]'
             }`}
             onClick={() => handleButtonClick('four')}
           >
-            <p className={`text-[14px] font-[NanumSquareB]`}>4개</p>
+            <p className={`text-[14px] font-[NanumSquareB]`}>4개 이상</p>
           </button>
         </div>
       </div>
