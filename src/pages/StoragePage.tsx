@@ -7,8 +7,8 @@ import Navbar2 from '../components/Navbar2';
 const fetchBoxes = async () => {
   return [
     { id: 1, color: 'bg-red-500', label: 'Box 1', createdAt: '2024-07-17 오전 02:30:30' },
-    { id: 2, color: 'bg-green-500', label: 'Box 2', createdAt: '2024-07-18 오후 03:45:00' },
-    { id: 3, color: 'bg-blue-500', label: 'Box 3', createdAt: '2024-07-19 오전 11:20:15' },
+    //{ id: 2, color: 'bg-green-500', label: 'Box 2', createdAt: '2024-07-18 오후 03:45:00' },
+    //{ id: 3, color: 'bg-blue-500', label: 'Box 3', createdAt: '2024-07-19 오전 11:20:15' },
   ];
 };
 
