@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar2 from './Sidebar2';
-import Main from '../assets/img/Main.svg';
+import HouseImage from '../assets/img/HouseImage.png';
 
 interface SidebarProps {
   onClose: () => void;
@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   return (
     <>
-      <div className="flex flex-col fixed bottom-0 right-0 w-[424px] h-[886px] bg-white border-[1.5px] border-[#EBEBEB]">
+      <div className="flex flex-col fixed bottom-0 right-0 w-[424px] h-[840px] bg-white border-[1.5px] border-[#EBEBEB]">
         {/* <button onClick={onClose} className="absolute right-4 top-1 opacity-100 hover:bg-[#357fff]/[0.2]">
           <svg
             width={42}
@@ -56,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               }`}
               onClick={() => handleButtonClick(index)}
             >
-              <img src={Main} alt="추가예정" className="w-[166px] h-[166px] border-[2px] flex object-cover" />
+              <img src={HouseImage} alt="추가예정" className="w-[166px] h-[166px] border-[2px] flex object-cover" />
               <div className="flex-col ml-[15px]">
                 <button
                   className="w-[140.97px] h-[29px] flex text-xl font-nanumSquareRoundB mb-[17px] text-left text-black hover:text-gray-600"

@@ -11,13 +11,12 @@ import RoomNumberModal from '../components/RoomNumberModal';
 import RegionModal from '../components/RegionModal';
 import Map from '../components/Map';
 import SellingOption2 from '../assets/img/SellingOption2.svg';
+import SearchBtn from '../assets/img/SearchBtn.svg';
 
 const OfficePage = () => {
-
   const [isShortTermRentalActive, setIsShortTermRentalActive] = useState(false);
   const [isParkingAvailableActive, setIsParkingAvailableActive] = useState(false);
   const [isElevatorActive, setIsElevatorActive] = useState(false);
-
 
   const [activeModal, setActiveModal] = useState<'sellingType' | 'parkingNumber' | 'roomNumber' | 'region' | null>(
     null,
@@ -69,9 +68,7 @@ const OfficePage = () => {
       {/* 거주형태 */}
       <div className="flex border-b-[1.5px] border-[#EBEBEB] w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[18px] text-black mt-[72px]">
         <Link to="/apt">
-          <button className="relative w-[130px] h-[61px] flex items-center justify-center">
-            아파트
-          </button>
+          <button className="relative w-[130px] h-[61px] flex items-center justify-center">아파트</button>
         </Link>
         <Link to="/office">
           <button className="relative w-[130px] h-[61px] flex items-center justify-center text-[#357FFF]">
@@ -80,13 +77,13 @@ const OfficePage = () => {
             <div className="absolute bottom-0 w-[80%] h-[4px] bg-[#357FFF]"></div>
           </button>
         </Link>
-        <Link to="house">
+        <Link to="/house">
           <button className="relative w-[130px] h-[61px] flex items-center justify-center">
             빌라 ∙ 주택
             <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
           </button>
         </Link>
-        <Link to="room">
+        <Link to="/room">
           <button className="relative w-[130px] h-[61px] flex items-center justify-center">
             원룸 ∙ 투룸
             <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
@@ -140,41 +137,47 @@ const OfficePage = () => {
         {activeModal === 'roomNumber' && <RoomNumberModal isOpen={true} onClose={handleCloseModal} />}
         <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
         <button className="relative flex mr-[10px]" onClick={handleShortTermRentalClick}>
-        <img src={isShortTermRentalActive ? ActiveOption : InactiveOption} alt="옵션" />
-        <p
-          className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
-            isShortTermRentalActive ? 'text-[#357FFF]' : 'text-black'
-          }`}
-        >
-          단기임대
-        </p>
-      </button>
+          <img src={isShortTermRentalActive ? ActiveOption : InactiveOption} alt="옵션" />
+          <p
+            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
+              isShortTermRentalActive ? 'text-[#357FFF]' : 'text-black'
+            }`}
+          >
+            단기임대
+          </p>
+        </button>
 
-      <button className="relative flex mr-[10px]" onClick={handleParkingAvailableClick}>
-        <img src={isParkingAvailableActive ? ActiveOption : InactiveOption} alt="옵션" />
-        <p
-          className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
-            isParkingAvailableActive ? 'text-[#357FFF]' : 'text-black'
-          }`}
-        >
-          주차가능
-        </p>
-      </button>
-      
-      <button className="relative flex mr-[10px]" onClick={handleElevatorClick}>
-        <div className='relative mt-[1px]'>
-          <img src={isElevatorActive ? ActiveOption : InactiveOption} alt="옵션"/>
-        </div>
-        
-        <p
-          className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[14.5px] ${
-            isElevatorActive ? 'text-[#357FFF]' : 'text-black'
-          }`}
-        >
-          엘리베이터
-        </p>
-      </button>
+        <button className="relative flex mr-[10px]" onClick={handleParkingAvailableClick}>
+          <img src={isParkingAvailableActive ? ActiveOption : InactiveOption} alt="옵션" />
+          <p
+            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
+              isParkingAvailableActive ? 'text-[#357FFF]' : 'text-black'
+            }`}
+          >
+            주차가능
+          </p>
+        </button>
 
+        <button className="relative flex" onClick={handleElevatorClick}>
+          <div className="relative mt-[1px]">
+            <img src={isElevatorActive ? ActiveOption : InactiveOption} alt="옵션" />
+          </div>
+
+          <p
+            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[14.5px] ${
+              isElevatorActive ? 'text-[#357FFF]' : 'text-black'
+            }`}
+          >
+            엘리베이터
+          </p>
+        </button>
+        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
+        <button className="relative flex mr-[10px]">
+          <img src={SearchBtn} alt="매물찾기" />
+          <p className="absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] text-white">
+            매물찾기
+          </p>
+        </button>
       </div>
       {/* 지도 표시 영역 */}
       <Map />

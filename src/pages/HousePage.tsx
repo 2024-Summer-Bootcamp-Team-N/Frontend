@@ -6,7 +6,7 @@ import InactiveOption from '../assets/img/InactiveOption.svg';
 import ActiveOption from '../assets/img/ActiveOption.svg';
 import Navbar2 from '../components/Navbar2';
 import SellingTypeModal from '../components/SellingTypeModal';
-
+import SearchBtn from '../assets/img/SearchBtn.svg';
 import RoomNumberModal from '../components/RoomNumberModal';
 import RegionModal from '../components/RegionModal';
 import Map from '../components/Map';
@@ -133,7 +133,7 @@ const HousePage = () => {
             단기임대
           </p>
         </button>
-        <button className="relative flex mr-[10px]" onClick={handleParkingAvailableClick}>
+        <button className="relative flex" onClick={handleParkingAvailableClick}>
           <img src={isParkingAvailableActive ? ActiveOption : InactiveOption} alt="주차가능" />
           <p
             className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
@@ -141,6 +141,13 @@ const HousePage = () => {
             }`}
           >
             주차가능
+          </p>
+        </button>
+        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
+        <button className="relative flex mr-[10px]">
+          <img src={SearchBtn} alt="매물찾기" />
+          <p className="absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] text-white">
+            매물찾기
           </p>
         </button>
       </div>

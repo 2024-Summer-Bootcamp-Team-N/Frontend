@@ -9,6 +9,7 @@ import RoomPage from './pages/RoomPage';
 import StoragePage from './pages/StoragePage';
 import SignupPage from './pages/SignupPage';
 import ConsultingPage from './pages/ConsultingPage';
+import ContractPage from './pages/ContractPage';
 
 function App() {
   return (
