@@ -10,6 +10,7 @@ import StoragePage from './pages/StoragePage';
 import SignupPage from './pages/SignupPage';
 import ConsultingPage from './pages/ConsultingPage';
 import ContractPage from './pages/ContractPage';
+import InputPage from './pages/InputPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/consulting" element={<ConsultingPage />} />
         <Route path="/contract" element={<ContractPage />} />
+        <Route path="/Input" element={<InputPage />} />
       </Routes>
     </BrowserRouter>
   );
