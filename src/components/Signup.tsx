@@ -44,21 +44,25 @@ function Signup({ onClose }: SignupProps) {
   const handleSignup = async () => {
     if (validate()) {
       try {
-        const response = await axios.post('http://localhost:8000/api/v1/users/signup', {
-          auth_id: id,
-          name,
-          password,
-          confirm_password: confirmPassword,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await axios.post(
+          'http://localhost:8000/api/v1/users/signup',
+          {
+            auth_id: id,
+            name,
+            password,
+            confirm_password: confirmPassword,
           },
-        });
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
 
         console.log(response.data); // 서버에서 반환한 응답 데이터
 
         onClose();
-        navigate('/map'); // 회원가입 후 이동할 페이지 경로
+        navigate('/apt'); // 회원가입 후 이동할 페이지 경로
       } catch (error) {
         if (error.response) {
           console.error('Error response data:', error.response.data);

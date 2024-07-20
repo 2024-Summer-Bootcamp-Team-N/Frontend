@@ -146,7 +146,6 @@ const OfficePage = () => {
             단기임대
           </p>
         </button>
-
         <button className="relative flex mr-[10px]" onClick={handleParkingAvailableClick}>
           <img src={isParkingAvailableActive ? ActiveOption : InactiveOption} alt="옵션" />
           <p
@@ -157,12 +156,10 @@ const OfficePage = () => {
             주차가능
           </p>
         </button>
-
         <button className="relative flex" onClick={handleElevatorClick}>
           <div className="relative mt-[1px]">
             <img src={isElevatorActive ? ActiveOption : InactiveOption} alt="옵션" />
           </div>
-
           <p
             className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[14.5px] ${
               isElevatorActive ? 'text-[#357FFF]' : 'text-black'
