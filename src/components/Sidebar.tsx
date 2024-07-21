@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
         const refreshToken = localStorage.getItem('refreshToken');
 
         // API 요청
-        const infoResponse = await axios.get('/api/v1/options/crawling', {
+        const infoResponse = await axios.get('http://localhost:8000/api/v1/options/crawling', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${refreshToken}`, // 토큰 형식을 확인하세요

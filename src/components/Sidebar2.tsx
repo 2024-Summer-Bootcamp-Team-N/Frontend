@@ -36,7 +36,7 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const detailInfoResponse = await axios.get(`/api/v1/options/crawling/${roomId}`, {
+        const detailInfoResponse = await axios.get(`http://localhost:8000/api/v1/options/crawling/${roomId}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${refreshToken}`,
