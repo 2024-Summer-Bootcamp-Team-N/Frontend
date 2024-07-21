@@ -1,5 +1,6 @@
 import LogoWhite from '../assets/img/LogoWhite.svg';
 import { useState } from 'react';
+import axios from 'axios';
 
 const Input = ({ onNext }) => {
   const [isMonthlyRentActive, setIsMonthlyRentActive] = useState(false);
@@ -8,26 +9,76 @@ const Input = ({ onNext }) => {
   const [district, setDistrict] = useState('');
   const [town, setTown] = useState('');
   const [rentAmount, setRentAmount] = useState('');
+  const [DepositAmount, setDepositAmount] = useState('');
+  const [DepositRentAmount, setDepositRentAmount] = useState('');
   const [error, setError] = useState('');
 
   const handleMonthlyRentClick = () => {
     setIsMonthlyRentActive(true);
     setIsDepositRentActive(false);
+    setDepositAmount('');
     setRentAmount('');
   };
 
   const handleDepositRentClick = () => {
     setIsMonthlyRentActive(false);
     setIsDepositRentActive(true);
-    setRentAmount('');
+    setDepositRentAmount('');
   };
 
-  const handleNext = () => {
-    if (!city || !district || !town || (!isMonthlyRentActive && !isDepositRentActive) || !rentAmount) {
+  const handleNext = async () => {
+    if (!city || !district || !town || (!isMonthlyRentActive && !isDepositRentActive)) {
       setError('모든 필드를 입력해주세요.');
+    } else if (isMonthlyRentActive && (!rentAmount || !DepositAmount)) {
+      setError('월세와 보증금을 입력해주세요.');
+    } else if (isDepositRentActive && !DepositRentAmount) {
+      setError('전세금을 입력해주세요.');
     } else {
       setError('');
-      onNext();
+
+      const addressData = {
+        province: city,
+        district: district,
+        street: town,
+      };
+
+      const typesData = {
+        LEASE: isDepositRentActive,
+        MONTHLY_RENT: isMonthlyRentActive,
+        depositRangeMax: isDepositRentActive ? DepositRentAmount : DepositAmount, //보증금, 전세금
+        priceRangeMax: isMonthlyRentActive ? rentAmount : '0', //월세
+      };
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        // 주소 API 요청
+        const addressResponse = await axios.post('http://localhost:8000/api/v1/entry/regions', addressData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${refreshToken}`,
+          },
+        });
+        console.log('서버로 전송되는 데이터:', typesData);
+        console.log('주소 API 응답:', addressResponse);
+
+        // 월세/전세 API 요청
+        const typesResponse = await axios.post('http://localhost:8000/api/v1/entry/types', typesData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${refreshToken}`,
+          },
+        });
+
+        console.log('월세/전세 API 응답:', typesResponse);
+        console.log('혁진쓰의 집:', addressData);
+        console.log('전세금잘좀나와라:', typesData);
+        // API 요청 성공 후의 처리
+        onNext();
+      } catch (err) {
+        setError('API 요청 중 오류가 발생했습니다.');
+        console.error(err);
+      }
     }
   };
 
@@ -44,6 +95,20 @@ const Input = ({ onNext }) => {
       setRentAmount(e.target.value);
     }
   };
+
+  const handleDepositInput = (e) => {
+    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
+    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+      setDepositAmount(e.target.value);
+    }
+  };
+  const handleDepositRentInput = (e) => {
+    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
+    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+      setDepositRentAmount(e.target.value);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <div className="flex mb-[80%]">
@@ -124,15 +189,27 @@ const Input = ({ onNext }) => {
         {isMonthlyRentActive && (
           <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4 gap-2">
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
-              보증금/월세
+              월세
             </label>
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
                 className="w-full text-base text-left text-[#202629] h-full"
-                placeholder="보증금/월세"
+                placeholder="월세"
                 value={rentAmount}
                 onChange={handleRentInput}
+              />
+            </div>
+            <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
+              보증금
+            </label>
+            <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
+              <input
+                type="text"
+                className="w-full text-base text-left text-[#202629] h-full"
+                placeholder="보증금"
+                value={DepositAmount}
+                onChange={handleDepositInput}
               />
             </div>
           </div>
@@ -148,8 +225,8 @@ const Input = ({ onNext }) => {
                 type="text"
                 className="w-full text-base text-left text-[#202629] h-full"
                 placeholder="전세금"
-                value={rentAmount}
-                onChange={handleRentInput}
+                value={DepositRentAmount}
+                onChange={handleDepositRentInput}
               />
             </div>
           </div>
