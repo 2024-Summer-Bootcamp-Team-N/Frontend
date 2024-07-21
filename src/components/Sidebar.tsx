@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Sidebar2 from './Sidebar2';
 import HouseImage from '../assets/img/HouseImage.png';
 
@@ -7,86 +7,88 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+interface Info {
+  id: number;
+  price: string;
+  room_info: string;
+  link: string;
+}
+
 const Sidebar: React.FC<SidebarProps> = () => {
   const [isSidebar2Open, setIsSidebar2Open] = useState(false);
-  const [activeButtonIndex, setActiveButtonIndex] = useState<number | null>(null);
+  const [selectedInfo, setSelectedInfo] = useState<Info | null>(null);
+  const [infoList, setInfoList] = useState<Info[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleOpenSidebar2 = () => {
+  useEffect(() => {
+    const fetchInfoList = async () => {
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        // API 요청
+        const infoResponse = await axios.get('/api/v1/options/crawling', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${refreshToken}`, // 토큰 형식을 확인하세요
+          },
+        });
+
+        console.log('매물 정보 API 응답:', infoResponse);
+
+        // API 응답의 데이터가 배열인지 확인하고 설정
+        if (Array.isArray(infoResponse.data)) {
+          setInfoList(infoResponse.data);
+        } else {
+          setError('올바른 데이터 형식이 아닙니다.');
+        }
+      } catch (error) {
+        setError('API 요청 중 오류가 발생했습니다.');
+        console.error(error);
+      }
+    };
+
+    fetchInfoList();
+  }, []);
+
+  const handleOpenSidebar2 = (info: Info) => {
+    setSelectedInfo(info);
     setIsSidebar2Open(true);
   };
 
   const handleCloseSidebar2 = () => {
     setIsSidebar2Open(false);
-    setActiveButtonIndex(null); // Reset the active button index when Sidebar2 is closed
+    setSelectedInfo(null);
   };
 
-  const handleButtonClick = (index: number) => {
-    setActiveButtonIndex(index);
-  };
+  if (error) return <div>{error}</div>;
 
   return (
     <>
-      <div className="flex flex-col fixed bottom-0 right-0 w-[424px] h-[840px] bg-white border-[1.5px] border-[#EBEBEB]">
-        {/* <button onClick={onClose} className="absolute right-4 top-1 opacity-100 hover:bg-[#357fff]/[0.2]">
-          <svg
-            width={42}
-            height={42}
-            viewBox="0 0 42 42"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-[41.22px] h-[42px]"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M27.2223 14.7778L14.7778 27.2223M14.7778 14.7778L27.2223 27.2223"
-              stroke="#494949 "
-              strokeWidth="2.59259"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button> */}
-
+      <div className="flex flex-col fixed top-0 right-0 w-[424px] h-full mt-[194px] bg-white border-[1.5px] border-[#EBEBEB]">
         <div className="flex flex-col w-full h-full overflow-y-auto">
-          {[1, 2, 3, 4, 5].map((_, index) => (
+          {infoList.map((info) => (
             <div
-              key={index}
-              className={`flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[25%] max-h-[25%] ${
-                activeButtonIndex === index ? 'bg-[#357fff]/[0.11] text-[#357fff]' : ''
-              }`}
-              onClick={() => handleButtonClick(index)}
+              key={info.id}
+              className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[25%] max-h-[25%]"
+              onClick={() => handleOpenSidebar2(info)}
             >
-              <img src={HouseImage} alt="추가예정" className="w-[166px] h-[166px] border-[2px] flex object-cover" />
+              <img src={HouseImage} alt="매물 사진" className="w-[166px] h-[166px] border-[2px] flex object-cover" />
               <div className="flex-col ml-[15px]">
-                <button
-                  className="w-[140.97px] h-[29px] flex text-xl font-nanumSquareRoundB mb-[17px] text-left text-black hover:text-gray-600"
-                  onClick={handleOpenSidebar2}
-                >
-                  전세 4억 8000
-                </button>
-                <p className="flex flex-col w-full text-sm text-left font-nanumSquareRoundR text-black">
-                  <span className="flex text-sm text-left text-black mb-[3px]">쓰리룸</span>
-                  <span className="flex text-sm text-left text-black mb-[3px]">2층, 53.28m, 관리비 6만</span>
-                  <span className="flex text-sm text-left text-black mb-[3px]">신축첫입주/ 3룸 화2 / 통베란다</span>
-                </p>
-                <div className="flex flex-row justify-end">
-                  <Link to="/consulting">
-                    <button
-                      className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
-                      style={{
-                        boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',
-                      }}
-                    >
-                      <p className="flex text-[13px] font-bold text-black">상담하기</p>
-                    </button>
-                  </Link>
+                <div className="w-[140.97px] h-[29px] flex text-xl font-nanumSquareRoundB mb-[17px] text-left text-black hover:text-gray-600">
+                  {info.price}
                 </div>
+                <p className="flex flex-col w-full text-sm text-left font-nanumSquareRoundR text-black">
+                  <span className="flex text-sm text-left text-black mb-[3px]">{info.room_info}</span>
+                  <a href={info.link} className="text-blue-500 hover:underline">
+                    자세히 보기
+                  </a>
+                </p>
               </div>
             </div>
           ))}
         </div>
       </div>
-      {isSidebar2Open && <Sidebar2 onClose={handleCloseSidebar2} />}
+      {isSidebar2Open && selectedInfo && <Sidebar2 onClose={handleCloseSidebar2} roomId={selectedInfo.id} />}
     </>
   );
 };
