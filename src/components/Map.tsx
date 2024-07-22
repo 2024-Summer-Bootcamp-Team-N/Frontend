@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapPlus from '../assets/img/MapPlus.svg';
 import MapMinus from '../assets/img/MapMinus.svg';
 import Sidebar from './Sidebar.tsx';
