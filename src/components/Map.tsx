@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapPlus from '../assets/img/MapPlus.svg';
 import MapMinus from '../assets/img/MapMinus.svg';
 import Sidebar from './Sidebar.tsx';
+import { useMap } from '../components/MapContext.tsx';
 
-const Map = () => {
+const Map: React.FC = () => {
+  const { latitude, longitude } = useMap();
   useEffect(() => {
     // Kakao Maps API script 태그 생성
     const kakaoMapScript = document.createElement('script');
@@ -17,7 +19,7 @@ const Map = () => {
         window.kakao.maps.load(() => {
           const container = document.getElementById('map') as HTMLElement;
           const options = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+            center: new window.kakao.maps.LatLng(latitude, longitude),
             level: 3,
           };
 
