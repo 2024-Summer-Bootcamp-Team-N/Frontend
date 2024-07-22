@@ -55,12 +55,6 @@ const Input2 = () => {
   );
 
   const handleSubmit = async () => {
-    const requestBody = {
-      apartment: activeButtons.residenceType === '아파트',
-      officetel: activeButtons.residenceType === '오피스텔',
-      house: activeButtons.residenceType === '주택빌라',
-      onetwo: activeButtons.residenceType === '원룸투룸',
-    };
     try {
       const refreshToken = localStorage.getItem('refreshToken');
 
@@ -80,8 +74,8 @@ const Input2 = () => {
 
       console.log('거주형태 API 응답:', residenceResponse.data);
 
-      // 두 번째 API 호출: 주택빌라 상세 정보 (주택빌라가 선택된 경우에만)
-      let houseDetailsResponse = null;
+      // 두 번째 API 호출: 선택된 거주형태에 따른 상세 정보
+      let detailsResponse = null;
       if (activeButtons.residenceType === '주택빌라') {
         const houseDetailsBody = {
           canParking: activeButtons.additionalOptions.includes('주차가능'),
@@ -94,56 +88,64 @@ const Input2 = () => {
           isDuplex: false,
         };
 
-        houseDetailsResponse = await axios.post(
+        detailsResponse = await axios.post(
           'http://localhost:8000/api/v1/entry/residences/house',
           houseDetailsBody,
           {
             headers: {
               Authorization: `${refreshToken}`,
             },
-          },
+          }
         );
+      } else if (activeButtons.residenceType === '아파트') {
+        const aptDetailsBody = {
+          canParking: activeButtons.additionalOptions.includes('주차가능'),
+          hasElevator: true,
+          parkingNumRangeMin: activeButtons.parking === '세대당 1대 이상' ? 1 : activeButtons.parking === '세대당 2대 이상' ? 2 : 0,
+          roomCount:
+            activeButtons.rooms === '상관X' ? 0 : activeButtons.rooms === '4개이상' ? 4 : parseInt(activeButtons.rooms),
+          isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+        };
 
-        console.log('주택빌라 상세 API 응답:', houseDetailsResponse.data);
+        detailsResponse = await axios.post(
+          'http://localhost:8000/api/v1/entry/residences/apt',
+          aptDetailsBody,
+          {
+            headers: {
+              Authorization: `${refreshToken}`,
+            },
+          }
+        );
+      } else if (activeButtons.residenceType === '오피스텔') {
+        const officetelDetailsBody = {
+          canParking: activeButtons.additionalOptions.includes('주차가능'),
+          hasElevator: activeButtons.additionalOptions.includes('엘레베이터'),
+          parkingNumRangeMin: activeButtons.parking === '세대당 1대 이상' ? 1 : activeButtons.parking === '세대당 2대 이상' ? 2 : 0,
+          roomCount:
+            activeButtons.rooms === '상관X' ? 0 : activeButtons.rooms === '4개이상' ? 4 : parseInt(activeButtons.rooms),
+          isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+        };
+
+        detailsResponse = await axios.post(
+          'http://localhost:8000/api/v1/entry/residences/officetel',
+          officetelDetailsBody,
+          {
+            headers: {
+              Authorization: `${refreshToken}`,
+            },
+          }
+        );
       }
 
-      // 두 API 응답을 모두 state나 localStorage에 저장
-      // 예: localStorage.setItem('residenceResponse', JSON.stringify(residenceResponse.data));
-      // 예: if (houseDetailsResponse) localStorage.setItem('houseDetailsResponse', JSON.stringify(houseDetailsResponse.data));
+      console.log('상세 정보 API 응답:', detailsResponse ? detailsResponse.data : 'No details response');
 
       // 다음 페이지로 이동
       navigate('/house', {
         state: {
           residenceResponse: residenceResponse.data,
-          houseDetailsResponse: houseDetailsResponse ? houseDetailsResponse.data : null,
+          detailsResponse: detailsResponse ? detailsResponse.data : null,
         },
       });
-    } catch (error) {
-      console.error('API 오류:', error);
-      // 오류 처리 로직 추가
-    }
-
-    const officetelRequestBody = {
-      officetel: true,
-      parking: activeButtons.parking,
-      rooms: activeButtons.rooms,
-      additionalOptions: activeButtons.additionalOptions,
-    };
-
-    try {
-      const refreshToken = localStorage.getItem('refreshToken');
-
-      const response = await axios.post(
-        'http://localhost:8000/api/v1/entry/residences/officetel',
-        officetelRequestBody,
-        {
-          headers: {
-            Authorization: `${refreshToken}`,
-          },
-        },
-      );
-      console.log('오피스텔 옵션:', response.data);
-      navigate('/office');
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
