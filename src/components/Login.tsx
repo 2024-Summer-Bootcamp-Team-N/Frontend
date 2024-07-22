@@ -76,7 +76,7 @@ function Login({ onSignupClick, onClose }: LoginProps) {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="text-base text-left text-[#202629] w-full h-[30px]"
                 placeholder="아이디"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
@@ -90,7 +90,7 @@ function Login({ onSignupClick, onClose }: LoginProps) {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="password"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="비밀번호"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
