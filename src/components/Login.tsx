@@ -19,7 +19,7 @@ function Login({ onSignupClick, onClose }: LoginProps) {
       const response = await axios.post('http://localhost:8000/api/v1/users/login', { auth_id: id, password });
 
       if (response.status === 200) {
-        const { refreshToken } = response.data;
+        const { refresh_token : refreshToken } = response.data;
 
         localStorage.setItem('refreshToken', refreshToken);
 
