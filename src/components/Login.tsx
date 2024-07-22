@@ -19,15 +19,15 @@ function Login({ onSignupClick, onClose }: LoginProps) {
       const response = await axios.post('http://localhost:8000/api/v1/users/login', { auth_id: id, password });
 
       if (response.status === 200) {
-        const { refresh_token } = response.data;
+        const { refreshToken } = response.data;
 
-        localStorage.setItem('refreshToken', refresh_token);
+        localStorage.setItem('refreshToken', refreshToken);
 
         // Axios interceptor 설정 (모든 요청에 Authorization 헤더 자동 추가)
         axios.interceptors.request.use(
           (config) => {
-            if (refresh_token) {
-              config.headers.Authorization = refresh_token;
+            if (refreshToken) {
+              config.headers.Authorization = refreshToken;
             }
             return config;
           },
@@ -37,7 +37,7 @@ function Login({ onSignupClick, onClose }: LoginProps) {
         );
 
         setError('');
-        setTimeout(() => navigate('/apt'), 1500);
+        setTimeout(() => navigate('/'), 1500);
       } else {
         setError('로그인에 실패했습니다.');
       }

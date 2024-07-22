@@ -26,7 +26,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/consulting" element={<ConsultingPage />} />
         <Route path="/contract" element={<ContractPage />} />
-        <Route path="/Input" element={<InputPage />} />
+        <Route path="/input" element={<InputPage />} />
       </Routes>
     </BrowserRouter>
   );

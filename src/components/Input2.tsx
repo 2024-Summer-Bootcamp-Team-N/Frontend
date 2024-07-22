@@ -17,9 +17,9 @@ const Input2 = () => {
   const roomOptions = ['상관X', '1개', '2개', '3개', '4개이상'];
   const additionalOptions = {
     아파트: ['단기임대'],
-    오피스텔: ['단기임대', '주차가능', '엘레베이터'],
+    오피스텔: ['단기임대', '주차가능', '엘리베이터'],
     주택빌라: ['단기임대', '주차가능'],
-    원룸투룸: ['단기임대', '주차가능', '엘레베이터', '분리형', '복층'],
+    원룸투룸: ['단기임대', '주차가능', '엘리베이터', '분리형', '복층'],
   };
 
   const handleButtonClick = (category, value) => {
@@ -74,9 +74,37 @@ const Input2 = () => {
 
       console.log('거주형태 API 응답:', residenceResponse.data);
 
-      // 두 번째 API 호출: 선택된 거주형태에 따른 상세 정보
-      let detailsResponse = null;
-      if (activeButtons.residenceType === '주택빌라') {
+      if (activeButtons.residenceType === '아파트') {
+        const aptDetailsBody = {
+          canParking: activeButtons.additionalOptions.includes('주차가능'),
+          hasElevator: true,
+          parkingNumRangeMin:
+            activeButtons.parking === '세대당 1대 이상' ? 1 : activeButtons.parking === '세대당 2대 이상' ? 2 : 0,
+          roomCount:
+            activeButtons.rooms === '상관X' ? 0 : activeButtons.rooms === '4개이상' ? 4 : parseInt(activeButtons.rooms),
+          isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+        };
+
+        const aptDetailsResponse = await axios.post(
+          'http://localhost:8000/api/v1/entry/residences/apt',
+          aptDetailsBody,
+          {
+            headers: {
+              Authorization: `${refreshToken}`,
+            },
+          },
+        );
+
+        console.log('아파트 상세 API 응답:', aptDetailsResponse.data);
+
+        // 응답 데이터를 저장하고 다음 페이지로 이동
+        navigate('/house', {
+          state: {
+            residenceResponse: residenceResponse.data,
+            aptDetailsResponse: aptDetailsResponse.data,
+          },
+        });
+      } else if (activeButtons.residenceType === '주택빌라') {
         const houseDetailsBody = {
           canParking: activeButtons.additionalOptions.includes('주차가능'),
           hasElevator: false,
@@ -88,64 +116,84 @@ const Input2 = () => {
           isDuplex: false,
         };
 
-        detailsResponse = await axios.post(
+        const houseDetailsResponse = await axios.post(
           'http://localhost:8000/api/v1/entry/residences/house',
           houseDetailsBody,
           {
             headers: {
               Authorization: `${refreshToken}`,
             },
-          }
+          },
         );
-      } else if (activeButtons.residenceType === '아파트') {
-        const aptDetailsBody = {
-          canParking: activeButtons.additionalOptions.includes('주차가능'),
-          hasElevator: true,
-          parkingNumRangeMin: activeButtons.parking === '세대당 1대 이상' ? 1 : activeButtons.parking === '세대당 2대 이상' ? 2 : 0,
-          roomCount:
-            activeButtons.rooms === '상관X' ? 0 : activeButtons.rooms === '4개이상' ? 4 : parseInt(activeButtons.rooms),
-          isShortLease: activeButtons.additionalOptions.includes('단기임대'),
-        };
 
-        detailsResponse = await axios.post(
-          'http://localhost:8000/api/v1/entry/residences/apt',
-          aptDetailsBody,
-          {
-            headers: {
-              Authorization: `${refreshToken}`,
-            },
-          }
-        );
+        console.log('주택빌라 상세 API 응답:', houseDetailsResponse.data);
+
+        // 응답 데이터를 저장하고 다음 페이지로 이동
+        navigate('/house', {
+          state: {
+            residenceResponse: residenceResponse.data,
+            houseDetailsResponse: houseDetailsResponse.data,
+          },
+        });
       } else if (activeButtons.residenceType === '오피스텔') {
-        const officetelDetailsBody = {
-          canParking: activeButtons.additionalOptions.includes('주차가능'),
-          hasElevator: activeButtons.additionalOptions.includes('엘레베이터'),
-          parkingNumRangeMin: activeButtons.parking === '세대당 1대 이상' ? 1 : activeButtons.parking === '세대당 2대 이상' ? 2 : 0,
+        const officetelRequestBody = {
+          officetel: true,
+          parkingNumRangeMin: 0,
           roomCount:
             activeButtons.rooms === '상관X' ? 0 : activeButtons.rooms === '4개이상' ? 4 : parseInt(activeButtons.rooms),
+          parking: activeButtons.parking,
+          rooms: activeButtons.rooms,
           isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+          canParking: activeButtons.additionalOptions.includes('주차가능'),
+          isElevator: activeButtons.additionalOptions.includes('엘리베이터'),
         };
 
-        detailsResponse = await axios.post(
+        const response = await axios.post(
           'http://localhost:8000/api/v1/entry/residences/officetel',
-          officetelDetailsBody,
+          officetelRequestBody,
           {
             headers: {
               Authorization: `${refreshToken}`,
             },
-          }
+          },
         );
+        console.log('오피스텔 옵션:', response.data);
+
+        // 응답 데이터를 저장하고 다음 페이지로 이동
+        navigate('/office', {
+          state: {
+            officetelResponse: response.data,
+          },
+        });
+      } else if (activeButtons.residenceType === '원룸투룸') {
+        const onetwoRequestBody = {
+          isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+          canParking: activeButtons.additionalOptions.includes('주차가능'),
+          hasElevator: activeButtons.additionalOptions.includes('엘리베이터'),
+          isDivision: activeButtons.additionalOptions.includes('분리형'),
+          isDuplex: activeButtons.additionalOptions.includes('복층'),
+        };
+
+        const onetwoResponse = await axios.post(
+          'http://localhost:8000/api/v1/entry/residences/onetwo',
+          onetwoRequestBody,
+          {
+            headers: {
+              Authorization: `${refreshToken}`,
+            },
+          },
+        );
+
+        console.log('원룸투룸 옵션:', onetwoResponse.data);
+
+        // 응답 데이터를 저장하고 다음 페이지로 이동
+        navigate('/room', {
+          state: {
+            residenceResponse: residenceResponse.data,
+            onetwoResponse: onetwoResponse.data,
+          },
+        });
       }
-
-      console.log('상세 정보 API 응답:', detailsResponse ? detailsResponse.data : 'No details response');
-
-      // 다음 페이지로 이동
-      navigate('/house', {
-        state: {
-          residenceResponse: residenceResponse.data,
-          detailsResponse: detailsResponse ? detailsResponse.data : null,
-        },
-      });
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
