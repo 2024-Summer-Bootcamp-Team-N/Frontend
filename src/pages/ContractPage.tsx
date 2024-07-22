@@ -31,7 +31,7 @@ const ContractPage = () => {
       <div className={`flex flex-row grow ${isModalOpen ? 'blur-sm' : ''}`}>
         <div className="flex flex-col w-[40%] h-full ">
           <div className="flex justify-end items-center w-full h-[45%] ">
-            <div className="flex flex-col w-[488px] h-[340px] mr-[70px] font-nanumSquareRoundB text-[#49454f] overflow-y-auto">
+            <div className="flex flex-col w-[90%] h-[80%] mr-[5%] font-nanumSquareRoundB text-[#49454f] overflow-y-auto">
               {[1, 2, 3, 4, 5].map((_, index) => (
                 <button
                   key={index}
@@ -59,7 +59,7 @@ const ContractPage = () => {
           </div>
           <div className="flex justify-end items-start w-full h-[55%] ">
             <div
-              className="flex flex-col justify-center items-center w-[600px] h-[442px] font-nanumSquareRoundB rounded-xl bg-[#fbfbfb] mr-[15px]"
+              className="flex flex-col justify-center items-center w-[90%] h-[90%] font-nanumSquareRoundB rounded-xl bg-[#fbfbfb] mr-[15px]"
               style={{ boxShadow: '0px 5px 15px 0 rgba(0,0,0,0.35)' }}
             >
               <div className="flex justify-center items-center w-[30%] h-[10%] rounded-[62.5px] bg-[#e4e6e8]">
@@ -68,10 +68,10 @@ const ContractPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col w-[60%] h-full ">
+        <div className="flex flex-col w-[65%] h-full ">
           <div className="flex w-full h-[85%] justify-center items-center overflow-hidden">
             <div
-              className="flex ml-[60px] mr-[170px] w-full h-[700px] overflow-y-auto rounded-[27.42px] cursor-pointer"
+              className="flex ml-[60px] mr-[170px] w-screen h-[600px] overflow-y-auto rounded-[27.42px] cursor-pointer"
               style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
               onClick={toggleModal}
             >
