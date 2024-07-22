@@ -97,7 +97,7 @@ const Input2 = () => {
         },
       );
       console.log('오피스텔 옵션:', response.data);
-      navigate('/apt');
+      navigate('/office');
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
