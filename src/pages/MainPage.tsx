@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Main from '../assets/img/Main.svg';
 import Main1 from '../assets/img/Main1.svg';
 import Main2 from '../assets/img/Main2.svg';
@@ -12,6 +13,8 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar.tsx';
 
 const MainPage = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     AOS.init({
       duration: 1000, // 애니메이션 지속 시간 (밀리초)
@@ -19,6 +22,15 @@ const MainPage = () => {
       once: true, // 한 번만 애니메이션이 실행되도록
     });
   }, []);
+
+  const handleFindHomeClick = () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      navigate('/input');
+    } else {
+      navigate('/login');
+    }
+  };
 
   return (
     <div className="relative w-full bg-white overflow-hidden">
@@ -99,8 +111,11 @@ const MainPage = () => {
             />
           </div>
           <div className="relative mb-[300px]">
-            <Link to="/login" className="mt-16">
-              <button className="w-[199px] h-[78px]  rounded-full  bg-[#ebebeb] flex-row items-center justify-center mt-[20px]">
+            <div className="mt-16">
+              <button
+                onClick={handleFindHomeClick}
+                className="w-[199px] h-[78px] rounded-full bg-[#ebebeb] flex-row items-center justify-center mt-[20px]"
+              >
                 <img
                   src={SearchBtnBottom}
                   alt="내 집 찾기 버튼"
@@ -108,7 +123,7 @@ const MainPage = () => {
                 />
                 <p className="flex text-[24px] font-[NanumSquareRoundB] text-[#3d3b3a] ml-[65px] ">내 집 찾기</p>
               </button>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

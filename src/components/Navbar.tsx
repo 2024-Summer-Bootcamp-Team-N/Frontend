@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleMapClick = () => {
     if (isLoggedIn) {
-      navigate('/apt'); // 로그인된 경우 /map 페이지로 이동
+      navigate('/input'); // 로그인된 경우 /map 페이지로 이동
     } else {
       navigate('/login'); // 로그인되지 않은 경우 /login 페이지로 이동
     }
