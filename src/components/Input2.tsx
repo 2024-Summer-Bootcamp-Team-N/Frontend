@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoWhite from '../assets/img/LogoWhite.svg';
 import axios from 'axios';
@@ -55,6 +55,12 @@ const Input2 = () => {
   );
 
   const handleSubmit = async () => {
+    const requestBody = {
+      apartment: activeButtons.residenceType === '아파트',
+      officetel: activeButtons.residenceType === '오피스텔',
+      house: activeButtons.residenceType === '주택빌라',
+      onetwo: activeButtons.residenceType === '원룸투룸',
+    };
     try {
       const refreshToken = localStorage.getItem('refreshToken');
 
@@ -112,6 +118,32 @@ const Input2 = () => {
           houseDetailsResponse: houseDetailsResponse ? houseDetailsResponse.data : null,
         },
       });
+    } catch (error) {
+      console.error('API 오류:', error);
+      // 오류 처리 로직 추가
+    }
+
+    const officetelRequestBody = {
+      officetel: true,
+      parking: activeButtons.parking,
+      rooms: activeButtons.rooms,
+      additionalOptions: activeButtons.additionalOptions,
+    };
+
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      const response = await axios.post(
+        'http://localhost:8000/api/v1/entry/residences/officetel',
+        officetelRequestBody,
+        {
+          headers: {
+            Authorization: `${refreshToken}`,
+          },
+        },
+      );
+      console.log('오피스텔 옵션:', response.data);
+      navigate('/office');
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
