@@ -55,23 +55,63 @@ const Input2 = () => {
   );
 
   const handleSubmit = async () => {
-    const requestBody = {
-      apartment: activeButtons.residenceType === '아파트',
-      officetel: activeButtons.residenceType === '오피스텔',
-      house: activeButtons.residenceType === '주택빌라',
-      onetwo: activeButtons.residenceType === '원룸투룸'
-    };
-
     try {
       const refreshToken = localStorage.getItem('refreshToken');
 
-      const response = await axios.post('http://localhost:8000/api/v1/entry/residences', requestBody, {
+      // 첫 번째 API 호출: 거주형태 선택
+      const residenceTypeBody = {
+        apartment: activeButtons.residenceType === '아파트',
+        officetel: activeButtons.residenceType === '오피스텔',
+        house: activeButtons.residenceType === '주택빌라',
+        onetwo: activeButtons.residenceType === '원룸투룸',
+      };
+
+      const residenceResponse = await axios.post('http://localhost:8000/api/v1/entry/residences', residenceTypeBody, {
         headers: {
           Authorization: `${refreshToken}`,
         },
       });
-      console.log('API 응답:', response.data);
-      navigate('/apt');
+
+      console.log('거주형태 API 응답:', residenceResponse.data);
+
+      // 두 번째 API 호출: 주택빌라 상세 정보 (주택빌라가 선택된 경우에만)
+      let houseDetailsResponse = null;
+      if (activeButtons.residenceType === '주택빌라') {
+        const houseDetailsBody = {
+          canParking: activeButtons.additionalOptions.includes('주차가능'),
+          hasElevator: false,
+          parkingNumRangeMin: 0,
+          roomCount:
+            activeButtons.rooms === '상관X' ? 0 : activeButtons.rooms === '4개이상' ? 4 : parseInt(activeButtons.rooms),
+          isDivision: false,
+          isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+          isDuplex: false,
+        };
+
+        houseDetailsResponse = await axios.post(
+          'http://localhost:8000/api/v1/entry/residences/house',
+          houseDetailsBody,
+          {
+            headers: {
+              Authorization: `${refreshToken}`,
+            },
+          },
+        );
+
+        console.log('주택빌라 상세 API 응답:', houseDetailsResponse.data);
+      }
+
+      // 두 API 응답을 모두 state나 localStorage에 저장
+      // 예: localStorage.setItem('residenceResponse', JSON.stringify(residenceResponse.data));
+      // 예: if (houseDetailsResponse) localStorage.setItem('houseDetailsResponse', JSON.stringify(houseDetailsResponse.data));
+
+      // 다음 페이지로 이동
+      navigate('/house', {
+        state: {
+          residenceResponse: residenceResponse.data,
+          houseDetailsResponse: houseDetailsResponse ? houseDetailsResponse.data : null,
+        },
+      });
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
@@ -85,10 +125,16 @@ const Input2 = () => {
         <div className="flex flex-col justify-start items-center w-[362px] mx-auto mt-8 gap-2">
           <p className="text-center font-[nanumSquareRoundEB]">거주형태 선택</p>
           {renderButtons(residenceTypes, 'residenceType')}
+          {activeButtons.residenceType &&
+            activeButtons.residenceType !== '원룸투룸' &&
+            activeButtons.residenceType !== '주택빌라' && (
+              <>
+                <p className="text-center font-[nanumSquareRoundEB] mt-8">주차대수 선택</p>
+                {renderButtons(parkingOptions, 'parking')}
+              </>
+            )}
           {activeButtons.residenceType && activeButtons.residenceType !== '원룸투룸' && (
             <>
-              <p className="text-center font-[nanumSquareRoundEB] mt-8">주차대수 선택</p>
-              {renderButtons(parkingOptions, 'parking')}
               <p className="text-center font-[nanumSquareRoundEB] mt-8">방 개수 선택</p>
               {renderButtons(roomOptions, 'rooms')}
             </>
@@ -100,10 +146,7 @@ const Input2 = () => {
             </>
           )}
         </div>
-        <button 
-          onClick={handleSubmit} 
-          className="flex justify-center items-center w-[362px] mx-auto mt-6"
-        >
+        <button onClick={handleSubmit} className="flex justify-center items-center w-[362px] mx-auto mt-6">
           <div className="flex justify-center items-center w-full p-3 h-[40px] rounded-lg bg-[#00A1E7] border border-[#00A1E7] text-neutral-100">
             확인
           </div>

@@ -59,7 +59,6 @@ const Input = ({ onNext }) => {
             Authorization: `${refreshToken}`,
           },
         });
-        console.log('서버로 전송되는 데이터:', typesData);
         console.log('주소 API 응답:', addressResponse);
 
         // 월세/전세 API 요청
@@ -71,8 +70,6 @@ const Input = ({ onNext }) => {
         });
 
         console.log('월세/전세 API 응답:', typesResponse);
-        console.log('혁진쓰의 집:', addressData);
-        console.log('전세금잘좀나와라:', typesData);
         // API 요청 성공 후의 처리
         onNext();
       } catch (err) {
