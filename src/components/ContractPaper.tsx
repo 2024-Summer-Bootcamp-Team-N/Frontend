@@ -1,9 +1,38 @@
+import React, { useEffect, useState } from 'react';
 import Icon from '../assets/img/PaperIcon.svg';
+import Checkbox from '../assets/img/Checkboxes.svg'
+import axios from 'axios';
 
 const ContractPaper = () => {
+  const [roomDetail, setRoomDetail] = useState(null);
+
+  useEffect(() => {
+    const fetchRoomDetail = async () => {
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        const response = await axios.get('http://localhost:8000/api/v1/contracts/latest-room-detail/', {
+          headers: {
+            'Accept': 'application/json',
+            Authorization: `${refreshToken}`,
+          }
+        });
+        setRoomDetail(response.data);
+      } catch (error) {
+        console.error('Error fetching room detail:', error);
+      }
+    };
+
+    fetchRoomDetail();
+  }, []);
+
+  if (!roomDetail) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div
-      className="flex flex-col justify-start w-[1214px] h-[2950px] relative overflow-hidden rounded-[27.42px] bg-white -z-20"
+      className="flex flex-col justify-start w-[1214px] h-[3200px] relative overflow-hidden rounded-[27.42px] bg-white -z-20"
       style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
     >
       <div className="flex justify-center w-full h-[80px] items-center gap-1 p-4">
@@ -15,15 +44,23 @@ const ContractPaper = () => {
         <div className="flex gap-3 items-center bg-[#ffde35]/[0.19]">
           <div className="flex gap-1 items-center">
             <p className="text-[16.5px] leading-none font-[NanumSquareRoundB] text-left text-[#49454f]">전세</p>
-            <div className="flex justify-center items-center rounded-full">
-              <div className="w-[12.99px] h-[12.99px] rounded-[1.44px] border-[1.44px] border-[#49454f]"></div>
-            </div>
+            {roomDetail.monthly_rent === null ? (
+              <img src={Checkbox} alt="Checked" className= "mt-1" />
+            ) : (
+              <div className="flex justify-center items-center rounded-full">
+                <div className="w-[12.99px] h-[12.99px] rounded-[1.44px] border-[1.44px] border-[#49454f]"></div>
+              </div>
+            )}
           </div>
           <div className="flex gap-1 items-center">
             <p className="text-[16.5px] leading-none font-[NanumSquareRoundB] text-left text-[#49454f]">월세</p>
-            <div className="flex justify-center items-center rounded-full">
-              <div className="w-[12.99px] h-[12.99px] rounded-[1.44px] border-[1.44px] border-[#49454f]"></div>
-            </div>
+            {roomDetail.monthly_rent !== null ? (
+              <img src={Checkbox} alt="Checked" className= "pt-1" />
+            ) : (
+              <div className="flex justify-center items-center rounded-full">
+                <div className="w-[12.99px] h-[12.99px] rounded-[1.44px] border-[1.44px] border-[#49454f]"></div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -42,17 +79,17 @@ const ContractPaper = () => {
               <tr className="border border-[#ededed]">
                 <td className="text-[#49454f] w-[17.5%] border border-[#ededed] p-[7px]">소재지</td>
                 <td colSpan={5} className="text-left text-[#393939] border border-[#ededed] p-[9px]">
-                  서울시 강남구 삼성동
+                  {roomDetail.location}
                 </td>
               </tr>
               <tr className="border border-[#ededed]">
                 <td className="text-[#49454f] border border-[#ededed] p-[7px]">전용/공급면적</td>
                 <td colSpan={2} className="text-left text-[#393939] w-[35%] border border-[#ededed] p-[9px]">
-                  29.72㎡/131.42㎡
+                  {roomDetail.exclusive_overall_area}
                 </td>
                 <td className=" text-[#49454f] p-[7px] w-[15.5%] border border-[#ededed]">건물용도</td>
                 <td colSpan={2} className=" text-[#49454f] text-left ml-[19px] border border-[#ededed] p-[7px]">
-                  공동주택
+                  {roomDetail.building_use}
                 </td>
               </tr>
             </tbody>
@@ -79,13 +116,6 @@ const ContractPaper = () => {
           </div>
         </div>
 
-        <div className="flex w-full justify-start items-center px-8 ">
-          <p className="text-[16.5px] font-[NanumSquareRoundB] text-left text-black/50">
-            위 부동산의 임대차에 관하여 임대인( HOUSE-ADVISOR )과 임차인( {/* 임차인 이름 */} )은 합의에 의하여 보증금과
-            차임 및 관리비를 아래와 같이 지불하기로 한다.
-          </p>
-        </div>
-
         {/* 제1조 표 */}
         <div className="flex w-full h-[91px] justify-center ">
           <table className="table-auto w-[93.75%] border-collapse bg-white text-[17px] font-nanumSquareRoundB">
@@ -93,18 +123,25 @@ const ContractPaper = () => {
               <tr className="border border-[#ededed]">
                 <td className="w-[20%] text-[#49454f] border border-[#ededed] p-[7px]">보증금</td>
                 <td colSpan={4} className="text-left text-[#393939] border border-[#ededed] p-[9px]">
-                  ( )원
+                  {roomDetail.deposit}
                 </td>
               </tr>
               <tr className="border border-[#ededed]">
                 <td className="w-[20%] text-[#49454f] border border-[#ededed] p-[7px]">차임(월세)</td>
                 <td colSpan={4} className="text-left text-[#393939] border border-[#ededed] p-[9px]">
-                  ( )원
+                  {roomDetail.monthly_rent !== null ? roomDetail.monthly_rent : '없음'}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="flex w-full justify-start items-center px-8 ">
+        <p className="text-[16.5px] font-[NanumSquareRoundB] text-left text-black/50">
+          위 부동산의 임대차에 관하여 임대인( HOUSE-ADVISOR )과 임차인( {roomDetail.latest_user_name} )은 합의에 의하여 보증금과
+          차임 및 관리비를 아래와 같이 지불하기로 한다.
+        </p>
       </div>
 
       <div className="">
@@ -447,7 +484,7 @@ const ContractPaper = () => {
               </td>
               <td className="border border-[#ededed] border-1.37  text-[#49454f] p-[7px]">성명</td>
               <td colSpan={4} className="border border-[#ededed] border-1.37 text-left text-[#393939] p-[7px]">
-                사용자 이름 {/* 사용자 이름 */}
+                {roomDetail.latest_user_name}
               </td>
             </tr>
           </tbody>
@@ -458,3 +495,4 @@ const ContractPaper = () => {
 };
 
 export default ContractPaper;
+
