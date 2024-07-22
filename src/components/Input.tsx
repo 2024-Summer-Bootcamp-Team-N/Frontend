@@ -1,6 +1,7 @@
 import LogoWhite from '../assets/img/LogoWhite.svg';
 import { useState } from 'react';
 import axios from 'axios';
+import { useMap } from '../components/MapContext'; // MapContext의 경로를 설정합니다.
 
 const Input = ({ onNext }) => {
   const [isMonthlyRentActive, setIsMonthlyRentActive] = useState(false);
@@ -12,6 +13,7 @@ const Input = ({ onNext }) => {
   const [DepositAmount, setDepositAmount] = useState('');
   const [DepositRentAmount, setDepositRentAmount] = useState('');
   const [error, setError] = useState('');
+  const { setCoordinates } = useMap();
 
   const handleMonthlyRentClick = () => {
     setIsMonthlyRentActive(true);
@@ -59,6 +61,8 @@ const Input = ({ onNext }) => {
             Authorization: `${refreshToken}`,
           },
         });
+        const { latitude, longitude } = addressResponse.data.data;
+        setCoordinates(parseFloat(latitude), parseFloat(longitude));
         console.log('주소 API 응답:', addressResponse);
 
         // 월세/전세 API 요청
