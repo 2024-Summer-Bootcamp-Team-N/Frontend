@@ -99,7 +99,7 @@ function Signup({ onClose }: SignupProps) {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[41px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="아이디"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
@@ -114,7 +114,7 @@ function Signup({ onClose }: SignupProps) {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[41px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="이름"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -129,7 +129,7 @@ function Signup({ onClose }: SignupProps) {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[41px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="password"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="비밀번호"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -140,7 +140,7 @@ function Signup({ onClose }: SignupProps) {
           <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[41px] rounded-lg bg-white border border-[#d9d9d9] mt-[4px]">
             <input
               type="password"
-              className="w-full text-base text-left text-[#202629] h-full"
+              className="w-full text-base text-left text-[#202629] h-[30px]"
               placeholder="비밀번호 확인"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

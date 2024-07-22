@@ -168,13 +168,6 @@ const OfficePage = () => {
             엘리베이터
           </p>
         </button>
-        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
-        <button className="relative flex mr-[10px]">
-          <img src={SearchBtn} alt="매물찾기" />
-          <p className="absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] text-white">
-            매물찾기
-          </p>
-        </button>
       </div>
       {/* 지도 표시 영역 */}
       <Map />

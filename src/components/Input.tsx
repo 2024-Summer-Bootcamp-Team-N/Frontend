@@ -129,7 +129,7 @@ const Input = ({ onNext }) => {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="시/도"
                 value={city}
                 onChange={handleKoreanInput(setCity)}
@@ -143,7 +143,7 @@ const Input = ({ onNext }) => {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="시/군/구"
                 value={district}
                 onChange={handleKoreanInput(setDistrict)}
@@ -157,7 +157,7 @@ const Input = ({ onNext }) => {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="읍/면/동"
                 value={town}
                 onChange={handleKoreanInput(setTown)}
@@ -191,7 +191,7 @@ const Input = ({ onNext }) => {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="월세"
                 value={rentAmount}
                 onChange={handleRentInput}
@@ -203,7 +203,7 @@ const Input = ({ onNext }) => {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="보증금"
                 value={DepositAmount}
                 onChange={handleDepositInput}
@@ -220,7 +220,7 @@ const Input = ({ onNext }) => {
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
               <input
                 type="text"
-                className="w-full text-base text-left text-[#202629] h-full"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="전세금"
                 value={DepositRentAmount}
                 onChange={handleDepositRentInput}
