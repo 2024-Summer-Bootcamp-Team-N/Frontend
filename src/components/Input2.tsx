@@ -59,7 +59,7 @@ const Input2 = () => {
       apartment: activeButtons.residenceType === '아파트',
       officetel: activeButtons.residenceType === '오피스텔',
       house: activeButtons.residenceType === '주택빌라',
-      onetwo: activeButtons.residenceType === '원룸투룸'
+      onetwo: activeButtons.residenceType === '원룸투룸',
     };
 
     try {
@@ -72,6 +72,32 @@ const Input2 = () => {
       });
       console.log('API 응답:', response.data);
       navigate('/apt');
+    } catch (error) {
+      console.error('API 오류:', error);
+      // 오류 처리 로직 추가
+    }
+
+    const officetelRequestBody = {
+      officetel: true,
+      parking: activeButtons.parking,
+      rooms: activeButtons.rooms,
+      additionalOptions: activeButtons.additionalOptions,
+    };
+
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      const response = await axios.post(
+        'http://localhost:8000/api/v1/entry/residences/officetel',
+        officetelRequestBody,
+        {
+          headers: {
+            Authorization: `${refreshToken}`,
+          },
+        },
+      );
+      console.log('오피스텔 옵션:', response.data);
+      navigate('/office');
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
@@ -100,10 +126,7 @@ const Input2 = () => {
             </>
           )}
         </div>
-        <button 
-          onClick={handleSubmit} 
-          className="flex justify-center items-center w-[362px] mx-auto mt-6"
-        >
+        <button onClick={handleSubmit} className="flex justify-center items-center w-[362px] mx-auto mt-6">
           <div className="flex justify-center items-center w-full p-3 h-[40px] rounded-lg bg-[#00A1E7] border border-[#00A1E7] text-neutral-100">
             확인
           </div>
