@@ -76,15 +76,22 @@ const Map: React.FC = () => {
           <img src={MapMinus} alt="축소" />
         </button>
         {isSidebarOpen && <Sidebar onClose={handleCloseSidebar} />}
-        <button
-          onClick={handleOpenSidebar}
-          className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
-          style={{
-            boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',
-          }}
-        >
-          <p className="flex text-[13px] font-bold text-black">매물</p>
-        </button>
+      </div>
+      <div className="flex flex-row justify-center items-center flex-grow w-full h-full z-50 mt-[82.5px] -ml-[317px]">
+        <div className="flex flex-row h-full items-center justify-center">
+          <button
+            className="flex flex-row w-max-full h-[40px] rounded-[30px] bg-white border border-[#357fff]"
+            onClick={handleOpenSidebar}
+          >
+            <div className="flex w-[40px] h-[40px] items-center justify-center  rounded-[30px] bg-[#357fff] border-2 border-[#357fff] -mt-[1px] mr-[2px] -ml-[0px]">
+              <p className="flex  w-max-full  font-bold  text-white mx-[3px]">711</p>
+            </div>
+            <p className="flex w-max-full items-center top-2 font-bold text-center p-1.5 mr-[4px] -mt-[1px] h-[40px] text-[#357fff]">
+              {' '}
+              한남동
+            </p>
+          </button>
+        </div>
       </div>
     </div>
   );
