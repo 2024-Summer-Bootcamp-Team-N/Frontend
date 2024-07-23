@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import MapPlus from '../assets/img/MapPlus.svg';
 import MapMinus from '../assets/img/MapMinus.svg';
 import Sidebar from './Sidebar.tsx';
@@ -6,6 +6,7 @@ import { useMap } from '../components/MapContext.tsx';
 
 const Map: React.FC = () => {
   const { latitude, longitude } = useMap();
+
   useEffect(() => {
     // Kakao Maps API script 태그 생성
     const kakaoMapScript = document.createElement('script');
@@ -53,20 +54,10 @@ const Map: React.FC = () => {
       (window as any).zoomIn = undefined;
       (window as any).zoomOut = undefined;
     };
-  }, []);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const handleOpenSidebar = () => {
-    setIsSidebarOpen(true);
-  };
-
-  const handleCloseSidebar = () => {
-    setIsSidebarOpen(false);
-  };
+  }, [latitude, longitude]);
 
   return (
-    <div id="map" className="flex flex-row flex-grow w-full h-full">
+    <div id="map" className="relative flex flex-row flex-grow w-full h-full">
       {/* ZoomControl */}
       <div className="flex flex-col custom_zoomcontrol z-10 mt-[20px] ml-[20px]">
         <button onClick={() => (window as any).zoomIn()} className="flex">
@@ -75,14 +66,10 @@ const Map: React.FC = () => {
         <button onClick={() => (window as any).zoomOut()} className="flex">
           <img src={MapMinus} alt="축소" />
         </button>
-        {isSidebarOpen && <Sidebar onClose={handleCloseSidebar} />}
       </div>
       <div className="flex flex-row justify-center items-center flex-grow w-full h-full z-50 mt-[82.5px] -ml-[317px]">
         <div className="flex flex-row h-full items-center justify-center">
-          <button
-            className="flex flex-row w-max-full h-[40px] rounded-[30px] bg-white border border-[#357fff]"
-            onClick={handleOpenSidebar}
-          >
+          <button className="flex flex-row w-max-full h-[40px] rounded-[30px] bg-white border border-[#357fff]">
             <div className="flex w-[40px] h-[40px] items-center justify-center  rounded-[30px] bg-[#357fff] border-2 border-[#357fff] -mt-[1px] mr-[2px] -ml-[0px]">
               <p className="flex  w-max-full  font-bold  text-white mx-[3px]">711</p>
             </div>
@@ -91,6 +78,9 @@ const Map: React.FC = () => {
               한남동
             </p>
           </button>
+        </div>
+        <div className="absolute top-0 right-0 w-[424px] h-full z-10">
+          <Sidebar />
         </div>
       </div>
     </div>
