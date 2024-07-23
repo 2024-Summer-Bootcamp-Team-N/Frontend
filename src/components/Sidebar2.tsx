@@ -43,7 +43,7 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
           },
         });
 
-        console.log('주소 API 응답:', detailInfoResponse);
+        console.log('매물 상세정보 API 응답:', detailInfoResponse);
 
         setDetailInfo(detailInfoResponse.data.room_detail_info);
       } catch (error) {

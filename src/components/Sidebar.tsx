@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar2 from './Sidebar2';
 import HouseImage from '../assets/img/HouseImage.png';
-
-interface SidebarProps {
-  onClose: () => void;
-}
 
 interface Info {
   id: number;
@@ -14,7 +11,7 @@ interface Info {
   link: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC = () => {
   const [isSidebar2Open, setIsSidebar2Open] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState<Info | null>(null);
   const [infoList, setInfoList] = useState<Info[]>([]);
@@ -29,16 +26,16 @@ const Sidebar: React.FC<SidebarProps> = () => {
         const infoResponse = await axios.get('http://localhost:8000/api/v1/options/crawling/', {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${refreshToken}`, // 토큰 형식을 확인하세요
+            Authorization: `${refreshToken}`,
           },
         });
 
-        console.log('매물 정보 API 응답:', infoResponse);
+        console.log('매물 정보 API 응답:', infoResponse.data);
 
-        // API 응답의 데이터가 배열인지 확인하고 설정
-        if (Array.isArray(infoResponse.data)) {
-          setInfoList(infoResponse.data);
+        if (Array.isArray(infoResponse.data.new_room_info_list)) {
+          setInfoList(infoResponse.data.new_room_info_list);
         } else {
+          console.error('Expected an array but got:', infoResponse.data.new_room_info_list);
           setError('올바른 데이터 형식이 아닙니다.');
         }
       } catch (error) {
@@ -64,12 +61,12 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   return (
     <>
-      <div className="flex flex-col fixed top-0 right-0 w-[424px] h-full mt-[194px] bg-white border-[1.5px] border-[#EBEBEB]">
+      <div className="flex flex-col fixed top-0 right-0 w-[424px] h-full mt-[194px] bg-white border-[1.5px] border-[#EBEBEB] z-50">
         <div className="flex flex-col w-full h-full overflow-y-auto">
           {infoList.map((info) => (
             <div
               key={info.id}
-              className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[25%] max-h-[25%]"
+              className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[25%] max-h-[25%] cursor-pointer hover:bg-gray-100"
               onClick={() => handleOpenSidebar2(info)}
             >
               <img src={HouseImage} alt="매물 사진" className="w-[166px] h-[166px] border-[2px] flex object-cover" />
@@ -83,6 +80,17 @@ const Sidebar: React.FC<SidebarProps> = () => {
                     자세히 보기
                   </a>
                 </p>
+                <div className="flex justify-end">
+                  <Link
+                    to="/consulting"
+                    className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
+                    style={{
+                      boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    <p className="flex text-[13px] font-bold text-black">상담하기</p>
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
