@@ -74,6 +74,8 @@ const Input2 = () => {
 
       console.log('거주형태 API 응답:', residenceResponse.data);
 
+      let detailsResponse;
+
       if (activeButtons.residenceType === '아파트') {
         const aptDetailsBody = {
           canParking: activeButtons.additionalOptions.includes('주차가능'),
@@ -85,23 +87,18 @@ const Input2 = () => {
           isShortLease: activeButtons.additionalOptions.includes('단기임대'),
         };
 
-        const aptDetailsResponse = await axios.post(
-          'http://localhost:8000/api/v1/entry/residences/apt',
-          aptDetailsBody,
-          {
-            headers: {
-              Authorization: `${refreshToken}`,
-            },
+        detailsResponse = await axios.post('http://localhost:8000/api/v1/entry/residences/apt', aptDetailsBody, {
+          headers: {
+            Authorization: `${refreshToken}`,
           },
-        );
+        });
 
-        console.log('아파트 상세 API 응답:', aptDetailsResponse.data);
+        console.log('아파트 상세 API 응답:', detailsResponse.data);
 
-        // 응답 데이터를 저장하고 다음 페이지로 이동
-        navigate('/house', {
+        navigate('/apt', {
           state: {
             residenceResponse: residenceResponse.data,
-            aptDetailsResponse: aptDetailsResponse.data,
+            aptDetailsResponse: detailsResponse.data,
           },
         });
       } else if (activeButtons.residenceType === '주택빌라') {
@@ -116,23 +113,18 @@ const Input2 = () => {
           isDuplex: false,
         };
 
-        const houseDetailsResponse = await axios.post(
-          'http://localhost:8000/api/v1/entry/residences/house',
-          houseDetailsBody,
-          {
-            headers: {
-              Authorization: `${refreshToken}`,
-            },
+        detailsResponse = await axios.post('http://localhost:8000/api/v1/entry/residences/house', houseDetailsBody, {
+          headers: {
+            Authorization: `${refreshToken}`,
           },
-        );
+        });
 
-        console.log('주택빌라 상세 API 응답:', houseDetailsResponse.data);
+        console.log('주택빌라 상세 API 응답:', detailsResponse.data);
 
-        // 응답 데이터를 저장하고 다음 페이지로 이동
         navigate('/house', {
           state: {
             residenceResponse: residenceResponse.data,
-            houseDetailsResponse: houseDetailsResponse.data,
+            houseDetailsResponse: detailsResponse.data,
           },
         });
       } else if (activeButtons.residenceType === '오피스텔') {
@@ -148,7 +140,7 @@ const Input2 = () => {
           isElevator: activeButtons.additionalOptions.includes('엘리베이터'),
         };
 
-        const response = await axios.post(
+        detailsResponse = await axios.post(
           'http://localhost:8000/api/v1/entry/residences/officetel',
           officetelRequestBody,
           {
@@ -157,12 +149,13 @@ const Input2 = () => {
             },
           },
         );
-        console.log('오피스텔 옵션:', response.data);
 
-        // 응답 데이터를 저장하고 다음 페이지로 이동
+        console.log('오피스텔 옵션:', detailsResponse.data);
+
         navigate('/office', {
           state: {
-            officetelResponse: response.data,
+            residenceResponse: residenceResponse.data,
+            officetelResponse: detailsResponse.data,
           },
         });
       } else if (activeButtons.residenceType === '원룸투룸') {
@@ -174,26 +167,31 @@ const Input2 = () => {
           isDuplex: activeButtons.additionalOptions.includes('복층'),
         };
 
-        const onetwoResponse = await axios.post(
-          'http://localhost:8000/api/v1/entry/residences/onetwo',
-          onetwoRequestBody,
-          {
-            headers: {
-              Authorization: `${refreshToken}`,
-            },
+        detailsResponse = await axios.post('http://localhost:8000/api/v1/entry/residences/onetwo', onetwoRequestBody, {
+          headers: {
+            Authorization: `${refreshToken}`,
           },
-        );
+        });
 
-        console.log('원룸투룸 옵션:', onetwoResponse.data);
+        console.log('원룸투룸 옵션:', detailsResponse.data);
 
-        // 응답 데이터를 저장하고 다음 페이지로 이동
-        navigate('/room', {
+        navigate('/onetwo', {
           state: {
             residenceResponse: residenceResponse.data,
-            onetwoResponse: onetwoResponse.data,
+            onetwoResponse: detailsResponse.data,
           },
         });
       }
+
+      // 추가: URL 생성 API 호출
+      const generateUrlResponse = await axios.get('http://localhost:8000/api/v1/info/generate-url', {
+        params: { residenceType: activeButtons.residenceType, details: detailsResponse.data },
+        headers: {
+          Authorization: `${refreshToken}`,
+        },
+      });
+
+      console.log('생성된 URL 응답:', generateUrlResponse.data);
     } catch (error) {
       console.error('API 오류:', error);
       // 오류 처리 로직 추가
