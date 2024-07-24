@@ -1,177 +1,116 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import RegionOption from '../assets/img/RegionOption.svg';
-import SellingOption from '../assets/img/SellingOption.svg';
-import InactiveOption from '../assets/img/InactiveOption.svg';
-import ActiveOption from '../assets/img/ActiveOption.svg';
+import { useLocation } from 'react-router-dom';
 import Navbar2 from '../components/Navbar2';
-import SellingTypeModal from '../components/SellingTypeModal';
-import RegionModal from '../components/RegionModal';
 import Map from '../components/Map';
-import SellingOption2 from '../assets/img/SellingOption2.svg';
-import SearchBtn from '../assets/img/SearchBtn.svg';
+import SelectedIcon from '../assets/img/SelectedIcon.svg';
+import SelectedIcon2 from '../assets/img/SelectedIcon2.svg';
+import { useRentContext } from '../components/RentContext';
 
 const RoomPage = () => {
-  const [isElevatorActive, setIsElevatorActive] = useState(false);
-  const [isShortTermActive, setIsShortTermActive] = useState(false);
-  const [isParkingActive, setIsParkingActive] = useState(false);
-  const [isSeparateActive, setIsSeparateActive] = useState(false);
-  const [isDuplexActive, setIsDuplexActive] = useState(false);
+  const location = useLocation();
+  const { state } = location;
 
-  const handleElevatorClick = () => {
-    setIsElevatorActive(!isElevatorActive);
-  };
+  const { isMonthlyRentActive, isDepositRentActive } = useRentContext();
+  const transactionType = isMonthlyRentActive ? '월세' : isDepositRentActive ? '전세' : '';
 
-  const handleShortTermClick = () => {
-    setIsShortTermActive(!isShortTermActive);
-  };
-
-  const handleParkingClick = () => {
-    setIsParkingActive(!isParkingActive);
-  };
-
-  const handleSeparateClick = () => {
-    setIsSeparateActive(!isSeparateActive);
-  };
-
-  const handleDuplexClick = () => {
-    setIsDuplexActive(!isDuplexActive);
-  };
-
-  const [activeModal, setActiveModal] = useState<'sellingType' | 'parkingNumber' | 'roomNumber' | 'region' | null>(
-    null,
-  );
-
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const handleButtonClick = (modal: 'sellingType' | 'parkingNumber' | 'roomNumber' | 'region') => {
-    setActiveModal(modal);
-  };
-
-  const handleCloseModal = () => {
-    setActiveModal(null);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        handleCloseModal();
-      }
-    };
-
-    if (activeModal) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [activeModal]);
+  console.log('State:', state);
+  console.log('거래유형:', transactionType);
 
   return (
     <div className="flex flex-col min-h-screen w-full h-full overflow-hidden bg-white">
       <Navbar2 />
       {/* 거주형태 */}
       <div className="flex border-b-[1.5px] border-[#EBEBEB] w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[18px] text-black mt-[72px]">
-        <Link to="/apt">
-          <button className="relative w-[130px] h-[61px] flex items-center justify-center">아파트</button>
-        </Link>
-        <Link to="/office">
-          <button className="relative w-[130px] h-[61px] flex items-center justify-center">
-            오피스텔
-            <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
-          </button>
-        </Link>
-        <Link to="/house">
-          <button className="relative w-[130px] h-[61px] flex items-center justify-center">
-            빌라 ∙ 주택
-            <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
-          </button>
-        </Link>
-        <Link to="/room">
-          <button className="relative w-[130px] h-[61px] flex items-center justify-center text-[#357FFF]">
-            원룸 ∙ 투룸
-            <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]"></div>
-            <div className="absolute bottom-0 w-[80%] h-[4px] bg-[#357FFF]"></div>
-          </button>
-        </Link>
+        <div className="relative w-[130px] h-[61px] flex items-center justify-center">아파트</div>
+        <div className="relative w-[130px] h-[61px] flex items-center justify-center">
+          오피스텔
+          <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]" />
+        </div>
+        <div className="relative w-[130px] h-[61px] flex items-center justify-center">
+          빌라 ∙ 주택
+          <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]" />
+        </div>
+        <div className="relative w-[130px] h-[61px] flex items-center justify-center text-[#357FFF]">
+          원룸 ∙ 투룸
+          <div className="absolute left-0 w-[2px] h-[30%] bg-[#E0E0E0]" />
+          <div className="absolute bottom-0 w-[80%] h-[4px] bg-[#357FFF]" />
+        </div>
       </div>
       {/* options */}
       <div className="flex relative w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[16px] text-black">
-        <button className="relative flex ml-[30px]" onClick={() => handleButtonClick('region')}>
-          <img src={RegionOption} alt="지역 설정" />
-          <div className="absolute flex w-full h-full flex-row justify-end items-center">
-            <p className="flex w-[75px] h-[30px] items-center">시/도</p>
-            <p className="flex w-[90px] h-[30px] items-center">시/군/구</p>
-            <p className="flex w-[75px] h-[30px] items-center mr-[5px]">읍/면/동</p>
-          </div>
-        </button>
-        {activeModal === 'region' && <RegionModal ref={modalRef} isOpen={true} onClose={handleCloseModal} />}
-        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
-        <button className="relative flex" onClick={() => handleButtonClick('sellingType')}>
-          <img src={activeModal === 'sellingType' ? SellingOption2 : SellingOption} alt="거래 유형" />
+        <div className="flex w-[100px] h-[35px] ml-[30px] mr-[10px] justify-center items-center rounded-[30px] bg-white border border-[#357fff]">
+          <p className="flex font-[NanumSquareRoundB] text-[16px] text-[#357fff]">{transactionType}</p>
+        </div>
+        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[10px]" />
+        <div
+          className={`flex flex-row justify-start items-center w-[100px] h-[35px] mx-[10px] rounded-lg ${
+            state?.isShortLease ? 'bg-[#E3F3FF]' : 'bg-white border border-[#B0B0B0]'
+          }`}
+        >
+          <img src={state?.isShortLease ? SelectedIcon2 : SelectedIcon} alt="Selected Icon" className="flex ml-[7px]" />
           <p
-            className={`absolute flex w-full h-full ml-[20px] items-center font-[NanumSquareRoundB] text-[16px] ${
-              activeModal === 'sellingType' ? 'text-[#357FFF]' : 'text-black'
-            }`}
-          >
-            거래유형
-          </p>
-        </button>
-        {activeModal === 'sellingType' && <SellingTypeModal ref={modalRef} isOpen={true} onClose={handleCloseModal} />}
-        <span className="border-l-2 border-[#E0E0E0] h-[19px] mx-[20px]"></span>
-        <button className="relative flex" onClick={handleElevatorClick}>
-          <img src={isElevatorActive ? ActiveOption : InactiveOption} alt="옵션" />
-          <p
-            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[14.5px] ${
-              isElevatorActive ? 'text-[#357FFF]' : 'text-black'
-            }`}
-          >
-            엘리베이터
-          </p>
-        </button>
-        <button className="relative flex ml-[20px]" onClick={handleShortTermClick}>
-          <img src={isShortTermActive ? ActiveOption : InactiveOption} alt="옵션" />
-          <p
-            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
-              isShortTermActive ? 'text-[#357FFF]' : 'text-black'
+            className={`flex ml-[5px] font-[NanumSquareRoundB] text-[16px] ${
+              state?.isShortLease ? 'text-[#357FFF]' : 'text-[#919191]'
             }`}
           >
             단기임대
           </p>
-        </button>
-        <button className="relative flex ml-[20px]" onClick={handleParkingClick}>
-          <img src={isParkingActive ? ActiveOption : InactiveOption} alt="옵션" />
+        </div>
+        <div
+          className={`flex flex-row justify-start items-center w-[100px] h-[35px] mx-[10px] rounded-lg ${
+            state?.canParking ? 'bg-[#E3F3FF]' : 'bg-white border border-[#B0B0B0]'
+          }`}
+        >
+          <img src={state?.canParking ? SelectedIcon2 : SelectedIcon} alt="Selected Icon" className="flex ml-[7px]" />
           <p
-            className={`absolute flex w-full h-full ml-[35px] items-center font-[NanumSquareRoundB] text-[16px] ${
-              isParkingActive ? 'text-[#357FFF]' : 'text-black'
+            className={`flex ml-[5px] font-[NanumSquareRoundB] text-[16px] ${
+              state?.canParking ? 'text-[#357FFF]' : 'text-[#919191]'
             }`}
           >
             주차가능
           </p>
-        </button>
-        <button className="relative flex ml-[20px]" onClick={handleSeparateClick}>
-          <img src={isSeparateActive ? ActiveOption : InactiveOption} alt="옵션" />
+        </div>
+        <div
+          className={`flex flex-row justify-start items-center w-[110px] h-[35px] mx-[10px] rounded-lg ${
+            state?.hasElevator ? 'bg-[#E3F3FF]' : 'bg-white border border-[#B0B0B0]'
+          }`}
+        >
+          <img src={state?.hasElevator ? SelectedIcon2 : SelectedIcon} alt="Selected Icon" className="flex ml-[7px]" />
           <p
-            className={`absolute flex w-full h-full ml-[40px] items-center font-[NanumSquareRoundB] text-[16px] ${
-              isSeparateActive ? 'text-[#357FFF]' : 'text-black'
+            className={`flex ml-[5px] font-[NanumSquareRoundB] text-[16px] ${
+              state?.hasElevator ? 'text-[#357FFF]' : 'text-[#919191]'
+            }`}
+          >
+            엘리베이터
+          </p>
+        </div>
+        <div
+          className={`flex flex-row justify-start items-center w-[100px] h-[35px] mx-[10px] rounded-lg ${
+            state?.isDivision ? 'bg-[#E3F3FF]' : 'bg-white border border-[#B0B0B0]'
+          }`}
+        >
+          <img src={state?.isDivision ? SelectedIcon2 : SelectedIcon} alt="Selected Icon" className="flex ml-[7px]" />
+          <p
+            className={`flex ml-[10px] font-[NanumSquareRoundB] text-[16px] ${
+              state?.isDivision ? 'text-[#357FFF]' : 'text-[#919191]'
             }`}
           >
             분리형
           </p>
-        </button>
-        <button className="relative flex ml-[20px]" onClick={handleDuplexClick}>
-          <img src={isDuplexActive ? ActiveOption : InactiveOption} alt="옵션" />
+        </div>
+        <div
+          className={`flex flex-row justify-start items-center w-[100px] h-[35px] ml-[10px] rounded-lg ${
+            state?.isDuplex ? 'bg-[#E3F3FF]' : 'bg-white border border-[#B0B0B0]'
+          }`}
+        >
+          <img src={state?.isDuplex ? SelectedIcon2 : SelectedIcon} alt="Selected Icon" className="flex ml-[7px]" />
           <p
-            className={`absolute flex w-full h-full ml-[45px] items-center font-[NanumSquareRoundB] text-[16px] ${
-              isDuplexActive ? 'text-[#357FFF]' : 'text-black'
+            className={`flex ml-[15px] font-[NanumSquareRoundB] text-[16px] ${
+              state?.isDuplex ? 'text-[#357FFF]' : 'text-[#919191]'
             }`}
           >
             복층
           </p>
-        </button>
+        </div>
       </div>
       {/* 지도 표시 영역 */}
       <Map />

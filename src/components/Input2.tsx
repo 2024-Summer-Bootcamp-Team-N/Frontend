@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const Input2 = () => {
   const navigate = useNavigate();
+
   const [activeButtons, setActiveButtons] = useState({
     residenceType: '',
     parking: '',
@@ -97,8 +98,9 @@ const Input2 = () => {
 
         navigate('/apt', {
           state: {
-            residenceResponse: residenceResponse.data,
-            aptDetailsResponse: detailsResponse.data,
+            parking: activeButtons.parking,
+            rooms: activeButtons.rooms,
+            isShortLease: activeButtons.additionalOptions.includes('단기임대'),
           },
         });
       } else if (activeButtons.residenceType === '주택빌라') {
@@ -123,8 +125,9 @@ const Input2 = () => {
 
         navigate('/house', {
           state: {
-            residenceResponse: residenceResponse.data,
-            houseDetailsResponse: detailsResponse.data,
+            rooms: activeButtons.rooms,
+            isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+            canParking: activeButtons.additionalOptions.includes('주차가능'),
           },
         });
       } else if (activeButtons.residenceType === '오피스텔') {
@@ -154,8 +157,11 @@ const Input2 = () => {
 
         navigate('/office', {
           state: {
-            residenceResponse: residenceResponse.data,
-            officetelResponse: detailsResponse.data,
+            parking: activeButtons.parking,
+            rooms: activeButtons.rooms,
+            isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+            canParking: activeButtons.additionalOptions.includes('주차가능'),
+            hasElevator: activeButtons.additionalOptions.includes('엘리베이터'),
           },
         });
       } else if (activeButtons.residenceType === '원룸투룸') {
@@ -177,8 +183,11 @@ const Input2 = () => {
 
         navigate('/onetwo', {
           state: {
-            residenceResponse: residenceResponse.data,
-            onetwoResponse: detailsResponse.data,
+            isShortLease: activeButtons.additionalOptions.includes('단기임대'),
+            canParking: activeButtons.additionalOptions.includes('주차가능'),
+            hasElevator: activeButtons.additionalOptions.includes('엘리베이터'),
+            isDivision: activeButtons.additionalOptions.includes('분리형'),
+            isDuplex: activeButtons.additionalOptions.includes('복층'),
           },
         });
       }
