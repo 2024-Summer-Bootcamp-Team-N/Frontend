@@ -5,7 +5,7 @@ import Sidebar from './Sidebar.tsx';
 import { useMap } from '../components/MapContext.tsx';
 
 const Map: React.FC = () => {
-  const { latitude, longitude } = useMap();
+  const { latitude, longitude, setLatitude, setLongitude } = useMap();
 
   useEffect(() => {
     // Kakao Maps API script 태그 생성
@@ -39,6 +39,13 @@ const Map: React.FC = () => {
           // ZoomControl 버튼 클릭 이벤트 처리
           (window as any).zoomIn = zoomIn;
           (window as any).zoomOut = zoomOut;
+
+          // // 중심 좌표가 변경되면 localStorage에 저장
+          // window.kakao.maps.event.addListener(map, 'center_changed', () => {
+          //   const center = map.getCenter();
+          //   setLatitude(center.getLat());
+          //   setLongitude(center.getLng());
+          // });
         });
       } else {
         console.error('Kakao Maps API failed to load.');
@@ -54,7 +61,7 @@ const Map: React.FC = () => {
       (window as any).zoomIn = undefined;
       (window as any).zoomOut = undefined;
     };
-  }, [latitude, longitude]);
+  }, [latitude, longitude, setLatitude, setLongitude]);
 
   return (
     <div id="map" className="relative flex flex-row flex-grow w-full h-full">
@@ -74,7 +81,6 @@ const Map: React.FC = () => {
               <p className="flex  w-max-full  font-bold  text-white mx-[3px]">711</p>
             </div>
             <p className="flex w-max-full items-center top-2 font-bold text-center p-1.5 mr-[4px] -mt-[1px] h-[40px] text-[#357fff]">
-              {' '}
               한남동
             </p>
           </button>
