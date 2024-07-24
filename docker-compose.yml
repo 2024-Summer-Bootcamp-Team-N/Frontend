@@ -12,10 +12,10 @@ services:
       - .:/frontend/
       - /frontend/node_modules
     networks:
-      - nteam
+      - app-network
     tty: true
     stdin_open: true
 
 networks:
-  nteam:
+  app-network:
     driver: bridge
