@@ -88,8 +88,12 @@ const Sidebar: React.FC = () => {
               className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[25%] max-h-[25%] cursor-pointer hover:bg-gray-100"
               onClick={() => handleOpenSidebar2(info)}
             >
-              <img src={HouseImage} alt="매물 사진" className="w-[166px] h-[166px] border-[2px] flex object-cover" />
-              <div className="flex-col ml-[15px]">
+              <img
+                src={HouseImage}
+                alt="매물 사진"
+                className="w-[166px] h-[166px] ml-[30px] border-[2px] flex object-cover"
+              />
+              <div className="flex-col ml-[30px]">
                 <div className="w-[140.97px] h-[29px] flex text-xl font-nanumSquareRoundB mb-[17px] text-left text-black hover:text-gray-600">
                   {info.price}
                 </div>
@@ -100,7 +104,7 @@ const Sidebar: React.FC = () => {
                     자세히 보기
                   </a>
                 </p>
-                <div className="flex justify-end">
+                <div className="flex justify-start">
                   <Link
                     to="/consulting"
                     className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
