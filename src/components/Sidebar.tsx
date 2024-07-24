@@ -9,6 +9,7 @@ interface Info {
   price: string;
   room_info: string;
   link: string;
+  maintenance_fee?: string;
 }
 
 const Sidebar: React.FC = () => {
@@ -22,7 +23,6 @@ const Sidebar: React.FC = () => {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        // API 요청
         const infoResponse = await axios.get('http://localhost:8000/api/v1/options/crawling/', {
           headers: {
             'Content-Type': 'application/json',
@@ -33,7 +33,26 @@ const Sidebar: React.FC = () => {
         console.log('매물 정보 API 응답:', infoResponse.data);
 
         if (Array.isArray(infoResponse.data.new_room_info_list)) {
-          setInfoList(infoResponse.data.new_room_info_list);
+          const parsedInfoList = infoResponse.data.new_room_info_list.map((info: Info) => {
+            const match = info.room_info.match(/관리비\s*(\S+)/);
+            let maintenance_fee = match ? match[1] : '정보 없음';
+
+            if (maintenance_fee === '확인') {
+              maintenance_fee = '확인 불가';
+            }
+
+            const room_info = info.room_info
+              .replace(/,?\s*관리비\s*확인\s*불가/, '')
+              .replace(/,?\s*관리비\s*\S+/, '')
+              .trim();
+
+            return {
+              ...info,
+              maintenance_fee,
+              room_info,
+            };
+          });
+          setInfoList(parsedInfoList);
         } else {
           console.error('Expected an array but got:', infoResponse.data.new_room_info_list);
           setError('올바른 데이터 형식이 아닙니다.');
@@ -76,6 +95,7 @@ const Sidebar: React.FC = () => {
                 </div>
                 <p className="flex flex-col w-full text-sm text-left font-nanumSquareRoundR text-black">
                   <span className="flex text-sm text-left text-black mb-[3px]">{info.room_info}</span>
+                  <span className="flex text-sm text-left text-gray-600 mb-[3px]">관리비: {info.maintenance_fee}</span>
                   <a href={info.link} className="text-blue-500 hover:underline">
                     자세히 보기
                   </a>
