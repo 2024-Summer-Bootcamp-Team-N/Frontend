@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useMap } from '../components/MapContext';
 import { useRentContext } from '../components/RentContext';
-import LogoWhite from '../assets/img/LogoWhite.svg';
 
 const Input = ({ onNext }) => {
   const { isMonthlyRentActive, setIsMonthlyRentActive, isDepositRentActive, setIsDepositRentActive } = useRentContext();
@@ -16,17 +15,31 @@ const Input = ({ onNext }) => {
   const [error, setError] = useState('');
   const { setCoordinates } = useMap();
 
+  // 로컬 스토리지에서 상태를 불러오는 초기 로직
+  useEffect(() => {
+    const savedTransactionType = localStorage.getItem('transactionType');
+    if (savedTransactionType === '월세') {
+      setIsMonthlyRentActive(true);
+      setIsDepositRentActive(false);
+    } else if (savedTransactionType === '전세') {
+      setIsMonthlyRentActive(false);
+      setIsDepositRentActive(true);
+    }
+  }, [setIsMonthlyRentActive, setIsDepositRentActive]);
+
   const handleMonthlyRentClick = () => {
     setIsMonthlyRentActive(true);
     setIsDepositRentActive(false);
     setDepositAmount('');
     setRentAmount('');
+    localStorage.setItem('transactionType', '월세');
   };
 
   const handleDepositRentClick = () => {
     setIsMonthlyRentActive(false);
     setIsDepositRentActive(true);
     setDepositRentAmount('');
+    localStorage.setItem('transactionType', '전세');
   };
 
   const handleNext = async () => {
@@ -56,7 +69,7 @@ const Input = ({ onNext }) => {
         const refreshToken = localStorage.getItem('refreshToken');
 
         // 주소 API 요청
-        const addressResponse = await axios.post('http://localhost:8000/api/v1/entry/regions', addressData, {
+        const addressResponse = await axios.post(`${import.meta.env.VITE_API_KEY}/entry/regions`, addressData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${refreshToken}`,
@@ -67,7 +80,7 @@ const Input = ({ onNext }) => {
         console.log('주소 API 응답:', addressResponse);
 
         // 월세/전세 API 요청
-        const typesResponse = await axios.post('http://localhost:8000/api/v1/entry/types', typesData, {
+        const typesResponse = await axios.post(`${import.meta.env.VITE_API_KEY}/entry/types`, typesData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${refreshToken}`,
@@ -83,47 +96,51 @@ const Input = ({ onNext }) => {
     }
   };
 
-  const handleKoreanInput = (setter) => (e) => {
-    const koreanRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$/;
-    if (koreanRegex.test(e.target.value) || e.target.value === '') {
+  const handleAddressInput = (setter) => (e) => {
+    const koreanEnglishRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z\s]*$/;
+    if (koreanEnglishRegex.test(e.target.value) || e.target.value === '') {
       setter(e.target.value);
     }
   };
 
   const handleRentInput = (e) => {
-    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
-    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+    const koreanEnglishNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z|0-9\s]*$/;
+    if (koreanEnglishNumberRegex.test(e.target.value) || e.target.value === '') {
       setRentAmount(e.target.value);
     }
   };
 
   const handleDepositInput = (e) => {
-    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
-    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+    const koreanEnglishNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z|0-9\s]*$/;
+    if (koreanEnglishNumberRegex.test(e.target.value) || e.target.value === '') {
       setDepositAmount(e.target.value);
     }
   };
 
   const handleDepositRentInput = (e) => {
-    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
-    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+    const koreanEnglishNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z|0-9\s]*$/;
+    if (koreanEnglishNumberRegex.test(e.target.value) || e.target.value === '') {
       setDepositRentAmount(e.target.value);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 폼 제출 방지
+      handleNext();
     }
   };
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
-      <div className="flex mb-[80%]">
-        <img src={LogoWhite} alt="Logo" className="flex object-cover w-[650px] h-[auto]" />
-      </div>
       <div
-        className="absolute justify-center items-center mt-[110px] w-[410px] h-[550px] bg-white rounded-lg opacity-95 font-nanumSquareRoundR"
+        className="absolute justify-center items-center mt-[50px] w-[450px] h-[650px] bg-white rounded-lg opacity-95 font-[nanumSquareRoundR]"
         onClick={(e) => e.stopPropagation()}
         style={{
           filter: 'drop-shadow(0px 2px 5px rgba(50,50,93,0.25)) drop-shadow(0px 1px 3px rgba(0,0,0,0.3))',
         }}
       >
-        <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-8 gap-2">
+        <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-[30px] gap-2">
           <div className="flex w-full flex-row justify-center font-[nanumSquareRoundEB]">
             <p className="flex text-center">주소 및 거래유형 입력</p>
           </div>
@@ -137,7 +154,8 @@ const Input = ({ onNext }) => {
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="시/도"
                 value={city}
-                onChange={handleKoreanInput(setCity)}
+                onChange={handleAddressInput(setCity)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -151,7 +169,8 @@ const Input = ({ onNext }) => {
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="시/군/구"
                 value={district}
-                onChange={handleKoreanInput(setDistrict)}
+                onChange={handleAddressInput(setDistrict)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -165,7 +184,8 @@ const Input = ({ onNext }) => {
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="읍/면/동"
                 value={town}
-                onChange={handleKoreanInput(setTown)}
+                onChange={handleAddressInput(setTown)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -200,6 +220,7 @@ const Input = ({ onNext }) => {
                 placeholder="월세"
                 value={rentAmount}
                 onChange={handleRentInput}
+                onKeyDown={handleKeyDown}
               />
             </div>
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
@@ -212,6 +233,7 @@ const Input = ({ onNext }) => {
                 placeholder="보증금"
                 value={depositAmount}
                 onChange={handleDepositInput}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -229,6 +251,7 @@ const Input = ({ onNext }) => {
                 placeholder="전세금"
                 value={depositRentAmount}
                 onChange={handleDepositRentInput}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>

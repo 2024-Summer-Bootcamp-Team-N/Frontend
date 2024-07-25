@@ -1,6 +1,6 @@
 import { useEffect, useState, forwardRef } from 'react';
 import Icon from '../assets/img/PaperIcon.svg';
-import Checkbox from '../assets/img/Checkboxes.svg'
+import Checkbox from '../assets/img/Checkboxes.svg';
 import axios from 'axios';
 
 const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
@@ -13,11 +13,11 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const response = await axios.get('http://localhost:8000/api/v1/contracts/latest-room-detail/', {
+        const response = await axios.get(`${import.meta.env.VITE_API_KEY}/contracts/latest-room-detail/`, {
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             Authorization: `${refreshToken}`,
-          }
+          },
         });
         setRoomDetail(response.data);
         setFetchedDate(currentDate);
@@ -38,7 +38,6 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
     return <div>Loading...</div>;
   }
 
-  
   return (
     <div ref={ref}>
       <div
@@ -65,7 +64,7 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
             <div className="flex gap-1 items-center flex-shrink-0">
               <p className="text-[1.2vw] leading-none font-[NanumSquareRoundB] text-left text-[#49454f]">월세</p>
               {roomDetail.monthly_rent !== null ? (
-                <img src={Checkbox} alt="Checked" className= "w-[3vw] h-auto pt-1.5" />
+                <img src={Checkbox} alt="Checked" className="w-[3vw] h-auto pt-1.5" />
               ) : (
                 <div className="flex justify-center items-center rounded-full">
                   <div className="w-[1.2vw] h-[1.2vw] rounded-[10%] border-[0.2vw] border-[#49454f]"></div>
@@ -149,8 +148,8 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
 
         <div className="flex w-full justify-start items-center px-8 ">
           <p className="text-[16.5px] font-[NanumSquareRoundB] text-left text-black/50">
-            위 부동산의 임대차에 관하여 임대인( HOUSE-ADVISOR )과 임차인( {roomDetail.latest_user_name} )은 합의에 의하여 보증금과
-            차임 및 관리비를 아래와 같이 지불하기로 한다.
+            위 부동산의 임대차에 관하여 임대인( HOUSE-ADVISOR )과 임차인( {roomDetail.latest_user_name} )은 합의에
+            의하여 보증금과 차임 및 관리비를 아래와 같이 지불하기로 한다.
           </p>
         </div>
 
@@ -244,8 +243,8 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
           </div>
           <div className="flex w-full justify-start items-center px-8 pb-2">
             <p className="text-[16.5px] font-[NanumSquareRoundB] text-left text-[#49454f]">
-              ③ 임대인과 임차인은 계약 존속 중에 발생하는 임차주택의 수리 및 비용부담에 관하여 다음과 같이 합의한다. 다만,
-              합의되지 아니한 기타 수선비용에 관한 부담은 민법, 판례 기타 관습에 따른다.
+              ③ 임대인과 임차인은 계약 존속 중에 발생하는 임차주택의 수리 및 비용부담에 관하여 다음과 같이 합의한다.
+              다만, 합의되지 아니한 기타 수선비용에 관한 부담은 민법, 판례 기타 관습에 따른다.
             </p>
           </div>
           {/* 제4조 표 */}
@@ -268,8 +267,8 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
                     colSpan={5}
                     className="border border-dashed border-[#868686] text-left text-[#49454f]/[0.5] p-[7px]"
                   >
-                    ( 예컨대, 임차인의 고의․과실에 기한 파손, 전구 등 통상의 간단한 수선, 소모품 교체 비용은 민법 제623조,
-                    판례상 임차인이 부담하는 것으로 해석됨 )
+                    ( 예컨대, 임차인의 고의․과실에 기한 파손, 전구 등 통상의 간단한 수선, 소모품 교체 비용은 민법
+                    제623조, 판례상 임차인이 부담하는 것으로 해석됨 )
                   </td>
                 </tr>
               </tbody>
@@ -360,8 +359,8 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
             <div className="flex w-full justify-start items-center px-8 ">
               <p className="text-[16.5px] font-[NanumSquareRoundB] text-left text-[#49454f]">
                 임대차계약이 종료된 경우에 임차인은 임차주택을 원래의 상태로 복구하여 임대인에게 반환하고, 이와 동시에
-                임대인은 보증금을 임차인에게 반환하여야 한다. 다만, 시설물의 노후화나 통상 생길 수 있는 파손 등은 임차인의
-                원상복구의무에 포함되지 아니한다.{' '}
+                임대인은 보증금을 임차인에게 반환하여야 한다. 다만, 시설물의 노후화나 통상 생길 수 있는 파손 등은
+                임차인의 원상복구의무에 포함되지 아니한다.{' '}
               </p>
             </div>
           </div>
@@ -425,8 +424,8 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
               <div className="flex w-full justify-start items-center px-8 pt-8">
                 <p className="text-[16.5px] font-[NanumSquareRoundR] text-left text-[#000000]">
                   • 주택을 인도받은 임차인은 ___________년 ___________월 ___________일까지 주민등록(전입신고)과
-                  주택임대차계약서 확정일자를 받기로 하고, 임대인은 위 약정일자의 다음날까지 임차주택에 저당권 등 담보권을
-                  설정할 수 없다.
+                  주택임대차계약서 확정일자를 받기로 하고, 임대인은 위 약정일자의 다음날까지 임차주택에 저당권 등
+                  담보권을 설정할 수 없다.
                 </p>
               </div>
 
@@ -440,9 +439,11 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
               <div className="flex w-full justify-start items-center px-8 pt-8">
                 <p className="text-[16.5px] font-[NanumSquareRoundR] text-left text-[#000000]">
                   • 주택 임대차 계약과 관련하여 분쟁이 있는 경우 임대인 또는 임차인은 법원에 소를 제기하기 전에 먼저
-                  주택임대차분쟁조정위원회에 조정을 신청한다. 
-                  <br/>
-                  <span className='text-[16.5px] font-[NanumSquareRoundR] text-left text-[#000000] pl-4'>( □ 동의 □ 미동의)</span>
+                  주택임대차분쟁조정위원회에 조정을 신청한다.
+                  <br />
+                  <span className="text-[16.5px] font-[NanumSquareRoundR] text-left text-[#000000] pl-4">
+                    ( □ 동의 □ 미동의)
+                  </span>
                 </p>
               </div>
 
@@ -458,8 +459,8 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
 
         <div className="flex w-full justify-start items-center px-12 p-2">
           <p className="text-[16.5px] font-[NanumSquareRoundB] text-left text-black">
-            본 계약을 증명하기 위해 계약 당사자가 이의 없음을 확인하고 각각 서명∙날인 후 임대인, 임차인, 개업공인중개사는
-            매 장마다 간인하여, 각각 1통씩 보관한다.
+            본 계약을 증명하기 위해 계약 당사자가 이의 없음을 확인하고 각각 서명∙날인 후 임대인, 임차인,
+            개업공인중개사는 매 장마다 간인하여, 각각 1통씩 보관한다.
           </p>
         </div>
 
@@ -503,7 +504,7 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
           </table>
         </div>
 
-        <br/>
+        <br />
       </div>
     </div>
   );

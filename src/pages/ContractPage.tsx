@@ -26,27 +26,27 @@ const ContractPage = () => {
       const originalStyle = element.style.cssText;
       const originalHeight = element.style.height;
       const originalOverflow = element.style.overflow;
-  
+
       try {
         // 스타일 변경
         element.style.width = 'auto';
         element.style.height = 'auto';
         element.style.overflow = 'visible';
-  
+
         // 스크롤을 맨 위로 이동
         element.scrollTop = 0;
-  
+
         const canvas = await html2canvas(element, {
           scrollY: -window.scrollY,
           height: element.scrollHeight,
-          windowHeight: element.scrollHeight
+          windowHeight: element.scrollHeight,
         });
-  
+
         // 원래 스타일로 복원
         element.style.cssText = originalStyle;
         element.style.height = originalHeight;
         element.style.overflow = originalOverflow;
-  
+
         // 이미지 다운로드
         const pngData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
@@ -54,29 +54,25 @@ const ContractPage = () => {
         link.href = pngData;
         link.download = fileName;
         link.click();
-  
+
         const dataUrl = canvas.toDataURL('image/png');
         // S3 업로드
         const base64Data = dataUrl.split(',')[1];
         const jsonData = {
           image_data: base64Data,
           file_name: fileName,
-          content_type: 'image/png'
+          content_type: 'image/png',
         };
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const response = await axios.post(
-          'http://localhost:8000/api/v1/contracts/s3-upload/',
-          jsonData,
-          {
-            headers: {
-              'accept': 'application/json',
-              Authorization: `${refreshToken}`, 
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-  
+        const response = await axios.post(`${import.meta.env.VITE_API_KEY}/contracts/s3-upload/`, jsonData, {
+          headers: {
+            accept: 'application/json',
+            Authorization: `${refreshToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
         if (response.status === 200) {
           console.log('Contract image downloaded and uploaded successfully');
           // 성공 메시지 표시
@@ -164,10 +160,7 @@ const ContractPage = () => {
               style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
               onClick={toggleModal}
             >
-              <ContractPaper 
-                ref={contractPaperRef} 
-                onContentLoaded={() => setIsContentLoaded(true)} 
-              />
+              <ContractPaper ref={contractPaperRef} onContentLoaded={() => setIsContentLoaded(true)} />
             </div>
           </div>
           <div className="flex w-full h-[15%] justify-center items-start ">
@@ -200,7 +193,7 @@ const ContractPage = () => {
             style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <ContractPaper onContentLoaded={() => {}} /> 
+            <ContractPaper onContentLoaded={() => {}} />
           </div>
         </div>
       )}
