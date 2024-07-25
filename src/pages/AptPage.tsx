@@ -74,7 +74,7 @@ const AptPage = () => {
         </div>
       </div>
       {/* options */}
-      <div className="flex relative w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[16px] text-black">
+      <div className="flex relative w-full h-[61px] justify-start items-center font-[NanumSquareRoundB] text-[16px] text-black border-b-[1.5px] border-[#EBEBEB]">
         <div className="flex w-[100px] h-[35px] ml-[30px] mr-[10px] justify-center items-center rounded-[30px] bg-white border border-[#357fff]">
           <p className="flex font-[NanumSquareRoundB] text-[16px] text-[#357fff]">{transactionType}</p>
         </div>

@@ -121,7 +121,7 @@ const Map: React.FC = () => {
           <img src={MapMinus} alt="축소" />
         </button>
       </div>
-      <div className="flex flex-row justify-center items-center flex-grow w-full h-full z-50 mt-[70px] -ml-[317px]">
+      <div className="flex flex-row justify-center items-center flex-grow w-full h-full z-50 mt-[50px] -ml-[317px]">
         <div className="flex flex-row h-full items-center justify-center">
           <button className="flex flex-row w-max-full h-[40px] rounded-[30px] bg-white border border-[#357fff]">
             <div className="flex w-[40px] h-[40px] items-center justify-center rounded-[30px] bg-[#357fff] border-2 border-[#357fff] -mt-[1px] mr-[2px] -ml-[0px]">
