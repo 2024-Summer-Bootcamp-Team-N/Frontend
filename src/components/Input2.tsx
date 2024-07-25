@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoWhite from '../assets/img/LogoWhite.svg';
 import axios from 'axios';
 
 const Input2 = () => {
@@ -217,9 +216,8 @@ const Input2 = () => {
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
-      <img src={LogoWhite} alt="Logo" className="flex object-cover w-[650px] h-[auto] mb-[80%]" />
-      <div className="absolute justify-center items-center mt-[110px] w-[670px] h-[550px] bg-white rounded-lg opacity-95 font-nanumSquareRoundR">
-        <div className="flex flex-col justify-start items-center w-[362px] mx-auto mt-8 gap-2">
+      <div className="absolute justify-center items-center mt-[50px] w-[670px] h-[570px] bg-white rounded-lg opacity-95 font-[nanumSquareRoundR]">
+        <div className="flex flex-col justify-start items-center w-[450px] mx-auto mt-8 gap-2">
           <p className="text-center font-[nanumSquareRoundEB]">거주형태 선택</p>
           {renderButtons(residenceTypes, 'residenceType')}
           {activeButtons.residenceType &&

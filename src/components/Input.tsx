@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useMap } from '../components/MapContext';
 import { useRentContext } from '../components/RentContext';
-import LogoWhite from '../assets/img/LogoWhite.svg';
 
 const Input = ({ onNext }) => {
   const { isMonthlyRentActive, setIsMonthlyRentActive, isDepositRentActive, setIsDepositRentActive } = useRentContext();
@@ -97,30 +96,30 @@ const Input = ({ onNext }) => {
     }
   };
 
-  const handleKoreanInput = (setter) => (e) => {
-    const koreanRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$/;
-    if (koreanRegex.test(e.target.value) || e.target.value === '') {
+  const handleAddressInput = (setter) => (e) => {
+    const koreanEnglishRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z\s]*$/;
+    if (koreanEnglishRegex.test(e.target.value) || e.target.value === '') {
       setter(e.target.value);
     }
   };
 
   const handleRentInput = (e) => {
-    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
-    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+    const koreanEnglishNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z|0-9\s]*$/;
+    if (koreanEnglishNumberRegex.test(e.target.value) || e.target.value === '') {
       setRentAmount(e.target.value);
     }
   };
 
   const handleDepositInput = (e) => {
-    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
-    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+    const koreanEnglishNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z|0-9\s]*$/;
+    if (koreanEnglishNumberRegex.test(e.target.value) || e.target.value === '') {
       setDepositAmount(e.target.value);
     }
   };
 
   const handleDepositRentInput = (e) => {
-    const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
-    if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
+    const koreanEnglishNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-zA-Z|0-9\s]*$/;
+    if (koreanEnglishNumberRegex.test(e.target.value) || e.target.value === '') {
       setDepositRentAmount(e.target.value);
     }
   };
@@ -134,17 +133,14 @@ const Input = ({ onNext }) => {
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
-      <div className="flex mb-[80%]">
-        <img src={LogoWhite} alt="Logo" className="flex object-cover w-[650px] h-[auto]" />
-      </div>
       <div
-        className="absolute justify-center items-center mt-[110px] w-[410px] h-[550px] bg-white rounded-lg opacity-95 font-nanumSquareRoundR"
+        className="absolute justify-center items-center mt-[50px] w-[450px] h-[650px] bg-white rounded-lg opacity-95 font-[nanumSquareRoundR]"
         onClick={(e) => e.stopPropagation()}
         style={{
           filter: 'drop-shadow(0px 2px 5px rgba(50,50,93,0.25)) drop-shadow(0px 1px 3px rgba(0,0,0,0.3))',
         }}
       >
-        <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-8 gap-2">
+        <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-[30px] gap-2">
           <div className="flex w-full flex-row justify-center font-[nanumSquareRoundEB]">
             <p className="flex text-center">주소 및 거래유형 입력</p>
           </div>
@@ -158,7 +154,7 @@ const Input = ({ onNext }) => {
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="시/도"
                 value={city}
-                onChange={handleKoreanInput(setCity)}
+                onChange={handleAddressInput(setCity)}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -173,7 +169,7 @@ const Input = ({ onNext }) => {
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="시/군/구"
                 value={district}
-                onChange={handleKoreanInput(setDistrict)}
+                onChange={handleAddressInput(setDistrict)}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -188,7 +184,7 @@ const Input = ({ onNext }) => {
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="읍/면/동"
                 value={town}
-                onChange={handleKoreanInput(setTown)}
+                onChange={handleAddressInput(setTown)}
                 onKeyDown={handleKeyDown}
               />
             </div>
