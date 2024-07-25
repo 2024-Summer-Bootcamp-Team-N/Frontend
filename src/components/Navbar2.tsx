@@ -20,14 +20,15 @@ const Navbar2 = () => {
         return;
       }
 
-      const response = await axios.delete('http://localhost:8000/api/v1/users/logout', {
+      const response = await axios.delete(`${import.meta.env.VITE_API_KEY}/users/logout`, {
         headers: {
-          'Accept': 'application/json',
-          'Authorization': refreshToken,  // Authorization 헤더에 리프레시 토큰 추가 (Bearer 제외)
+          Accept: 'application/json',
+          Authorization: refreshToken, // Authorization 헤더에 리프레시 토큰 추가 (Bearer 제외)
         },
       });
 
-      if (response.status === 205 || response.status === 204) { // 205 또는 204 응답 처리
+      if (response.status === 205 || response.status === 204) {
+        // 205 또는 204 응답 처리
         localStorage.removeItem('refreshToken');
         setIsLoggedIn(false);
         navigate('/');
@@ -44,31 +45,31 @@ const Navbar2 = () => {
   };
 
   return (
-      <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 flex border-b-[2px] border-[#EBEBEB] items-center p-1.5 font-NanumSquareRoundB">
-        <div className="flex justify-between w-full px-4">
-          <div className="flex">
-            <Link to="/">
-              <img src={LogoBlue} alt="Logo" className="" />
+    <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 flex border-b-[2px] border-[#EBEBEB] items-center p-1.5 font-NanumSquareRoundB">
+      <div className="flex justify-between w-full px-4">
+        <div className="flex">
+          <Link to="/">
+            <img src={LogoBlue} alt="Logo" className="" />
+          </Link>
+        </div>
+        <div className="flex justify-center left-[-0.5px] mr-[50px] items-center gap-8">
+          <Link to="/storage" className="hover:underline text-xl font-nanumSquareRoundB text-[#49454F]">
+            계약서 보관함
+          </Link>
+          <span className="border-l-2 border-[#E0E0E0] h-[19px]"></span>
+          {/* 로그인 상태에 따라 버튼 또는 링크 렌더링 */}
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
+              로그아웃
+            </button>
+          ) : (
+            <Link to="/login" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
+              로그인
             </Link>
-          </div>
-          <div className="flex justify-center left-[-0.5px] mr-[50px] items-center gap-8">
-            <Link to="/storage" className="hover:underline text-xl font-nanumSquareRoundB text-[#49454F]">
-              계약서 보관함
-            </Link>
-            <span className="border-l-2 border-[#E0E0E0] h-[19px]"></span>
-            {/* 로그인 상태에 따라 버튼 또는 링크 렌더링 */}
-            {isLoggedIn ? (
-                <button onClick={handleLogout} className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
-                  로그아웃
-                </button>
-            ) : (
-                <Link to="/login" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
-                  로그인
-                </Link>
-            )}
-          </div>
+          )}
         </div>
       </div>
+    </div>
   );
 };
 

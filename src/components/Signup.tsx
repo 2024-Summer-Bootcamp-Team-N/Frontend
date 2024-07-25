@@ -45,7 +45,7 @@ function Signup({ onClose }: SignupProps) {
     if (validate()) {
       try {
         const response = await axios.post(
-          'http://localhost:8000/api/v1/users/signup',
+          `${import.meta.env.VITE_API_KEY}/users/signup`,
           {
             auth_id: id,
             name,

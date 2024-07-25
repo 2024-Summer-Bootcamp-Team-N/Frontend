@@ -16,10 +16,10 @@ function Login({ onSignupClick, onClose }: LoginProps) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/users/login', { auth_id: id, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_KEY}/users/login`, { auth_id: id, password });
 
       if (response.status === 200) {
-        const { refresh_token : refreshToken } = response.data;
+        const { refresh_token: refreshToken } = response.data;
 
         localStorage.setItem('refreshToken', refreshToken);
 
