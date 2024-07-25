@@ -56,7 +56,7 @@ const Input = ({ onNext }) => {
         const refreshToken = localStorage.getItem('refreshToken');
 
         // 주소 API 요청
-        const addressResponse = await axios.post('http://localhost:8000/api/v1/entry/regions', addressData, {
+        const addressResponse = await axios.post(`${import.meta.env.VITE_API_KEY}/entry/regions`, addressData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${refreshToken}`,
@@ -67,7 +67,7 @@ const Input = ({ onNext }) => {
         console.log('주소 API 응답:', addressResponse);
 
         // 월세/전세 API 요청
-        const typesResponse = await axios.post('http://localhost:8000/api/v1/entry/types', typesData, {
+        const typesResponse = await axios.post(`${import.meta.env.VITE_API_KEY}/entry/types`, typesData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${refreshToken}`,

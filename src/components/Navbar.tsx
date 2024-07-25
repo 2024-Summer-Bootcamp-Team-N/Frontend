@@ -28,7 +28,7 @@ const Navbar = () => {
         return;
       }
 
-      const response = await axios.delete('http://localhost:8000/api/v1/users/logout', {
+      const response = await axios.delete(`${import.meta.env.VITE_API_KEY}/users/logout`, {
         headers: {
           Accept: 'application/json',
           Authorization: refreshToken,

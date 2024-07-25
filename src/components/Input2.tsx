@@ -67,11 +67,15 @@ const Input2 = () => {
         onetwo: activeButtons.residenceType === '원룸투룸',
       };
 
-      const residenceResponse = await axios.post('http://localhost:8000/api/v1/entry/residences', residenceTypeBody, {
-        headers: {
-          Authorization: `${refreshToken}`,
+      const residenceResponse = await axios.post(
+        '${import.meta.env.VITE_API_KEY}/entry/residences',
+        residenceTypeBody,
+        {
+          headers: {
+            Authorization: `${refreshToken}`,
+          },
         },
-      });
+      );
 
       console.log('거주형태 API 응답:', residenceResponse.data);
 
@@ -88,7 +92,7 @@ const Input2 = () => {
           isShortLease: activeButtons.additionalOptions.includes('단기임대'),
         };
 
-        detailsResponse = await axios.post('http://localhost:8000/api/v1/entry/residences/apt', aptDetailsBody, {
+        detailsResponse = await axios.post(`${import.meta.env.VITE_API_KEY}/entry/residences/apt`, aptDetailsBody, {
           headers: {
             Authorization: `${refreshToken}`,
           },
@@ -115,7 +119,7 @@ const Input2 = () => {
           isDuplex: false,
         };
 
-        detailsResponse = await axios.post('http://localhost:8000/api/v1/entry/residences/house', houseDetailsBody, {
+        detailsResponse = await axios.post(`${import.meta.env.VITE_API_KEY}/entry/residences/house`, houseDetailsBody, {
           headers: {
             Authorization: `${refreshToken}`,
           },
@@ -144,7 +148,7 @@ const Input2 = () => {
         };
 
         detailsResponse = await axios.post(
-          'http://localhost:8000/api/v1/entry/residences/officetel',
+          `${import.meta.env.VITE_API_KEY}/entry/residences/officetel`,
           officetelRequestBody,
           {
             headers: {
@@ -173,11 +177,15 @@ const Input2 = () => {
           isDuplex: activeButtons.additionalOptions.includes('복층'),
         };
 
-        detailsResponse = await axios.post('http://localhost:8000/api/v1/entry/residences/onetwo', onetwoRequestBody, {
-          headers: {
-            Authorization: `${refreshToken}`,
+        detailsResponse = await axios.post(
+          `${import.meta.env.VITE_API_KEY}/entry/residences/onetwo`,
+          onetwoRequestBody,
+          {
+            headers: {
+              Authorization: `${refreshToken}`,
+            },
           },
-        });
+        );
 
         console.log('원룸투룸 옵션:', detailsResponse.data);
 
@@ -193,7 +201,7 @@ const Input2 = () => {
       }
 
       // 추가: URL 생성 API 호출
-      const generateUrlResponse = await axios.get('http://localhost:8000/api/v1/info/generate-url', {
+      const generateUrlResponse = await axios.get(`${import.meta.env.VITE_API_KEY}/info/generate-url`, {
         params: { residenceType: activeButtons.residenceType, details: detailsResponse.data },
         headers: {
           Authorization: `${refreshToken}`,

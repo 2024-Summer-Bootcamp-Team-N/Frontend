@@ -21,15 +21,15 @@ const StoragePage: React.FC = () => {
     const fetchBoxes = async () => {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const response = await axios.get('http://localhost:8000/api/v1/contracts/s3-list/', {
+        const response = await axios.get(`${import.meta.env.VITE_API_KEY}/contracts/s3-list/`, {
           headers: {
-            Authorization: `${refreshToken}`, 
+            Authorization: `${refreshToken}`,
           },
         });
-  
+
         const imageData = response.data;
         console.log(imageData);
-  
+
         const newBoxes: Box[] = imageData.map((item: any, index: number) => ({
           id: index + 1,
           color: 'bg-gray-500',
@@ -37,13 +37,13 @@ const StoragePage: React.FC = () => {
           createdAt: item.created_at || new Date().toLocaleString(),
           imageUrl: item.url, // base64 데이터를 직접 사용
         }));
-  
+
         setBoxes(newBoxes);
       } catch (error) {
         console.error('Error fetching image data:', error);
       }
     };
-  
+
     fetchBoxes();
   }, []);
 
@@ -67,7 +67,11 @@ const StoragePage: React.FC = () => {
           <div className="w-screen h-[630px] flex justify-center items-center gap-2">
             {boxes.length > 1 && (
               <div className={getBoxClass((currentIndex - 1 + boxes.length) % boxes.length)}>
-                <img src={boxes[(currentIndex - 1 + boxes.length) % boxes.length].imageUrl} alt="Contract" className="w-full h-3/4 object-cover rounded-t-[27.42px]" />
+                <img
+                  src={boxes[(currentIndex - 1 + boxes.length) % boxes.length].imageUrl}
+                  alt="Contract"
+                  className="w-full h-3/4 object-cover rounded-t-[27.42px]"
+                />
                 <div className="h-1/4 flex items-center justify-center">
                   {boxes[(currentIndex - 1 + boxes.length) % boxes.length].label}
                 </div>
@@ -80,14 +84,14 @@ const StoragePage: React.FC = () => {
             )}
             <div className={getBoxClass(currentIndex)}>
               <div className="w-full h-full overflow-hidden shadow-xl cursor-pointer transform transition duration-300 hover:scale-[1.03]">
-                <Link to = {"/contract"}>
+                <Link to={'/contract'}>
                   <button>
-                    <img 
-                      src={boxes[currentIndex].imageUrl} 
+                    <img
+                      src={boxes[currentIndex].imageUrl}
                       alt="Contract"
                       className="w-full h-full object-cover object-top"
                     />
-                  </button> 
+                  </button>
                 </Link>
               </div>
             </div>
@@ -98,7 +102,11 @@ const StoragePage: React.FC = () => {
             )}
             {boxes.length > 1 && (
               <div className={getBoxClass((currentIndex + 1) % boxes.length)}>
-                <img src={boxes[(currentIndex + 1) % boxes.length].imageUrl} alt="Contract" className="w-full h-3/4 object-cover rounded-t-[27.42px]" />
+                <img
+                  src={boxes[(currentIndex + 1) % boxes.length].imageUrl}
+                  alt="Contract"
+                  className="w-full h-3/4 object-cover rounded-t-[27.42px]"
+                />
                 <div className="h-1/4 flex items-center justify-center">
                   {boxes[(currentIndex + 1) % boxes.length].label}
                 </div>
