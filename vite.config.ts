@@ -14,5 +14,8 @@ export default defineConfig({
         }
       : false, // 배포 환경에서는 HMR을 비활성화
   },
+  optimizeDeps: {
+    include: ['html2canvas']
+  },
 });
 
