@@ -62,23 +62,39 @@ function Signup({ onClose }: SignupProps) {
         console.log(response.data); // 서버에서 반환한 응답 데이터
 
         onClose();
-        navigate('/apt'); // 회원가입 후 이동할 페이지 경로
+        navigate('/login'); // 회원가입 후 이동할 페이지 경로
       } catch (error) {
         if (error.response) {
           console.error('Error response data:', error.response.data);
           console.error('Error response status:', error.response.status);
           console.error('Error response headers:', error.response.headers);
+
           // 서버에서 반환한 에러 메시지를 사용자에게 표시
-          setErrors({ ...errors, server: error.response.data });
+          if (error.response.status === 409) {
+            // 예: 409 Conflict 상태 코드
+            setErrors({ server: '이미 가입된 회원입니다.' });
+          } else {
+            setErrors({ server: error.response.data.message || '회원가입 중 오류가 발생했습니다.' });
+          }
         } else if (error.request) {
           console.error('Error request:', error.request);
+          setErrors({ server: '서버 요청 중 오류가 발생했습니다.' });
         } else {
           console.error('Error message:', error.message);
+          setErrors({ server: '오류가 발생했습니다.' });
         }
         console.error('Error config:', error.config);
       }
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 폼 제출 방지
+      handleSignup();
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <div className="flex mb-[80%]">
@@ -103,6 +119,7 @@ function Signup({ onClose }: SignupProps) {
                 placeholder="아이디"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -118,6 +135,7 @@ function Signup({ onClose }: SignupProps) {
                 placeholder="이름"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -133,6 +151,7 @@ function Signup({ onClose }: SignupProps) {
                 placeholder="비밀번호"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -144,6 +163,7 @@ function Signup({ onClose }: SignupProps) {
               placeholder="비밀번호 확인"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
           {Errors.confirmPassword && <p className="text-red-500 text-sm">{Errors.confirmPassword}</p>}

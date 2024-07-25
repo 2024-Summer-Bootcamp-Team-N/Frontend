@@ -56,6 +56,13 @@ function Login({ onSignupClick, onClose }: LoginProps) {
     onSignupClick();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 폼 제출 방지
+      handleLogin();
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <div className="flex mb-[80%]">
@@ -80,6 +87,7 @@ function Login({ onSignupClick, onClose }: LoginProps) {
                 placeholder="아이디"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -94,6 +102,7 @@ function Login({ onSignupClick, onClose }: LoginProps) {
                 placeholder="비밀번호"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>

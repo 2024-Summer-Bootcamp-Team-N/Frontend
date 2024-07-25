@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useMap } from '../components/MapContext';
 import { useRentContext } from '../components/RentContext';
@@ -16,17 +16,31 @@ const Input = ({ onNext }) => {
   const [error, setError] = useState('');
   const { setCoordinates } = useMap();
 
+  // 로컬 스토리지에서 상태를 불러오는 초기 로직
+  useEffect(() => {
+    const savedTransactionType = localStorage.getItem('transactionType');
+    if (savedTransactionType === '월세') {
+      setIsMonthlyRentActive(true);
+      setIsDepositRentActive(false);
+    } else if (savedTransactionType === '전세') {
+      setIsMonthlyRentActive(false);
+      setIsDepositRentActive(true);
+    }
+  }, [setIsMonthlyRentActive, setIsDepositRentActive]);
+
   const handleMonthlyRentClick = () => {
     setIsMonthlyRentActive(true);
     setIsDepositRentActive(false);
     setDepositAmount('');
     setRentAmount('');
+    localStorage.setItem('transactionType', '월세');
   };
 
   const handleDepositRentClick = () => {
     setIsMonthlyRentActive(false);
     setIsDepositRentActive(true);
     setDepositRentAmount('');
+    localStorage.setItem('transactionType', '전세');
   };
 
   const handleNext = async () => {
@@ -111,6 +125,13 @@ const Input = ({ onNext }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 폼 제출 방지
+      handleNext();
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <div className="flex mb-[80%]">
@@ -138,6 +159,7 @@ const Input = ({ onNext }) => {
                 placeholder="시/도"
                 value={city}
                 onChange={handleKoreanInput(setCity)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -152,6 +174,7 @@ const Input = ({ onNext }) => {
                 placeholder="시/군/구"
                 value={district}
                 onChange={handleKoreanInput(setDistrict)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -166,6 +189,7 @@ const Input = ({ onNext }) => {
                 placeholder="읍/면/동"
                 value={town}
                 onChange={handleKoreanInput(setTown)}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -200,6 +224,7 @@ const Input = ({ onNext }) => {
                 placeholder="월세"
                 value={rentAmount}
                 onChange={handleRentInput}
+                onKeyDown={handleKeyDown}
               />
             </div>
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
@@ -212,6 +237,7 @@ const Input = ({ onNext }) => {
                 placeholder="보증금"
                 value={depositAmount}
                 onChange={handleDepositInput}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -229,6 +255,7 @@ const Input = ({ onNext }) => {
                 placeholder="전세금"
                 value={depositRentAmount}
                 onChange={handleDepositRentInput}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
