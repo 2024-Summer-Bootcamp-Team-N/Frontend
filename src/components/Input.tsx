@@ -1,17 +1,18 @@
-import LogoWhite from '../assets/img/LogoWhite.svg';
 import { useState } from 'react';
 import axios from 'axios';
-import { useMap } from '../components/MapContext'; // MapContext의 경로를 설정합니다.
+import { useMap } from '../components/MapContext';
+import { useRentContext } from '../components/RentContext';
+import LogoWhite from '../assets/img/LogoWhite.svg';
 
 const Input = ({ onNext }) => {
-  const [isMonthlyRentActive, setIsMonthlyRentActive] = useState(false);
-  const [isDepositRentActive, setIsDepositRentActive] = useState(false);
+  const { isMonthlyRentActive, setIsMonthlyRentActive, isDepositRentActive, setIsDepositRentActive } = useRentContext();
+
   const [city, setCity] = useState('');
   const [district, setDistrict] = useState('');
   const [town, setTown] = useState('');
   const [rentAmount, setRentAmount] = useState('');
-  const [DepositAmount, setDepositAmount] = useState('');
-  const [DepositRentAmount, setDepositRentAmount] = useState('');
+  const [depositAmount, setDepositAmount] = useState('');
+  const [depositRentAmount, setDepositRentAmount] = useState('');
   const [error, setError] = useState('');
   const { setCoordinates } = useMap();
 
@@ -31,9 +32,9 @@ const Input = ({ onNext }) => {
   const handleNext = async () => {
     if (!city || !district || !town || (!isMonthlyRentActive && !isDepositRentActive)) {
       setError('모든 필드를 입력해주세요.');
-    } else if (isMonthlyRentActive && (!rentAmount || !DepositAmount)) {
+    } else if (isMonthlyRentActive && (!rentAmount || !depositAmount)) {
       setError('월세와 보증금을 입력해주세요.');
-    } else if (isDepositRentActive && !DepositRentAmount) {
+    } else if (isDepositRentActive && !depositRentAmount) {
       setError('전세금을 입력해주세요.');
     } else {
       setError('');
@@ -47,8 +48,8 @@ const Input = ({ onNext }) => {
       const typesData = {
         LEASE: isDepositRentActive,
         MONTHLY_RENT: isMonthlyRentActive,
-        depositRangeMax: isDepositRentActive ? DepositRentAmount : DepositAmount, //보증금, 전세금
-        priceRangeMax: isMonthlyRentActive ? rentAmount : '0', //월세
+        depositRangeMax: isDepositRentActive ? depositRentAmount : depositAmount,
+        priceRangeMax: isMonthlyRentActive ? rentAmount : '0',
       };
 
       try {
@@ -74,7 +75,6 @@ const Input = ({ onNext }) => {
         });
 
         console.log('월세/전세 API 응답:', typesResponse);
-        // API 요청 성공 후의 처리
         onNext();
       } catch (err) {
         setError('API 요청 중 오류가 발생했습니다.');
@@ -103,6 +103,7 @@ const Input = ({ onNext }) => {
       setDepositAmount(e.target.value);
     }
   };
+
   const handleDepositRentInput = (e) => {
     const koreanAndNumberRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]*$/;
     if (koreanAndNumberRegex.test(e.target.value) || e.target.value === '') {
@@ -209,7 +210,7 @@ const Input = ({ onNext }) => {
                 type="text"
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="보증금"
-                value={DepositAmount}
+                value={depositAmount}
                 onChange={handleDepositInput}
               />
             </div>
@@ -226,7 +227,7 @@ const Input = ({ onNext }) => {
                 type="text"
                 className="w-full text-base text-left text-[#202629] h-[30px]"
                 placeholder="전세금"
-                value={DepositRentAmount}
+                value={depositRentAmount}
                 onChange={handleDepositRentInput}
               />
             </div>

@@ -7,8 +7,15 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    hmr: process.env.NODE_ENV === 'development'
+      ? {
+          host: 'localhost',
+          port: 5173,
+        }
+      : false, // 배포 환경에서는 HMR을 비활성화
   },
   optimizeDeps: {
     include: ['html2canvas']
   },
 });
+
