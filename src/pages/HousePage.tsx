@@ -3,14 +3,14 @@ import Navbar2 from '../components/Navbar2';
 import Map from '../components/Map';
 import SelectedIcon from '../assets/img/SelectedIcon.svg';
 import SelectedIcon2 from '../assets/img/SelectedIcon2.svg';
-import { useRentContext } from '../components/RentContext';
 
 const HousePage = () => {
   const location = useLocation();
   const { state } = location;
 
-  const { isMonthlyRentActive, isDepositRentActive } = useRentContext();
-  const transactionType = isMonthlyRentActive ? '월세' : isDepositRentActive ? '전세' : '';
+  const storedTransactionType = localStorage.getItem('transactionType');
+
+  const transactionType = storedTransactionType;
 
   const rooms =
     state?.rooms === '상관X'

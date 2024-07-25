@@ -91,7 +91,7 @@ const Sidebar: React.FC = () => {
               <img
                 src={HouseImage}
                 alt="매물 사진"
-                className="w-[166px] h-[166px] ml-[30px] border-[2px] flex object-cover"
+                className="w-[166px] h-[166px] ml-[20px] border-[2px] flex object-cover"
               />
               <div className="flex-col ml-[30px]">
                 <div className="w-[140.97px] h-[29px] flex text-xl font-nanumSquareRoundB mb-[17px] text-left text-black hover:text-gray-600">
