@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar2 from './Sidebar2';
 import HouseImage from '../assets/img/HouseImage.png';
+import { useMap } from './MapContext';
 
 interface Info {
   id: number;
@@ -17,6 +18,7 @@ const Sidebar: React.FC = () => {
   const [selectedInfo, setSelectedInfo] = useState<Info | null>(null);
   const [infoList, setInfoList] = useState<Info[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { setNewRoomInfoCounts } = useMap();
 
   useEffect(() => {
     const fetchInfoList = async () => {
@@ -53,6 +55,7 @@ const Sidebar: React.FC = () => {
             };
           });
           setInfoList(parsedInfoList);
+          setNewRoomInfoCounts(infoResponse.data.new_room_info_count);
         } else {
           console.error('Expected an array but got:', infoResponse.data.new_room_info_list);
           setError('올바른 데이터 형식이 아닙니다.');
@@ -64,7 +67,7 @@ const Sidebar: React.FC = () => {
     };
 
     fetchInfoList();
-  }, []);
+  }, [setNewRoomInfoCounts]);
 
   const handleOpenSidebar2 = (info: Info) => {
     setSelectedInfo(info);

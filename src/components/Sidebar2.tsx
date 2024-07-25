@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Inside from '../assets/img/Inside.svg';
+import { useMap } from './MapContext';
 
 interface Sidebar2Props {
   onClose: () => void;
@@ -30,8 +31,12 @@ interface DetailInfo {
 const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
   const [detailInfo, setDetailInfo] = useState<DetailInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { setLocation } = useMap();
+  // const { setSelectedRoom } = useMap();
 
   useEffect(() => {
+    let isMounted = true; // 이 컴포넌트가 마운트된 상태인지 확인하는 플래그
+
     const fetchDetailInfo = async () => {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -45,9 +50,21 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
 
         console.log('매물 상세정보 API 응답:', detailInfoResponse);
 
-        setDetailInfo(detailInfoResponse.data.room_detail_info);
+        if (isMounted) {
+          // 컴포넌트가 마운트된 상태에서만 상태 업데이트
+          setDetailInfo(detailInfoResponse.data.room_detail_info);
+          setLocation(detailInfoResponse.data.room_detail_info.location); // location 값 설정
+
+          // setSelectedRoom({
+          //   type: detailInfoResponse.data.room_detail_info.room_type,
+          //   price: detailInfoResponse.data.room_detail_info.price,
+          //   area: detailInfoResponse.data.room_detail_info.exclusive_overall_area,
+          // });
+        }
       } catch (error) {
-        setError('Failed to fetch data');
+        if (isMounted) {
+          setError('Failed to fetch data');
+        }
         console.log(error);
       }
     };
@@ -62,9 +79,13 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
 
     document.addEventListener('mousedown', handleOutsideClick);
     return () => {
+      isMounted = false; // 컴포넌트 언마운트 시 플래그 변경
       document.removeEventListener('mousedown', handleOutsideClick);
+      // 컴포넌트 언마운트 시 로컬 스토리지에서 좌표 값 삭제
+      localStorage.removeItem('latitude');
+      localStorage.removeItem('longitude');
     };
-  }, [onClose, roomId]);
+  }, [onClose, roomId, setLocation]);
 
   if (error) return <div>{error}</div>;
 

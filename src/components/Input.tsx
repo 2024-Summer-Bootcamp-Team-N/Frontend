@@ -15,6 +15,7 @@ const Input = ({ onNext }) => {
   const [depositRentAmount, setDepositRentAmount] = useState('');
   const [error, setError] = useState('');
   const { setCoordinates } = useMap();
+  const { setStreets } = useMap();
 
   // 로컬 스토리지에서 상태를 불러오는 초기 로직
   useEffect(() => {
@@ -76,8 +77,14 @@ const Input = ({ onNext }) => {
             Authorization: `${refreshToken}`,
           },
         });
-        const { latitude, longitude } = addressResponse.data.data;
+        const { latitude, longitude, street } = addressResponse.data.data;
         setCoordinates(parseFloat(latitude), parseFloat(longitude));
+        setStreets(street);
+
+        localStorage.setItem('OGstreet', street);
+        localStorage.setItem('OGlatitude', latitude.toString());
+        localStorage.setItem('OGlongitude', longitude.toString());
+
         console.log('주소 API 응답:', addressResponse);
 
         // 월세/전세 API 요청
