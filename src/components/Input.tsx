@@ -197,9 +197,9 @@ const Input = ({ onNext }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row w-full justify-center mt-[10px] items-start">
+        <div className="flex flex-row w-full justify-center mt-[20px] items-start">
           <button
-            className={`flex w-[67.38px] h-[36.95px] justify-center items-center  rounded-[54.34px] ${isMonthlyRentActive ? 'bg-[#357FFF]' : 'bg-[#F5F5F5]'}`}
+            className={`flex w-[67.38px] h-[36.95px] justify-center items-center mr-[5px] rounded-[54.34px] ${isMonthlyRentActive ? 'bg-[#357FFF]' : 'bg-[#F5F5F5]'}`}
             onClick={handleMonthlyRentClick}
           >
             <p className={`text-[18px] font-[NanumSquareB] ${isMonthlyRentActive ? 'text-white' : 'text-[#979797]'}`}>
@@ -207,7 +207,7 @@ const Input = ({ onNext }) => {
             </p>
           </button>
           <button
-            className={`flex w-[67.38px] h-[36.95px] justify-center items-center  rounded-[54.34px] ${isDepositRentActive ? 'bg-[#357FFF]' : 'bg-[#F5F5F5]'}`}
+            className={`flex w-[67.38px] h-[36.95px] justify-center items-center ml-[5px] rounded-[54.34px] ${isDepositRentActive ? 'bg-[#357FFF]' : 'bg-[#F5F5F5]'}`}
             onClick={handleDepositRentClick}
           >
             <p className={`text-[18px] font-[NanumSquareB] ${isDepositRentActive ? 'text-white' : 'text-[#979797]'}`}>
@@ -216,7 +216,7 @@ const Input = ({ onNext }) => {
           </button>
         </div>
         {isMonthlyRentActive && (
-          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-4 gap-2">
+          <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-[5px] gap-2">
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
               월세
             </label>
