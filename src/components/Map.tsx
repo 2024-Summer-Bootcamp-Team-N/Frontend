@@ -1,51 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MapPlus from '../assets/img/MapPlus.svg';
 import MapMinus from '../assets/img/MapMinus.svg';
-import Sidebar from './Sidebar.tsx';
-import { useMap } from '../components/MapContext.tsx';
+import Sidebar from './Sidebar';
+import { useMap } from './MapContext';
+import MapMarker from './MapMarker';
 
 const Map: React.FC = () => {
-  const { latitude, longitude, setLatitude, setLongitude } = useMap();
-
+  const { latitude, longitude, newRoomInfoCount, location, setCoordinates } = useMap();
+  const [map, setMap] = useState<any>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const savedStreet = localStorage.getItem('OGstreet');
+  const savedLatitude = localStorage.getItem('OGlatitude');
+  const savedLongitude = localStorage.getItem('OGlongitude');
   useEffect(() => {
-    // Kakao Maps API script 태그 생성
+    const savedLatitude = localStorage.getItem('OGlatitude');
+    const savedLongitude = localStorage.getItem('OGlongitude');
+
+    const initialLatitude = savedLatitude ? parseFloat(savedLatitude) : latitude;
+    const initialLongitude = savedLongitude ? parseFloat(savedLongitude) : longitude;
+
+    console.log('Initial OGLatitude from localStorage:', initialLatitude);
+    console.log('Initial OGLongitude from localStorage:', initialLongitude);
+
     const kakaoMapScript = document.createElement('script');
     kakaoMapScript.async = false;
-    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&autoload=false`;
+    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
     document.head.appendChild(kakaoMapScript);
-
-    // Kakao Maps API 로드 후 실행될 함수
+    //useeffect로 묶을 것
     const onLoadKakaoAPI = () => {
       if (window.kakao && window.kakao.maps) {
         window.kakao.maps.load(() => {
           const container = document.getElementById('map') as HTMLElement;
           const options = {
-            center: new window.kakao.maps.LatLng(latitude, longitude),
+            center: new window.kakao.maps.LatLng(initialLatitude, initialLongitude),
             level: 3,
           };
 
-          // 지도 생성
-          const map = new window.kakao.maps.Map(container, options);
+          const newMap = new window.kakao.maps.Map(container, options);
+          setMap(newMap);
 
-          // ZoomControl 함수 정의
-          const zoomIn = () => {
-            map.setLevel(map.getLevel() - 1);
-          };
+          console.log('Map Initialized with:', initialLatitude, initialLongitude);
 
-          const zoomOut = () => {
-            map.setLevel(map.getLevel() + 1);
-          };
-
-          // ZoomControl 버튼 클릭 이벤트 처리
-          (window as any).zoomIn = zoomIn;
-          (window as any).zoomOut = zoomOut;
-
-          // // 중심 좌표가 변경되면 localStorage에 저장
-          // window.kakao.maps.event.addListener(map, 'center_changed', () => {
-          //   const center = map.getCenter();
-          //   setLatitude(center.getLat());
-          //   setLongitude(center.getLng());
-          // });
+          newMap.setCenter(new window.kakao.maps.LatLng(initialLatitude, initialLongitude));
         });
       } else {
         console.error('Kakao Maps API failed to load.');
@@ -54,18 +50,69 @@ const Map: React.FC = () => {
 
     kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
 
-    // Cleanup 함수: 컴포넌트 언마운트 시 호출됨
     return () => {
       kakaoMapScript.removeEventListener('load', onLoadKakaoAPI);
       document.head.removeChild(kakaoMapScript);
-      (window as any).zoomIn = undefined;
-      (window as any).zoomOut = undefined;
     };
-  }, [latitude, longitude, setLatitude, setLongitude]);
+  }, [latitude, longitude]);
+
+  useEffect(() => {
+    if (map && isInitialLoad) {
+      const savedLatitude = localStorage.getItem('OGlatitude');
+      const savedLongitude = localStorage.getItem('OGlongitude');
+
+      const initialLatitude = savedLatitude ? parseFloat(savedLatitude) : latitude;
+      const initialLongitude = savedLongitude ? parseFloat(savedLongitude) : longitude;
+
+      const coords = new window.kakao.maps.LatLng(initialLatitude, initialLongitude);
+      map.setCenter(coords);
+
+      console.log('Map Center Set to Initial Coordinates:', initialLatitude, initialLongitude);
+
+      setIsInitialLoad(false); // 최초 로딩이 끝났음을 표시
+    }
+  }, [map, isInitialLoad, latitude, longitude]);
+
+  useEffect(() => {
+    if (map && location && !isInitialLoad) {
+      // 추가된 조건: isInitialLoad가 false일 때만 실행
+      const geocoder = new window.kakao.maps.services.Geocoder();
+
+      geocoder.addressSearch(location, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          map.setCenter(coords);
+          setCoordinates(result[0].y, result[0].x);
+
+          console.log('Address Search Center Set to:', result[0].y, result[0].x);
+
+          // // 로컬 스토리지에 새로운 좌표를 저장합니다.
+          // localStorage.setItem('latitude', result[0].y.toString());
+          // localStorage.setItem('longitude', result[0].x.toString());
+        }
+      });
+    }
+  }, [location, map, setCoordinates, isInitialLoad]); // isInitialLoad를 의존성 배열에 추가
+
+  // 페이지 언로드 시 로컬 스토리지 값 삭제
+  // 페이지 언로드 또는 비활성화 시 로컬 스토리지 값 삭제
+  useEffect(() => {
+    const handleUnload = (event: Event) => {
+      localStorage.removeItem('latitude');
+      localStorage.removeItem('longitude');
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+    document.addEventListener('visibilitychange', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+      document.removeEventListener('visibilitychange', handleUnload);
+    };
+  }, []);
 
   return (
     <div id="map" className="relative flex flex-row flex-grow w-full h-full">
-      {/* ZoomControl */}
       <div className="flex flex-col custom_zoomcontrol z-10 mt-[20px] ml-[20px]">
         <button onClick={() => (window as any).zoomIn()} className="flex">
           <img src={MapPlus} alt="확대" />
@@ -77,11 +124,11 @@ const Map: React.FC = () => {
       <div className="flex flex-row justify-center items-center flex-grow w-full h-full z-50 mt-[70px] -ml-[317px]">
         <div className="flex flex-row h-full items-center justify-center">
           <button className="flex flex-row w-max-full h-[40px] rounded-[30px] bg-white border border-[#357fff]">
-            <div className="flex w-[40px] h-[40px] items-center justify-center  rounded-[30px] bg-[#357fff] border-2 border-[#357fff] -mt-[1px] mr-[2px] -ml-[0px]">
-              <p className="flex  w-max-full  font-bold  text-white mx-[3px]">711</p>
+            <div className="flex w-[40px] h-[40px] items-center justify-center rounded-[30px] bg-[#357fff] border-2 border-[#357fff] -mt-[1px] mr-[2px] -ml-[0px]">
+              <p className="flex w-max-full font-bold text-white mx-[3px]">{newRoomInfoCount}</p>
             </div>
             <p className="flex w-max-full items-center top-2 font-bold text-center p-1.5 mr-[4px] -mt-[1px] h-[40px] text-[#357fff]">
-              한남동
+              {savedStreet}
             </p>
           </button>
         </div>
@@ -89,6 +136,13 @@ const Map: React.FC = () => {
           <Sidebar />
         </div>
       </div>
+      {map && (
+        <MapMarker
+          latitude={isInitialLoad ? parseFloat(savedLatitude!) : latitude!}
+          longitude={isInitialLoad ? parseFloat(savedLongitude!) : longitude!}
+          map={map}
+        />
+      )}
     </div>
   );
 };

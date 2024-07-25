@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Navbar2 from '../components/Navbar2';
 import Map from '../components/Map';
 import SelectedIcon from '../assets/img/SelectedIcon.svg';
@@ -36,6 +37,19 @@ const AptPage = () => {
             : state?.rooms === '4개이상'
               ? '방 4개'
               : '';
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      localStorage.removeItem('latitude');
+      localStorage.removeItem('longitude');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen w-full h-full overflow-hidden bg-white">
