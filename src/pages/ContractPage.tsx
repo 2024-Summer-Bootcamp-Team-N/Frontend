@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ContractPaper from '../components/ContractPaper';
 import Navbar2 from '../components/Navbar2';
@@ -6,10 +6,94 @@ import PaperIcon from '../assets/img/PaperIcon.svg';
 import DeleteIcon from '../assets/img/DeleteIcon.svg';
 import DownloadIcon from '../assets/img/DownloadIcon.svg';
 import ShareIcon from '../assets/img/ShareIcon.svg';
+import html2canvas from 'html2canvas';
+import axios from 'axios';
 
 const ContractPage = () => {
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const contractPaperRef = useRef(null);
+  const [isContentLoaded, setIsContentLoaded] = useState(false);
+
+  const generateFileName = () => {
+    const currentTime = new Date().toISOString().replace(/[:.]/g, '-');
+    return `contract_${currentTime}.png`;
+  };
+
+  const handleDownloadAndUpload = async () => {
+    if (contractPaperRef.current && isContentLoaded) {
+      const element = contractPaperRef.current;
+      const originalStyle = element.style.cssText;
+      const originalHeight = element.style.height;
+      const originalOverflow = element.style.overflow;
+
+      try {
+        // 스타일 변경
+        element.style.width = 'auto';
+        element.style.height = 'auto';
+        element.style.overflow = 'visible';
+
+        // 스크롤을 맨 위로 이동
+        element.scrollTop = 0;
+
+        const canvas = await html2canvas(element, {
+          scrollY: -window.scrollY,
+          height: element.scrollHeight,
+          windowHeight: element.scrollHeight,
+        });
+
+        // 원래 스타일로 복원
+        element.style.cssText = originalStyle;
+        element.style.height = originalHeight;
+        element.style.overflow = originalOverflow;
+
+        // 이미지 다운로드
+        const pngData = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        const fileName = generateFileName();
+        link.href = pngData;
+        link.download = fileName;
+        link.click();
+
+        const dataUrl = canvas.toDataURL('image/png');
+        // S3 업로드
+        const base64Data = dataUrl.split(',')[1];
+        const jsonData = {
+          image_data: base64Data,
+          file_name: fileName,
+          content_type: 'image/png',
+        };
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        const response = await axios.post(`${import.meta.env.VITE_API_KEY}/contracts/s3-upload/`, jsonData, {
+          headers: {
+            accept: 'application/json',
+            Authorization: `${refreshToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          console.log('Contract image downloaded and uploaded successfully');
+          // 성공 메시지 표시
+        } else {
+          throw new Error('Failed to upload contract image');
+        }
+      } catch (error) {
+        console.error('Error during download or upload:', error);
+        if (axios.isAxiosError(error)) {
+          console.error('Server response:', error.response?.data);
+          console.error('Status code:', error.response?.status);
+        }
+        // 에러 메시지 표시
+      } finally {
+        // 스타일 복원 (오류 발생 시에도 실행)
+        element.style.cssText = originalStyle;
+        element.style.height = originalHeight;
+        element.style.overflow = originalOverflow;
+      }
+    }
+  };
 
   const handleButtonClick = (index: number) => {
     setActiveButtonIndex(index);
@@ -71,11 +155,12 @@ const ContractPage = () => {
         <div className="flex flex-col w-[65%] h-full ">
           <div className="flex w-full h-[85%] justify-center items-center overflow-hidden">
             <div
-              className="flex ml-[60px] mr-[170px] w-screen h-[600px] overflow-y-auto rounded-[27.42px] cursor-pointer"
+              ref={contractPaperRef}
+              className="flex ml-[60px] mr-[170px] w-full max-w-[800px] h-[600px] overflow-y-auto overflow-x-hidden rounded-[27.42px] cursor-pointer"
               style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
               onClick={toggleModal}
             >
-              <ContractPaper />
+              <ContractPaper ref={contractPaperRef} onContentLoaded={() => setIsContentLoaded(true)} />
             </div>
           </div>
           <div className="flex w-full h-[15%] justify-center items-start ">
@@ -89,7 +174,7 @@ const ContractPage = () => {
                 <img src={DeleteIcon} alt="삭제" className="flex w-[53px] h-[53px] object-cover " />
               </button>
               <Link to="/Storage">
-                <button className="flex rounded-[62.2px]  mr-[70px]">
+                <button className="flex rounded-[62.2px] mr-[70px]" onClick={handleDownloadAndUpload}>
                   <img src={DownloadIcon} alt="다운로드" className="flex w-[53px] h-[53px] object-cover" />
                 </button>
               </Link>
@@ -104,11 +189,11 @@ const ContractPage = () => {
           onClick={toggleModal}
         >
           <div
-            className="flex w-[1214px] h-[80%]  rounded-[27.42px] overflow-y-auto"
+            className="flex w-[1214px] h-[80%] rounded-[27.42px] overflow-y-auto"
             style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <ContractPaper />
+            <ContractPaper onContentLoaded={() => {}} />
           </div>
         </div>
       )}

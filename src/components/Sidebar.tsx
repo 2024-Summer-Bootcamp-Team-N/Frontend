@@ -23,7 +23,7 @@ const Sidebar: React.FC = () => {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const infoResponse = await axios.get('http://localhost:8000/api/v1/options/crawling/', {
+        const infoResponse = await axios.get(`${import.meta.env.VITE_API_KEY}/options/crawling/`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${refreshToken}`,
