@@ -1,68 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Navbar2 from '../components/Navbar2';
 import Navleft from '../assets/img/NavigateBefore.svg';
 import Navright from '../assets/img/NavigateNext.svg';
-import Navbar2 from '../components/Navbar2';
-
 interface Box {
   id: number;
-  color: string;
-  label: string;
-  createdAt: string;
   imageUrl: string;
+  createdAt: string;
+  label: string;
 }
-
 const StoragePage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [boxes, setBoxes] = useState<Box[]>([]);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    const fetchBoxes = async () => {
-      try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        const response = await axios.get(`${import.meta.env.VITE_API_KEY}/contracts/s3-list/`, {
-          headers: {
-            Authorization: `${refreshToken}`,
-          },
-        });
-
-        const imageData = response.data;
-        console.log(imageData);
-
-        const newBoxes: Box[] = imageData.map((item: any, index: number) => ({
-          id: index + 1,
-          color: 'bg-gray-500',
-          label: `Box ${index + 1}`,
-          createdAt: item.created_at || new Date().toLocaleString(),
-          imageUrl: item.url, // base64 데이터를 직접 사용
-        }));
-
-        setBoxes(newBoxes);
-      } catch (error) {
-        console.error('Error fetching image data:', error);
-      }
-    };
-
     fetchBoxes();
   }, []);
-
+  const fetchBoxes = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      const response = await axios.get(`${import.meta.env.VITE_API_KEY}/contracts/s3-list/`, {
+        headers: {
+          Authorization: `${refreshToken}`,
+        },
+      });
+      const imageData = response.data;
+      const newBoxes: Box[] = imageData.map((item: any, index: number) => ({
+        id: index + 1,
+        imageUrl: item.url,
+        createdAt: item.created_at || new Date().toLocaleString(),
+        label: item.file_name || `Box ${index + 1}`,
+      }));
+      setBoxes(newBoxes);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching image data:', error);
+      setError('Failed to fetch images. Please try again later.');
+      setIsLoading(false);
+    }
+  };
   const handleNext = () => {
-    setCurrentIndex((prevIndex: number) => (prevIndex + 1) % boxes.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % boxes.length);
   };
-
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex: number) => (prevIndex - 1 + boxes.length) % boxes.length);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + boxes.length) % boxes.length);
   };
-
   const getBoxClass = (index: number) => {
-    return `w-[402px] h-[530px] ${boxes[index].color} rounded-[27.42px] flex flex-col items-center justify-center text-white ${index === currentIndex ? '' : 'blur-sm'}`;
+    return `w-[402px] h-[530px] bg-gray-500 rounded-[27.42px] flex flex-col items-center justify-center text-white ${
+      index === currentIndex ? '' : 'blur-sm'
+    }`;
   };
-
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
       <Navbar2 />
-      {boxes.length > 0 ? (
+      {isLoading ? (
+        <div className="text-black">Loading...</div>
+      ) : error ? (
+        <div className="text-red-500">{error}</div>
+      ) : boxes.length > 0 ? (
         <>
           <div className="w-screen h-[630px] flex justify-center items-center gap-2">
             {boxes.length > 1 && (
@@ -70,11 +69,8 @@ const StoragePage: React.FC = () => {
                 <img
                   src={boxes[(currentIndex - 1 + boxes.length) % boxes.length].imageUrl}
                   alt="Contract"
-                  className="w-full h-3/4 object-cover rounded-t-[27.42px]"
+                  className="w-full h-full object-cover object-top"
                 />
-                <div className="h-1/4 flex items-center justify-center">
-                  {boxes[(currentIndex - 1 + boxes.length) % boxes.length].label}
-                </div>
               </div>
             )}
             {boxes.length > 1 && (
@@ -84,7 +80,7 @@ const StoragePage: React.FC = () => {
             )}
             <div className={getBoxClass(currentIndex)}>
               <div className="w-full h-full overflow-hidden shadow-xl cursor-pointer transform transition duration-300 hover:scale-[1.03]">
-                <Link to={'/contract'}>
+                <Link to={`/contract`}>
                   <button>
                     <img
                       src={boxes[currentIndex].imageUrl}
@@ -105,11 +101,8 @@ const StoragePage: React.FC = () => {
                 <img
                   src={boxes[(currentIndex + 1) % boxes.length].imageUrl}
                   alt="Contract"
-                  className="w-full h-3/4 object-cover rounded-t-[27.42px]"
+                  className="w-full h-full object-cover object-top"
                 />
-                <div className="h-1/4 flex items-center justify-center">
-                  {boxes[(currentIndex + 1) % boxes.length].label}
-                </div>
               </div>
             )}
           </div>
@@ -125,5 +118,4 @@ const StoragePage: React.FC = () => {
     </div>
   );
 };
-
 export default StoragePage;
