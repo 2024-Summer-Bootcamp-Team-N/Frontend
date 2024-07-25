@@ -68,7 +68,7 @@ const Input2 = () => {
       };
 
       const residenceResponse = await axios.post(
-        '${import.meta.env.VITE_API_KEY}/entry/residences',
+        `${import.meta.env.VITE_API_KEY}/entry/residences`,
         residenceTypeBody,
         {
           headers: {
