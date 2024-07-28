@@ -36,8 +36,22 @@ const Map: React.FC = () => {
             level: 3,
           };
 
+          // 지도 생성
           const newMap = new window.kakao.maps.Map(container, options);
           setMap(newMap);
+
+          // ZoomControl 함수 정의
+          const zoomIn = () => {
+            newMap.setLevel(newMap.getLevel() - 1);
+          };
+
+          const zoomOut = () => {
+            newMap.setLevel(newMap.getLevel() + 1);
+          };
+
+          // ZoomControl 버튼 클릭 이벤트 처리
+          (window as any).zoomIn = zoomIn;
+          (window as any).zoomOut = zoomOut;
 
           console.log('Map Initialized with:', initialLatitude, initialLongitude);
 

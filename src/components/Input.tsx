@@ -218,19 +218,6 @@ const Input = ({ onNext }) => {
         {isMonthlyRentActive && (
           <div className="flex flex-col justify-start items-start w-[362px] mx-auto mt-[5px] gap-2">
             <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
-              월세
-            </label>
-            <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
-              <input
-                type="text"
-                className="w-full text-base text-left text-[#202629] h-[30px]"
-                placeholder="월세"
-                value={rentAmount}
-                onChange={handleRentInput}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
-            <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
               보증금
             </label>
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
@@ -240,6 +227,19 @@ const Input = ({ onNext }) => {
                 placeholder="보증금"
                 value={depositAmount}
                 onChange={handleDepositInput}
+                onKeyDown={handleKeyDown}
+              />
+            </div>
+            <label className="self-stretch flex-grow-0 flex-shrink-0 w-[362px] text-base font-bold text-left text-[#1e1e1e]">
+              월세
+            </label>
+            <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden px-4 py-3 h-[40px] rounded-lg bg-white border border-[#d9d9d9]">
+              <input
+                type="text"
+                className="w-full text-base text-left text-[#202629] h-[30px]"
+                placeholder="월세"
+                value={rentAmount}
+                onChange={handleRentInput}
                 onKeyDown={handleKeyDown}
               />
             </div>

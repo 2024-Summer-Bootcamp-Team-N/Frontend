@@ -60,7 +60,7 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
         }
       } catch (error) {
         if (isMounted) {
-          setError('Failed to fetch data');
+          setError('API 요청 중 오류가 발생했습니다.');
         }
         console.log(error);
       } finally {
@@ -72,20 +72,16 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
 
     fetchDetailInfo();
 
-    const handleOutsideClick = (event: MouseEvent) => {
-      if ((event.target as HTMLElement).closest('.sidebar2-modal') === null) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleOutsideClick);
     return () => {
       isMounted = false;
-      document.removeEventListener('mousedown', handleOutsideClick);
       localStorage.removeItem('latitude');
       localStorage.removeItem('longitude');
     };
-  }, [onClose, roomId, setLocation]);
+  }, [roomId, setLocation]); // roomId 추가
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [roomId]); // roomId 변경 시 isLoading 초기화
 
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -93,7 +89,12 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
 
   const renderContent = () => {
     if (error) {
-      return <div className="flex justify-center items-center h-full">{error}</div>;
+      return (
+        <div className="flex flex-col justify-center items-center h-full">
+          <div className="text-red-500 mb-4">{error}</div>
+          <div className="text-gray-600">상세 정보를 불러오는 데 실패했습니다.</div>
+        </div>
+      );
     }
 
     return (
@@ -105,7 +106,7 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
             <img
               src={detailInfo?.image_url || Inside}
               alt="매물 사진"
-              className={`w-full h-[300px] object-cover ${imageLoading ? 'hidden' : ''}`}
+              className={`w-full h-full object-cover ${imageLoading ? 'hidden' : ''}`}
               onLoad={handleImageLoad}
               onError={() => setImageLoading(false)} // 이미지 로딩 오류 시 스켈레톤 표시
             />
@@ -241,7 +242,27 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
   return (
     <div className="flex flex-col fixed top-0 right-[424px] w-[424px] h-full z-50">
       <div className="flex h-[194px] flex-none" />
-      <div className="flex flex-col sidebar2-modal h-full bg-white border-[1.5px] border-[#EBEBEB] pb-[20px] overflow-y-auto">
+      <div className="flex flex-col sidebar2-modal h-full bg-white border-[1.5px] border-[#EBEBEB] pb-[20px] overflow-y-auto relative">
+        <button onClick={onClose} className="absolute top-0 left-0 opacity-70 z-10">
+          <svg
+            width={42}
+            height={42}
+            viewBox="0 0 42 42"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-[41.22px] h-[42px]"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M27.2223 14.7778L14.7778 27.2223M14.7778 14.7778L27.2223 27.2223"
+              stroke="#494949"
+              strokeWidth="2.59259"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="opacity-100 z-50"
+            />
+          </svg>
+        </button>
         {renderContent()}
       </div>
     </div>
