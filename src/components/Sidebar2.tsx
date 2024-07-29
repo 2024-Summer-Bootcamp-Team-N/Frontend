@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Inside from '../assets/img/Inside.svg';
 import { useMap } from './MapContext';
@@ -37,53 +37,45 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
   const [imageLoading, setImageLoading] = useState(true); // 이미지 로딩 상태
   const { setLocation } = useMap();
 
+  const fetchDetailInfo = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      const detailInfoResponse = await axios.get(`${import.meta.env.VITE_API_KEY}/options/crawling/${roomId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${refreshToken}`,
+        },
+      });
+
+      console.log('매물 상세정보 API 응답:', detailInfoResponse);
+
+      setDetailInfo(detailInfoResponse.data.room_detail_info);
+      setLocation(detailInfoResponse.data.room_detail_info.location);
+      setError(null); // 에러 상태 초기화
+    } catch (error) {
+      setError('API 요청 중 오류가 발생했습니다.');
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [roomId, setLocation]);
+
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchDetailInfo = async () => {
-      try {
-        setIsLoading(true);
-        const refreshToken = localStorage.getItem('refreshToken');
-
-        const detailInfoResponse = await axios.get(`${import.meta.env.VITE_API_KEY}/options/crawling/${roomId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `${refreshToken}`,
-          },
-        });
-
-        console.log('매물 상세정보 API 응답:', detailInfoResponse);
-
-        if (isMounted) {
-          setDetailInfo(detailInfoResponse.data.room_detail_info);
-          setLocation(detailInfoResponse.data.room_detail_info.location);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setError('API 요청 중 오류가 발생했습니다.');
-        }
-        console.log(error);
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
     fetchDetailInfo();
-
-    return () => {
-      isMounted = false;
-      localStorage.removeItem('latitude');
-      localStorage.removeItem('longitude');
-    };
-  }, [roomId, setLocation]); // roomId 추가
+  }, [fetchDetailInfo]);
 
   useEffect(() => {
     setIsLoading(true);
-  }, [roomId]); // roomId 변경 시 isLoading 초기화
+    setImageLoading(true); // roomId 변경 시 imageLoading 초기화
+  }, [roomId]);
 
   const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const handleImageError = () => {
     setImageLoading(false);
   };
 
@@ -91,7 +83,6 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
     if (error) {
       return (
         <div className="flex flex-col justify-center items-center h-full">
-          <div className="text-red-500 mb-4">{error}</div>
           <div className="text-gray-600">상세 정보를 불러오는 데 실패했습니다.</div>
         </div>
       );
@@ -108,7 +99,7 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
               alt="매물 사진"
               className={`w-full h-full object-cover ${imageLoading ? 'hidden' : ''}`}
               onLoad={handleImageLoad}
-              onError={() => setImageLoading(false)} // 이미지 로딩 오류 시 스켈레톤 표시
+              onError={handleImageError}
             />
           )}
           {imageLoading && <Skeleton height={300} width="100%" className="absolute inset-0" />}

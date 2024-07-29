@@ -13,7 +13,7 @@ const ContractPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const contractPaperRef = useRef(null);
   const [isContentLoaded, setIsContentLoaded] = useState(false);
-  const [contractList, setContractList] = useState<Array<{ name: string, url: string, createdDate: string }>>([]);
+  const [contractList, setContractList] = useState<Array<{ name: string; url: string; createdDate: string }>>([]);
 
   useEffect(() => {
     fetchContracts();
@@ -44,26 +44,26 @@ const ContractPage = () => {
       const originalStyle = element.style.cssText;
       const originalHeight = element.style.height;
       const originalOverflow = element.style.overflow;
-  
+
       try {
         element.style.width = 'auto';
         element.style.height = 'auto';
         element.style.overflow = 'visible';
         element.scrollTop = 0;
-  
+
         const canvas = await html2canvas(element, {
           scrollY: -window.scrollY,
           height: element.scrollHeight,
-          windowHeight: element.scrollHeight
+          windowHeight: element.scrollHeight,
         });
-  
+
         const pngData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         const fileName = generateFileName();
         link.href = pngData;
         link.download = fileName;
         link.click();
-  
+
         console.log('Contract image downloaded successfully');
       } catch (error) {
         console.error('Error during download:', error);
@@ -81,41 +81,37 @@ const ContractPage = () => {
       const originalStyle = element.style.cssText;
       const originalHeight = element.style.height;
       const originalOverflow = element.style.overflow;
-  
+
       try {
         element.style.width = 'auto';
         element.style.height = 'auto';
         element.style.overflow = 'visible';
         element.scrollTop = 0;
-  
+
         const canvas = await html2canvas(element, {
           scrollY: -window.scrollY,
           height: element.scrollHeight,
-          windowHeight: element.scrollHeight
+          windowHeight: element.scrollHeight,
         });
-  
+
         const dataUrl = canvas.toDataURL('image/png');
         const base64Data = dataUrl.split(',')[1];
         const fileName = generateFileName();
         const jsonData = {
           image_data: base64Data,
           file_name: fileName,
-          content_type: 'image/png'
+          content_type: 'image/png',
         };
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const response = await axios.post(
-          'http://localhost:8000/api/v1/contracts/s3-upload/',
-          jsonData,
-          {
-            headers: {
-              'accept': 'application/json',
-              Authorization: `${refreshToken}`, 
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-  
+        const response = await axios.post(`${import.meta.env.VITE_API_KEY}/contracts/s3-upload/`, jsonData, {
+          headers: {
+            accept: 'application/json',
+            Authorization: `${refreshToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
         if (response.status === 200) {
           console.log('Contract image uploaded successfully');
           // 성공 메시지 표시
@@ -136,7 +132,6 @@ const ContractPage = () => {
       }
     }
   };
-
 
   const handleButtonClick = (index: number) => {
     setActiveButtonIndex(index);
@@ -201,22 +196,18 @@ const ContractPage = () => {
               style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
               onClick={toggleModal}
             >
-              <ContractPaper 
-                ref={contractPaperRef} 
-                onContentLoaded={() => setIsContentLoaded(true)} 
-              />
+              <ContractPaper ref={contractPaperRef} onContentLoaded={() => setIsContentLoaded(true)} />
             </div>
           </div>
           <div className="flex w-full h-[15%] justify-center items-start ">
             <div className="flex mr-[4%]">
-              <button 
-                className="flex flex-col items-center rounded-[62.2px] mr-[70px] hover:shadow-inner" 
+              <button
+                className="flex flex-col items-center rounded-[62.2px] mr-[70px] hover:shadow-inner"
                 onClick={handleUpload}
               >
                 <img src={UploadIcon} alt="업로드" className="flex w-[53px] h-[53px] object-cover" />
                 <span className="mt-2 text-sm font-nanumSquareRoundB">업로드</span>
               </button>
-
               <button 
                 className="flex flex-col items-center rounded-[62.2px] mr-[70px] hover:shadow-inner" 
                 onClick={handleDownload}
@@ -228,7 +219,7 @@ const ContractPage = () => {
           </div>
         </div>
       </div>
-
+      
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
@@ -239,7 +230,7 @@ const ContractPage = () => {
             style={{ boxShadow: '0px 6.8px 20.5px 0 rgba(0,0,0,0.35)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <ContractPaper onContentLoaded={() => {}} /> 
+            <ContractPaper onContentLoaded={() => {}} />
           </div>
         </div>
       )}
