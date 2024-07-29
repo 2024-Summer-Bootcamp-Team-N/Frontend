@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar2 from './Sidebar2';
 import HouseImage from '../assets/img/HouseImage.png';
 import { useMap } from './MapContext';
+import { useRentContext } from './RentContext';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -22,6 +23,8 @@ const Sidebar: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { setNewRoomInfoCounts } = useMap();
+  const { isMonthlyRentActive, isDepositRentActive } = useRentContext(); // Access RentContext
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInfoList = async () => {
@@ -85,6 +88,14 @@ const Sidebar: React.FC = () => {
     setSelectedInfo(null);
   };
 
+  const handleConsultingClick = () => {
+    if (isMonthlyRentActive) {
+      navigate('/monthlyconsulting');
+    } else if (isDepositRentActive) {
+      navigate('/depositconsulting');
+    }
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -138,15 +149,15 @@ const Sidebar: React.FC = () => {
             </a>
           </p>
           <div className="flex justify-start">
-            <Link
-              to="/consulting"
+            <button
+              onClick={handleConsultingClick}
               className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
               style={{
                 boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',
               }}
             >
               <p className="flex text-[13px] font-bold text-black">상담하기</p>
-            </Link>
+            </button>
           </div>
         </div>
       </div>

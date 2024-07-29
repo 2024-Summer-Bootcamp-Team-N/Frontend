@@ -10,7 +10,8 @@ import HousePage from './pages/HousePage';
 import RoomPage from './pages/RoomPage';
 import StoragePage from './pages/StoragePage';
 import SignupPage from './pages/SignupPage';
-import ConsultingPage from './pages/ConsultingPage';
+import DepositConsultingPage from './pages/DepositConsultingPage';
+import MonthlyConsultingPage from './pages/MonthlyConsultingPage';
 import ContractPage from './pages/ContractPage';
 import InputPage from './pages/InputPage';
 
@@ -28,7 +29,8 @@ function App() {
             <Route path="/onetwo" element={<RoomPage />} />
             <Route path="/storage" element={<StoragePage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/consulting" element={<ConsultingPage />} />
+            <Route path="/depositconsulting" element={<DepositConsultingPage />} />
+            <Route path="/monthlyconsulting" element={<MonthlyConsultingPage />} />
             <Route path="/contract" element={<ContractPage />} />
             <Route path="/input" element={<InputPage />} />
           </Routes>

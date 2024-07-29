@@ -52,12 +52,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 items-center p-1.5">
+    <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 items-center p-1.5 overflow-x-auto">
       <Link to="/">
         <img src={LogoBlue} alt="Logo" className="mt-0.5 mr-5" />
       </Link>
-      <div className="flex-grow "></div>
-      <div className="flex justify-center left-[-0.5px] mr-[50px] items-center gap-8">
+      <div className="flex-grow " />
+      <div className="flex justify-center right-[0.5px] mr-[50px] items-center gap-8">
         {/* 내 집 찾기 버튼 */}
         <button
           onClick={handleMapClick} // 클릭 시 handleMapClick 함수 실행
