@@ -35,7 +35,16 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
   }, [onContentLoaded]);
 
   if (!roomDetail) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex flex-col w-full p-8 space-y-4 bg-white'>
+        <div className='w-1/2 h-8 bg-gray-200 rounded animate-pulse'></div>
+        <div className='w-full h-40 bg-gray-200 rounded animate-pulse'></div>
+        <div className='w-3/4 h-8 bg-gray-200 rounded animate-pulse'></div>
+        <div className='w-full h-60 bg-gray-200 rounded animate-pulse'></div>
+        <div className='w-2/3 h-8 bg-gray-200 rounded animate-pulse'></div>
+        <div className='w-full h-40 bg-gray-200 rounded animate-pulse'></div>
+      </div>
+    );
   }
 
   return (
@@ -44,30 +53,30 @@ const ContractPaper = forwardRef(({ onContentLoaded }, ref) => {
         className="flex flex-col justify-start w-full relative overflow-hidden rounded-[2%] bg-white"
         style={{ boxShadow: '0px 0.5% 1.5% 0 rgba(0,0,0,0.35)' }}
       >
-        <div className="flex justify-center w-full items-center gap-1 p-2 flex-shrink-0">
+        <div className="flex justify-center w-full items-center gap-1 flex-shrink-0 pt-1">
           <img src={Icon} className="flex justify-center w-[4%] h-auto object-contain" />
           <p className="flex justify-center text-[2vw] font-[NanumSquareRoundB] text-[#49454f]">부동산 임대차 계약서</p>
         </div>
 
         <div className="flex w-full justify-start items-center px-[5%]">
-          <div className="flex items-center bg-[#ffde35]/[0.19]">
+          <div className="flex items-center bg-[#ffde35]/[0.19] gap-3">
             <div className="flex gap-1 items-center flex-shrink-0">
               <p className="text-[1.2vw] leading-none font-[NanumSquareRoundB] text-left text-[#49454f]">전세</p>
               {roomDetail.monthly_rent === null ? (
-                <img src={Checkbox} alt="Checked" className="w-[3vw] h-auto pt-1.5" />
+                <img src={Checkbox} alt="Checked" className="w-auto h-auto" />
               ) : (
                 <div className="flex justify-center items-center rounded-full">
-                  <div className="w-[1.2vw] h-[1.2vw] rounded-[10%] border-[0.2vw] border-[#49454f]"></div>
+                  <div className="w-[14px] h-[15px] rounded-[10%] border-[3px] border-[#49454f]"></div>
                 </div>
               )}
             </div>
             <div className="flex gap-1 items-center flex-shrink-0">
               <p className="text-[1.2vw] leading-none font-[NanumSquareRoundB] text-left text-[#49454f]">월세</p>
               {roomDetail.monthly_rent !== null ? (
-                <img src={Checkbox} alt="Checked" className="w-[3vw] h-auto pt-1.5" />
+                <img src={Checkbox} alt="Checked" className="w-auto h-auto" />
               ) : (
                 <div className="flex justify-center items-center rounded-full">
-                  <div className="w-[1.2vw] h-[1.2vw] rounded-[10%] border-[0.2vw] border-[#49454f]"></div>
+                  <div className="w-[14px] h-[15px] rounded-[10%] border-[3px] border-[#49454f]"></div>
                 </div>
               )}
             </div>
