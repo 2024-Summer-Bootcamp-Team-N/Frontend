@@ -52,42 +52,46 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 left-0 z-50 items-center p-1.5 overflow-x-auto">
-      <Link to="/">
-        <img src={LogoBlue} alt="Logo" className="mt-0.5 mr-5" />
-      </Link>
-      <div className="flex-grow " />
-      <div className="flex justify-center right-[0.5px] mr-[50px] items-center gap-8">
-        {/* 내 집 찾기 버튼 */}
-        <button
-          onClick={handleMapClick} // 클릭 시 handleMapClick 함수 실행
-          className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]"
-        >
-          내 집 찾기
-        </button>
-
-        <span className="border-l border-[#E0E0E0] h-[19px]"></span>
-
-        {/* 로그인/로그아웃 버튼 부분 - 변경 없음 */}
-        {isLoggedIn ? (
-          <button onClick={handleLogout} className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
-            로그아웃
-          </button>
-        ) : (
-          <Link to="/login" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
-            로그인
+    <div className="w-full  mx-auto overflow-auto">
+      <div className="flex flex-row w-full h-[72px] bg-white fixed top-0 z-50 items-center p-1.5">
+        <div className=" absolute left-0 w-[348px] h-auto ">
+          <Link to="/">
+            <img src={LogoBlue} alt="Logo" className="w-[348px] h-auto" />
           </Link>
-        )}
+        </div>
+        <div className="flex-grow h-[72px] mx-auto"></div>
+        <div className="flex justify-center left-[-0.5px] mr-[50px] items-center gap-8">
+          {/* 내 집 찾기 버튼 */}
+          <button
+            onClick={handleMapClick} // 클릭 시 handleMapClick 함수 실행
+            className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]"
+          >
+            내 집 찾기
+          </button>
 
-        {/* 회원가입 링크 부분 - 변경 없음 */}
-        {!isLoggedIn && (
-          <>
-            <span className="border-l border-[#E0E0E0] h-[19px]"></span>
-            <Link to="/signup" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
-              회원가입
+          <span className="border-l border-[#E0E0E0] h-[19px]"></span>
+
+          {/* 로그인/로그아웃 버튼 부분 - 변경 없음 */}
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
+              로그아웃
+            </button>
+          ) : (
+            <Link to="/login" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
+              로그인
             </Link>
-          </>
-        )}
+          )}
+
+          {/* 회원가입 링크 부분 - 변경 없음 */}
+          {!isLoggedIn && (
+            <>
+              <span className="border-l border-[#E0E0E0] h-[19px]"></span>
+              <Link to="/signup" className="hover:underline text-xl text-[#49454F] font-[NanumSquareRoundB]">
+                회원가입
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
