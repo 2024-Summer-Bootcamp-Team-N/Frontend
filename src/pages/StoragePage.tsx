@@ -24,7 +24,7 @@ const StoragePage: React.FC = () => {
           throw new Error('Refresh token is missing');
         }
 
-        const response = await axios.get('http://localhost:8000/api/v1/contracts/s3-list/', {
+        const response = await axios.get(`${import.meta.env.VITE_API_KEY}/contracts/s3-list/`, {
           headers: {
             Authorization: `${refreshToken}`, 
           },
