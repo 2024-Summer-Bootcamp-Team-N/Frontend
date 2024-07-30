@@ -14,7 +14,7 @@ const DepositConsultingPage: React.FC = () => {
   const pingInterval = useRef<number | null>(null);
 
   useEffect(() => {
-    const wsUrl = 'ws://' + window.location.host + '/ws/chat/';
+    const wsUrl = import.meta.env.VITE_WS_URL;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
