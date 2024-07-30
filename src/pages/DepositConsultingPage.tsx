@@ -11,29 +11,31 @@ const DepositConsultingPage: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [messages, setMessages] = useState<string[]>([]);
   const [sessionId, setSessionId] = useState<string>('');
+  const pingInterval = useRef<number | null>(null);
 
   useEffect(() => {
-    const wsUrl = import.meta.env.VITE_WS_URL;
+    const wsUrl = 'ws://' + window.location.host + '/ws/chat/';
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       console.log('WebSocket connection opened');
       setSocket(ws);
-
-      // 요청을 통해 세션 ID를 초기화하거나 요청
       ws.send(JSON.stringify({ type: 'init' }));
+
+      // Ping every 30 seconds
+      pingInterval.current = window.setInterval(() => {
+        ws.send(JSON.stringify({ type: 'ping' }));
+      }, 30000);
     };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log('Received data:', data);
 
-      // 서버로부터 세션 ID를 받는 경우
-      if (data.type === 'session') {
+      if (data.session_id) {
         setSessionId(data.session_id);
-        console.log('Received session ID:', data.session_id);
       }
 
-      // 메시지 처리
       if (data.message) {
         setMessages((prevMessages) => [...prevMessages, data.message]);
       }
@@ -45,10 +47,16 @@ const DepositConsultingPage: React.FC = () => {
 
     ws.onclose = (event) => {
       console.log('WebSocket connection closed:', event);
+      if (pingInterval.current) {
+        clearInterval(ppingInterval.current);
+      }
     };
 
     return () => {
       ws.close();
+      if (pingInterval.current) {
+        clearInterval(pingInterval.current);
+      }
     };
   }, []);
 
@@ -56,7 +64,7 @@ const DepositConsultingPage: React.FC = () => {
     if (textareaRef.current && socket) {
       const message = textareaRef.current.value.trim();
       if (message) {
-        socket.send(JSON.stringify({ type: 'message', content: message, session_id: sessionId }));
+        socket.send(JSON.stringify({ type: 'message', message: message, session_id: sessionId }));
         textareaRef.current.value = '';
       }
     }
@@ -75,7 +83,6 @@ const DepositConsultingPage: React.FC = () => {
       handleSendMessage();
     }
   };
-
   return (
     <div className="flex flex-col w-full h-screen">
       <div className="flex flex-col h-[72px] justify-start">
