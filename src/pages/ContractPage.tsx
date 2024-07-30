@@ -196,6 +196,19 @@ const ContractPage = () => {
     setActiveButtonIndex(0);
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formatter = new Intl.DateTimeFormat('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    });
+    return formatter.format(date);
+  };
+
   return (
     <div className="flex flex-col w-screen h-screen">
       <div className="flex left-0 top-0 w-full h-[72px]">
@@ -208,22 +221,18 @@ const ContractPage = () => {
             {contractList.map((contract, index) => (
               <button
                 key={index}
-                className={`flex flex-row items-center w-full min-h-[25%] ${
+                className={`flex flex-row items-center justify-between w-full min-h-[25%] ${
                   activeButtonIndex === index
                     ? 'bg-[#494949]/[0.11] text-[#357fff]'
                     : 'hover:text-[#357fff] hover:bg-[#357fff]/[0.11]'
                 }`}
                 onClick={() => handleButtonClick(index)}
               >
-                <img src={PaperIcon} alt="계약서로고" className="flex w-[32.88px] h-[32px] ml-[30px] mr-[10px]" />
-                <span className="flex ml-[25px]">
-                  <p className="flex">
-                    보증금: {contract.deposit || roomDetail.deposit} / 월세: {contract.monthly_rent || roomDetail.monthly_rent}
-                  </p>
+                <img src={PaperIcon} alt="계약서로고" className="flex-shrink-0 w-[32.88px] h-[32px] ml-[30px]" />
+                <span className="flex-grow flex justify-center items-center">
+                  <p className="text-center">{contract.createdDate ? formatDate(contract.createdDate) : '날짜 정보를 가져올 수 없습니다.'}</p>
                 </span>
-                <span className="flex ml-[80px]">
-                  <p className="flex ">{contract.createdDate || '날짜 정보를 가져올 수 없습니다.'}</p>
-                </span>
+                <div className="flex-shrink-0 w-[32.88px] mr-[30px]"></div> {/* 오른쪽 여백을 위한 빈 div */}
               </button>
             ))}
           </div>
