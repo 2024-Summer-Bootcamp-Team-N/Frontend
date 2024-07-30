@@ -68,26 +68,36 @@ const MonthlyConsultingPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Send roomId after a fixed delay of 3 seconds
+    // Send roomId after a fixed delay of 4 seconds
     const timer = setTimeout(() => {
       const roomId = localStorage.getItem('roomId');
       if (roomId && textareaRef.current && sendButtonRef.current) {
-        textareaRef.current.value = `room_id = ${roomId}`;
-        sendButtonRef.current.click();
+        const message = `room_id = ${roomId}`;
+        setMessages((prevMessages) => [...prevMessages, { type: 'user', content: message }]);
+        socket?.send(JSON.stringify({ type: 'message', message: message, session_id: sessionId }));
+        textareaRef.current.value = '';
+        setIsLoading(true);
       }
-    }, 4000); // 3 seconds delay
+    }, 4000); // 4 seconds delay
 
     return () => clearTimeout(timer); // Cleanup timer on component unmount
-  }, []); // Run this effect once, on component mount
+  }, [socket, sessionId]); // Run this effect once, on component mount
 
   const handleSendMessage = () => {
-    if (textareaRef.current && socket) {
+    if (textareaRef.current && socket && !isLoading) {
       const message = textareaRef.current.value.trim();
       if (message) {
         setMessages((prevMessages) => [...prevMessages, { type: 'user', content: message }]);
         socket.send(JSON.stringify({ type: 'message', message: message, session_id: sessionId }));
-        textareaRef.current.value = '';
+        textareaRef.current.value = ''; // 여기서 입력 필드를 비웁니다
         setIsLoading(true);
+
+        // 추가: 비동기 작업 후 다시 한 번 입력 필드를 비웁니다
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.value = '';
+          }
+        }, 0);
       }
     }
   };
@@ -95,14 +105,21 @@ const MonthlyConsultingPage: React.FC = () => {
   const handleButtonClick = (text: string) => {
     if (textareaRef.current) {
       textareaRef.current.value = text;
+      handleSendMessage();
     }
-    handleSendMessage();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSendMessage();
+
+      // 추가: Enter 키 입력 후 입력 필드를 비웁니다
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.value = '';
+        }
+      }, 0);
     }
   };
 
