@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import ContractPaper from '../components/ContractPaper';
 import Navbar2 from '../components/Navbar2';
 import PaperIcon from '../assets/img/PaperIcon.svg';
@@ -16,6 +16,47 @@ const ContractPage = () => {
   const [contractList, setContractList] = useState<Array<{ name: string; url: string; createdDate: string }>>([]);
   const [uploadMessage, setUploadMessage] = useState<string>('');
   const [downloadMessage, setDownloadMessage] = useState<string>('');
+  const [detailInfo, setDetailInfo] = useState<DetailInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const roomId = localStorage.getItem('roomId');
+    if (roomId) {
+      setRoomId(parseInt(roomId, 10));
+    }
+  }, []);
+
+  const fetchDetailInfo = useCallback(async () => {
+    if (!roomId) return;
+
+    try {
+      setIsLoading(true);
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      const detailInfoResponse = await axios.get(`${import.meta.env.VITE_API_KEY}/options/crawling/${roomId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${refreshToken}`,
+        },
+      });
+
+      setDetailInfo(detailInfoResponse.data.room_detail_info);
+      setError(null);
+    } catch (error) {
+      setError('API 요청 중 오류가 발생했습니다.');
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [roomId]);
+
+  useEffect(() => {
+    if (roomId) {
+      fetchDetailInfo();
+    }
+  }, [fetchDetailInfo, roomId]);
 
   useEffect(() => {
     fetchContracts();
@@ -29,7 +70,13 @@ const ContractPage = () => {
           Authorization: `${refreshToken}`,
         },
       });
-      setContractList(response.data);
+      
+      // 날짜를 기준으로 내림차순 정렬 (최신순)
+      const sortedContracts = response.data.sort((a, b) => {
+        return new Date(b.createdDate) - new Date(a.createdDate);
+      });
+      
+      setContractList(sortedContracts);
     } catch (error) {
       console.error('Error fetching contracts:', error);
     }
@@ -157,40 +204,77 @@ const ContractPage = () => {
       <div className={`flex flex-row grow ${isModalOpen ? 'blur-sm' : ''}`}>
         <div className="flex flex-col w-[40%] h-full ">
           <div className="flex justify-end items-center w-full h-[45%] ">
-            <div className="flex flex-col w-[90%] h-[80%] mr-[2.5%] font-nanumSquareRoundB text-[#49454f] overflow-y-auto">
-              {[1, 2, 3, 4, 5].map((_, index) => (
-                <button
-                  key={index}
-                  className={`flex flex-row items-center w-full min-h-[25%] ${
-                    activeButtonIndex === index
-                      ? 'bg-[#494949]/[0.11] text-[#357fff]'
-                      : 'hover:text-[#357fff] hover:bg-[#357fff]/[0.11]'
-                  }`}
-                  onClick={() => handleButtonClick(index)}
-                >
-                  <img src={PaperIcon} alt="계약서로고" className="flex w-[32.88px] h-[32px] ml-[30px] mr-[10px]" />
-                  <span className="flex ml-[25px]">
-                    <p className="flex">
-                      보증금: {roomDetail.deposit} / 월세: {roomDetail.monthly_rent}
-                    </p>
-                  </span>
-                  <span className="flex ml-[80px]">
-                    <p className="flex ">{contractList[index]?.createdDate || '날짜 정보를 가져올 수 없습니다.'}</p>
-                  </span>
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-col w-[90%] h-[80%] mr-[2.5%] font-nanumSquareRoundB text-[#49454f] overflow-y-auto">
+            {contractList.map((contract, index) => (
+              <button
+                key={index}
+                className={`flex flex-row items-center w-full min-h-[25%] ${
+                  activeButtonIndex === index
+                    ? 'bg-[#494949]/[0.11] text-[#357fff]'
+                    : 'hover:text-[#357fff] hover:bg-[#357fff]/[0.11]'
+                }`}
+                onClick={() => handleButtonClick(index)}
+              >
+                <img src={PaperIcon} alt="계약서로고" className="flex w-[32.88px] h-[32px] ml-[30px] mr-[10px]" />
+                <span className="flex ml-[25px]">
+                  <p className="flex">
+                    보증금: {contract.deposit || roomDetail.deposit} / 월세: {contract.monthly_rent || roomDetail.monthly_rent}
+                  </p>
+                </span>
+                <span className="flex ml-[80px]">
+                  <p className="flex ">{contract.createdDate || '날짜 정보를 가져올 수 없습니다.'}</p>
+                </span>
+              </button>
+            ))}
+          </div>
           </div>
           <div className="flex justify-end items-start w-full h-[55%] ">
-            <div
-              className="flex flex-col justify-center items-center w-[90%] h-[90%] font-nanumSquareRoundB rounded-xl bg-[#fbfbfb] mr-[15px]"
-              style={{ boxShadow: '0px 5px 15px 0 rgba(0,0,0,0.35)' }}
-            >
-              <div className="flex justify-center items-center w-[30%] h-[10%] rounded-[62.5px] bg-[#e4e6e8]">
+          <div className="flex flex-col w-[90%] h-[90%] font-nanumSquareRoundB rounded-xl bg-[#fbfbfb] mr-[15px] overflow-hidden"
+            style={{ boxShadow: '0px 5px 15px 0 rgba(0,0,0,0.35)' }}>
+            <div className="flex justify-center items-center w-full py-4">
+              <div className="w-[30%] text-center rounded-[62.5px] bg-[#e4e6e8] py-2">
                 매물정보 요약
               </div>
             </div>
+            {isLoading ? (
+              <p>로딩 중...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : detailInfo ? (
+              <div className="flex-grow overflow-y-auto px-4 pb-4">
+                <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                  <table className="w-full text-left border-collapse">
+                    <tbody>
+                      {[
+                        { label: "소재지", value: detailInfo.location },
+                        { label: "전용/공급면적", value: detailInfo.exclusive_overall_area },
+                        { label: "관리비", value: detailInfo.maintenance_fee },
+                        { label: "방종류", value: detailInfo.room_type },
+                        { label: "방 수/욕실 수", value: detailInfo.num_rooms_bathrooms },
+                        { label: "해당층/건물층", value: detailInfo.floor_building_floors },
+                        { label: "방향", value: detailInfo.direction },
+                        { label: "주차가능여부", value: detailInfo.parking_availability },
+                        { label: "난방종류", value: detailInfo.heating_type },
+                        { label: "입주가능일", value: detailInfo.move_in_date }
+                      ].map((item, index) => (
+                        <tr key={index}>
+                          <td className="py-2 px-4 border-b border-gray-200 font-[NanumSquareRoundEB] text-gray-700 w-1/3 bg-gray-100">
+                            {item.label}
+                          </td>
+                          <td className="py-2 px-4 border-b border-gray-200 text-gray-800 bg-white">
+                            {item.value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <p>정보가 없습니다.</p>
+            )}
           </div>
+        </div>
         </div>
         <div className="flex flex-col w-[65%] h-full ">
           <div className="flex w-full h-[85%] justify-center items-center overflow-hidden">

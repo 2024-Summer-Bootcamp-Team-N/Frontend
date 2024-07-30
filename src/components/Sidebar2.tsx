@@ -63,6 +63,12 @@ const Sidebar2 = ({ onClose, roomId }: Sidebar2Props) => {
   }, [roomId, setLocation]);
 
   useEffect(() => {
+    if (roomId) {
+      localStorage.setItem('roomId', roomId.toString());
+    }
+  }, [roomId]);
+
+  useEffect(() => {
     fetchDetailInfo();
   }, [fetchDetailInfo]);
 
