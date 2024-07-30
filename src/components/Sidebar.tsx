@@ -101,16 +101,13 @@ const Sidebar: React.FC = () => {
       return (
         <div className="flex flex-col">
           {[...Array(5)].map((_, index) => (
-            <div
-              key={index}
-              className="flex flex-row items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[18.7%] max-h-[18.7%] p-4"
-            >
+            <div key={index} className="flex flex-row items-center border-b-[1.5px] border-[#EBEBEB] w-full h-auto p-4">
               <Skeleton height={166} width={166} className="mr-4" />
-              <div className="relative flex-col ml-4">
-                <Skeleton width={140.97} height={29} className="absolute mb-[17px] left-0 -top-[20px]" />
-                <Skeleton width={120} height={18} className="absolute mb-[3px] left-0" />
-                <Skeleton width={120} height={18} className="absolute mb-[3px] left-0" />
-                <Skeleton width={76} height={27} className="absolute mt-[15px] left-0" />
+              <div className="relative flex flex-col ml-4">
+                <Skeleton width={140.97} height={29} className="mb-4" />
+                <Skeleton width={120} height={18} className="mb-2" />
+                <Skeleton width={120} height={18} className="mb-2" />
+                <Skeleton width={76} height={27} className="mt-4" />
               </div>
             </div>
           ))}
@@ -129,34 +126,34 @@ const Sidebar: React.FC = () => {
     return infoList.map((info) => (
       <div
         key={info.id}
-        className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-full min-h-[25%] max-h-[25%] cursor-pointer hover:bg-gray-100"
+        className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-auto py-4 px-2 cursor-pointer hover:bg-gray-100"
         onClick={() => handleOpenSidebar2(info)}
       >
         <img
           src={HouseImage}
           alt="매물 사진"
-          className="w-[166px] h-[166px] ml-[20px] border-[2px] flex object-cover"
+          className="w-[166px] h-[166px] ml-[10px] border-[2px] flex object-cover"
         />
-        <div className="flex-col ml-[30px] flex-grow">
-          <div className="w-[140.97px] h-[29px] flex text-xl font-nanumSquareRoundB mb-[17px] text-left text-black hover:text-gray-600">
+        <div className="flex flex-col ml-[30px] flex-grow">
+          <div className="w-auto h-auto flex text-xl font-nanumSquareRoundB mb-4 text-left text-black hover:text-gray-600">
             {info.price}
           </div>
           <p className="flex flex-col w-full text-sm text-left font-nanumSquareRoundR text-black">
-            <span className="flex text-sm text-left text-black mb-[3px]">{info.room_info}</span>
-            <span className="flex text-sm text-left text-gray-600 mb-[3px]">관리비: {info.maintenance_fee}</span>
+            <span className="text-sm text-left text-black mb-2">{info.room_info}</span>
+            <span className="text-sm text-left text-gray-600 mb-2">관리비: {info.maintenance_fee}</span>
             <a href={info.link} className="text-blue-500 hover:underline">
               자세히 보기
             </a>
           </p>
-          <div className="flex justify-start">
+          <div className="flex justify-start mt-4">
             <button
               onClick={handleConsultingClick}
-              className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] mt-[15px] bg-[#efefef] hover:bg-gray-200"
+              className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] bg-[#efefef] hover:bg-gray-200"
               style={{
                 boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',
               }}
             >
-              <p className="flex text-[13px] font-bold text-black">상담하기</p>
+              <p className="text-[13px] font-bold text-black">상담하기</p>
             </button>
           </div>
         </div>

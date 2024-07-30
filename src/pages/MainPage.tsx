@@ -54,17 +54,16 @@ const MainPage = () => {
             <p className="text-[24px] font-[NanumSquareRoundB] text-white text-center mb-[20px]">
               당신의 첫 시작을 든든하게 함께합니다.
             </p>
-            <div className="mt-12">
+            <div className="flex w-[199px] h-[78px] items-center justify-center mt-12">
               <button
                 onClick={handleFindHomeClick}
-                className="w-[199px] h-[78px] rounded-full bg-[#ebebeb] bg-opacity-65 flex-row items-center justify-center mt-[20px]"
+                className="w-[199px] h-[78px] rounded-full bg-[#ebebeb] bg-opacity-0 flex-row items-center justify-center mt-[20px]"
               >
                 <img
                   src={SearchBtnTop}
                   alt="내 집 찾기 버튼"
-                  className="absolute w-[199px] h-[78px] object-cover rounded-full opacity-65 -mt-[23px]"
+                  className=" w-[199px] h-[78px] object-cover rounded-full opacity-85 "
                 />
-                <p className="flex text-[24px] font-[NanumSquareRoundB] text-[#3d3b3a] ml-[65px]">내 집 찾기</p>
               </button>
             </div>
           </div>
@@ -114,17 +113,16 @@ const MainPage = () => {
             />
           </div>
           <div className="relative mb-[300px]">
-            <div className="mt-16">
+            <div className="flex w-[199px] h-[78px] mt-16">
               <button
                 onClick={handleFindHomeClick}
-                className="w-[199px] h-[78px] rounded-full bg-[#ebebeb] flex-row items-center justify-center mt-[20px]"
+                className="w-[199px] h-[78px] rounded-full bg-[#ebebeb] bg-opacity-0 flex-row items-center justify-center mt-[20px]"
               >
                 <img
                   src={SearchBtnBottom}
                   alt="내 집 찾기 버튼"
-                  className="absolute w-[199px] h-[78px] object-cover rounded-full opacity-75 -mt-[23px]"
+                  className=" w-[199px] h-[78px] object-cover rounded-full opacity-75 -mt-[23px]"
                 />
-                <p className="flex text-[24px] font-[NanumSquareRoundB] text-[#3d3b3a] ml-[65px]">내 집 찾기</p>
               </button>
             </div>
           </div>
