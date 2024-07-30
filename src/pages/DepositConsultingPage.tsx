@@ -93,7 +93,7 @@ const DepositConsultingPage: React.FC = () => {
         <div className="flex flex-col justify-center min-w-[23%] bg-[#FAFAFA] h-full border border-gray p-4">
           <div className="flex flex-col w-full justify-center">
             <div className="flex items-end justify-start w-[250px] h-[30px] pb-[20px] ml-[20px]">
-              <p className="text-[22px] font-[NanumSquareEB] text-black">:전구: 이런 질문을 해보세요!</p>
+              <p className="text-[22px] font-[NanumSquareEB] text-black">💡 이런 질문을 해보세요!</p>
             </div>
             <div className="flex justify-center items-center w-full">
               <div className="flex flex-row w-[360px] h-[55px] items-center justify-center">
@@ -128,7 +128,7 @@ const DepositConsultingPage: React.FC = () => {
           </div>
           <div className="flex flex-col w-full justify-center">
             <div className="flex items-end justify-start w-[250px] h-[100px] pb-[20px] ml-[20px]">
-              <p className="text-[22px] font-[NanumSquareEB] text-black">:경광등: 전세사기</p>
+              <p className="text-[22px] font-[NanumSquareEB] text-black">🚨 전세사기</p>
             </div>
             <div className="flex justify-center items-center w-full">
               <div className="flex flex-row w-full h-[55px] items-center justify-center">
