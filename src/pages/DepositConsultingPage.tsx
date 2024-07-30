@@ -157,32 +157,37 @@ const DepositConsultingPage: React.FC = () => {
               <p className="text-[22px] font-[NanumSquareEB] text-black">💡 이런 질문을 해보세요!</p>
             </div>
             <div className="flex justify-center items-center w-full">
-              <div className="flex flex-row w-[360px] h-[55px] items-center justify-center">
-                <div className="flex w-[180px] h-[40px] justify-start items-center">
+              <div className="flex flex-row w-full h-[110px] sm:h-[55px] items-center justify-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative left-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
                     onClick={() => handleButtonClick('계약 시 주의사항')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">계약 시 주의사항</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      계약 시 주의사항
+                    </p>
                   </button>
                 </div>
-                <div className="flex w-[180px] h-[40px] justify-end items-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0">
                   <button
-                    className="flex relative right-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative right-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
                     onClick={() => handleButtonClick('세금 및 기타 내용')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">세금 및 기타 내용</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      세금 및 기타 내용
+                    </p>
                   </button>
                 </div>
               </div>
             </div>
-            <div className="flex justify-center items-center w-full">
-              <div className="flex flex-row w-[360px] h-[55px] items-center justify-start">
+
+            <div className="flex justify-center 2xl:justify-center items-center w-full">
+              <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mt-0 2xl:mt-2 mr-[10px] 2xl:mr-[10px]">
                 <button
-                  className="flex relative w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                  className="flex relative w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0] mt-0 2xl:mt-2"
                   onClick={() => handleButtonClick('이사 및 정착 팁')}
                 >
-                  <p className="absolute text-[18px] font-[NanumSquareB] text-black">이사 및 정착 팁</p>
+                  <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">이사 및 정착 팁</p>
                 </button>
               </div>
             </div>
@@ -192,72 +197,89 @@ const DepositConsultingPage: React.FC = () => {
               <p className="text-[22px] font-[NanumSquareEB] text-black">🚨 전세사기</p>
             </div>
             <div className="flex justify-center items-center w-full">
-              <div className="flex flex-row w-full h-[55px] items-center justify-center">
-                <div className="flex w-[180px] h-[40px] justify-start items-center">
+              <div className="flex flex-row w-full h-[110px] sm:h-[55px] items-center justify-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative left-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
                     onClick={() => handleButtonClick('등기부 확인하기')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">등기부 확인하기</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      등기부 확인하기
+                    </p>
                   </button>
                 </div>
-                <div className="flex w-[180px] h-[40px] justify-end items-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative right-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
                     onClick={() => handleButtonClick('전세와 매매 비교')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">전세와 매매 비교</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      전세와 매매 비교
+                    </p>
                   </button>
                 </div>
               </div>
             </div>
+
             <div className="flex justify-center items-center w-full">
-              <div className="flex flex-row w-full h-[55px] items-center justify-center">
-                <div className="flex w-[180px] h-[40px] justify-start items-center">
+              <div className="flex flex-row w-full h-[110px] sm:h-[55px] items-center justify-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative left-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0] "
                     onClick={() => handleButtonClick('다세대 주택이란')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">다세대 주택이란</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      다세대 주택이란
+                    </p>
                   </button>
                 </div>
-                <div className="flex w-[180px] h-[40px] justify-end items-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative right-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
                     onClick={() => handleButtonClick('다가구 주택이란')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">다가구 주택이란</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      다가구 주택이란
+                    </p>
                   </button>
                 </div>
               </div>
             </div>
+
             <div className="flex justify-center items-center w-full">
-              <div className="flex flex-row w-full h-[55px] items-center justify-center">
-                <div className="flex w-[180px] h-[40px] justify-start items-center">
+              <div className="flex flex-row w-full h-[110px] sm:h-[55px] items-center justify-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative left-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0] "
                     onClick={() => handleButtonClick('집주인 정보 확인')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">집주인 정보 확인</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      집주인 정보 확인
+                    </p>
                   </button>
                 </div>
-                <div className="flex w-[180px] h-[40px] justify-end items-center">
+                <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mb-2 2xl:mb-0 mr-[10px] 2xl:mr-[10px]">
                   <button
-                    className="flex relative right-0 w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                    className="flex relative left-0 w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0] "
                     onClick={() => handleButtonClick('대리인 확인하기')}
                   >
-                    <p className="absolute text-[18px] font-[NanumSquareB] text-black">대리인 확인하기</p>
+                    <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                      대리인 확인하기
+                    </p>
                   </button>
                 </div>
               </div>
             </div>
-            <div className="flex justify-center items-center w-full">
-              <div className="flex flex-row w-[360px] h-[55px] items-center justify-start">
+
+            <div className="flex justify-center 2xl:justify-center items-center w-full">
+              <div className="flex w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center 2xl:justify-end items-center mt-0 2xl:mt-2 mr-[10px] 2xl:mr-[10px]">
                 <button
-                  className="flex relative w-[170px] h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0]"
+                  className="flex relative w-[140px] h-[32px] 2xl:w-[170px] 2xl:h-[40px] justify-center items-center rounded-[50px] bg-[#F0F0F0] mt-0 2xl:mt-2"
                   onClick={() => handleButtonClick('가짜 계약 주의사항')}
                 >
-                  <p className="absolute text-[18px] font-[NanumSquareB] text-black">가짜 계약 주의사항</p>
+                  <p className="absolute text-[14px] 2xl:text-[18px] font-[NanumSquareB] text-black">
+                    가짜 계약 주의사항
+                  </p>
                 </button>
               </div>
             </div>
