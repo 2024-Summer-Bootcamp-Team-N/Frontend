@@ -242,7 +242,7 @@ const Input2 = () => {
           )}
         </div>
         <button onClick={handleSubmit} className="flex justify-center items-center w-[362px] mx-auto mt-6">
-          <div className="flex justify-center items-center w-full p-3 h-[40px] rounded-lg bg-[#00A1E7] border border-[#00A1E7] text-neutral-100">
+          <div className="flex justify-center items-center w-full p-3 h-[40px] rounded-lg bg-[#00A1E7] border border-[#00A1E7] text-neutral-100 hover:bg-[#357fff]">
             확인
           </div>
         </button>

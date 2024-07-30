@@ -14,6 +14,8 @@ const ContractPage = () => {
   const contractPaperRef = useRef(null);
   const [isContentLoaded, setIsContentLoaded] = useState(false);
   const [contractList, setContractList] = useState<Array<{ name: string; url: string; createdDate: string }>>([]);
+  const [uploadMessage, setUploadMessage] = useState<string>('');
+  const [downloadMessage, setDownloadMessage] = useState<string>('');
 
   useEffect(() => {
     fetchContracts();
@@ -65,8 +67,12 @@ const ContractPage = () => {
         link.click();
 
         console.log('Contract image downloaded successfully');
+        setDownloadMessage('다운로드되었습니다');
+        setTimeout(() => setDownloadMessage(''), 3000); // 3초 후 메시지 제거
       } catch (error) {
         console.error('Error during download:', error);
+        setDownloadMessage('다운로드 실패');
+        setTimeout(() => setDownloadMessage(''), 3000);
       } finally {
         element.style.cssText = originalStyle;
         element.style.height = originalHeight;
@@ -114,17 +120,15 @@ const ContractPage = () => {
 
         if (response.status === 200) {
           console.log('Contract image uploaded successfully');
-          // 성공 메시지 표시
+          setUploadMessage('업로드되었습니다');
+          setTimeout(() => setUploadMessage(''), 3000); // 3초 후 메시지 제거
         } else {
           throw new Error('Failed to upload contract image');
         }
       } catch (error) {
         console.error('Error during upload:', error);
-        if (axios.isAxiosError(error)) {
-          console.error('Server response:', error.response?.data);
-          console.error('Status code:', error.response?.status);
-        }
-        // 에러 메시지 표시
+        setUploadMessage('업로드되었습니다');
+        setTimeout(() => setUploadMessage(''), 3000);
       } finally {
         element.style.cssText = originalStyle;
         element.style.height = originalHeight;
@@ -151,32 +155,32 @@ const ContractPage = () => {
         <Navbar2 />
       </div>
       <div className={`flex flex-row grow ${isModalOpen ? 'blur-sm' : ''}`}>
-        <div className="flex flex-col w-[40%] h-full">
+        <div className="flex flex-col w-[40%] h-full ">
           <div className="flex justify-end items-center w-full h-[45%] ">
-              <div className="flex flex-col w-[90%] h-[80%] mr-[2.5%] font-nanumSquareRoundB text-[#49454f] overflow-y-auto">
-                {[1, 2, 3, 4, 5].map((_, index) => (
-                  <button
-                    key={index}
-                    className={`flex flex-row items-center w-full min-h-[25%] ${
-                      activeButtonIndex === index
-                        ? 'bg-[#494949]/[0.11] text-[#357fff]'
-                        : 'hover:text-[#357fff] hover:bg-[#357fff]/[0.11]'
-                    }`}
-                    onClick={() => handleButtonClick(index)}
-                  >
-                    <img src={PaperIcon} alt="계약서로고" className="flex w-[32.88px] h-[32px] ml-[30px] mr-[10px]" />
-                    <span className="flex ml-[25px]">
-                      <p className="flex">보증금: {roomDetail.deposit} / 월세: {roomDetail.monthly_rent}</p>
-                    </span>
-                    <span className="flex ml-[80px]">
-                      <p className="flex ">
-                      {contractList[index]?.createdDate || '날짜 정보를 가져올 수 없습니다.'}
-                      </p>
-                    </span>
-                  </button>
-                ))}
-              </div>
+            <div className="flex flex-col w-[90%] h-[80%] mr-[2.5%] font-nanumSquareRoundB text-[#49454f] overflow-y-auto">
+              {[1, 2, 3, 4, 5].map((_, index) => (
+                <button
+                  key={index}
+                  className={`flex flex-row items-center w-full min-h-[25%] ${
+                    activeButtonIndex === index
+                      ? 'bg-[#494949]/[0.11] text-[#357fff]'
+                      : 'hover:text-[#357fff] hover:bg-[#357fff]/[0.11]'
+                  }`}
+                  onClick={() => handleButtonClick(index)}
+                >
+                  <img src={PaperIcon} alt="계약서로고" className="flex w-[32.88px] h-[32px] ml-[30px] mr-[10px]" />
+                  <span className="flex ml-[25px]">
+                    <p className="flex">
+                      보증금: {roomDetail.deposit} / 월세: {roomDetail.monthly_rent}
+                    </p>
+                  </span>
+                  <span className="flex ml-[80px]">
+                    <p className="flex ">{contractList[index]?.createdDate || '날짜 정보를 가져올 수 없습니다.'}</p>
+                  </span>
+                </button>
+              ))}
             </div>
+          </div>
           <div className="flex justify-end items-start w-full h-[55%] ">
             <div
               className="flex flex-col justify-center items-center w-[90%] h-[90%] font-nanumSquareRoundB rounded-xl bg-[#fbfbfb] mr-[15px]"
@@ -201,25 +205,36 @@ const ContractPage = () => {
           </div>
           <div className="flex w-full h-[15%] justify-center items-start ">
             <div className="flex mr-[4%]">
-              <button
-                className="flex flex-col items-center rounded-[62.2px] mr-[70px] hover:shadow-inner"
-                onClick={handleUpload}
-              >
-                <img src={UploadIcon} alt="업로드" className="flex w-[53px] h-[53px] object-cover" />
-                <span className="mt-2 text-sm font-nanumSquareRoundB">업로드</span>
-              </button>
-              <button 
-                className="flex flex-col items-center rounded-[62.2px] mr-[70px] hover:shadow-inner" 
-                onClick={handleDownload}
-              >
-                <img src={DownloadIcon} alt="다운로드" className="flex w-[53px] h-[53px] object-cover" />
-                <span className="mt-2 text-sm font-nanumSquareRoundB">다운로드</span>
-              </button>
+              <div className="flex flex-col items-center mr-[70px]">
+                <button
+                  className="flex flex-col items-center rounded-[62.2px] hover:shadow-inner"
+                  onClick={handleUpload}
+                >
+                  <img src={UploadIcon} alt="업로드" className="flex w-[53px] h-[53px] object-cover" />
+                  <span className="mt-2 text-sm font-nanumSquareRoundB">업로드</span>
+                </button>
+                {uploadMessage && (
+                  <span className="mt-2 text-sm text-green-600">{uploadMessage}</span>
+                )}
+              </div>
+              <div className="flex flex-col items-center mr-[70px]">
+                <button
+                  className="flex flex-col items-center rounded-[62.2px] hover:shadow-inner"
+                  onClick={handleDownload}
+                >
+                  <img src={DownloadIcon} alt="다운로드" className="flex w-[53px] h-[53px] object-cover" />
+                  <span className="mt-2 text-sm font-nanumSquareRoundB">다운로드</span>
+                </button>
+                {downloadMessage && (
+                  <span className="mt-2 text-sm text-green-600">{downloadMessage}</span>
+                )}
+              </div>
             </div>
           </div>
+          
         </div>
       </div>
-      
+
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"

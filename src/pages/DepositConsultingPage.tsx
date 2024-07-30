@@ -13,7 +13,7 @@ const DepositConsultingPage: React.FC = () => {
   const [sessionId, setSessionId] = useState<string>('');
 
   useEffect(() => {
-    const wsUrl = import.meta.env.VITE_WS_URL;
+    const wsUrl = 'ws://localhost:8001/ws/chat/';
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
