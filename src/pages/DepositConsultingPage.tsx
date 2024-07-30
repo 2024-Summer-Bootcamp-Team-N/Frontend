@@ -4,14 +4,19 @@ import Navbar2 from '../components/Navbar2.tsx';
 import { Link } from 'react-router-dom';
 import AirplaneBtn from '../assets/img/AirplaneBtn.svg';
 import Arrow from '../assets/img/Arrow.svg';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import DOMPurify from 'dompurify';
 
 const DepositConsultingPage: React.FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const sendButtonRef = useRef<HTMLButtonElement>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<{ type: 'user' | 'ai'; content: string }[]>([]);
   const [sessionId, setSessionId] = useState<string>('');
   const pingInterval = useRef<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const wsUrl = 'ws://localhost:8001/ws/chat/';
@@ -37,7 +42,8 @@ const DepositConsultingPage: React.FC = () => {
       }
 
       if (data.message) {
-        setMessages((prevMessages) => [...prevMessages, data.message]);
+        setMessages((prevMessages) => [...prevMessages, { type: 'ai', content: data.message }]);
+        setIsLoading(false);
       }
     };
 
@@ -48,7 +54,7 @@ const DepositConsultingPage: React.FC = () => {
     ws.onclose = (event) => {
       console.log('WebSocket connection closed:', event);
       if (pingInterval.current) {
-        clearInterval(ppingInterval.current);
+        clearInterval(pingInterval.current);
       }
     };
 
@@ -60,12 +66,27 @@ const DepositConsultingPage: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Send roomId after a fixed delay of 3 seconds
+    const timer = setTimeout(() => {
+      const roomId = localStorage.getItem('roomId');
+      if (roomId && textareaRef.current && sendButtonRef.current) {
+        textareaRef.current.value = `room_id = ${roomId}`;
+        sendButtonRef.current.click();
+      }
+    }, 4000); // 3 seconds delay
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
+  }, []); // Run this effect once, on component mount
+
   const handleSendMessage = () => {
     if (textareaRef.current && socket) {
       const message = textareaRef.current.value.trim();
       if (message) {
+        setMessages((prevMessages) => [...prevMessages, { type: 'user', content: message }]);
         socket.send(JSON.stringify({ type: 'message', message: message, session_id: sessionId }));
         textareaRef.current.value = '';
+        setIsLoading(true);
       }
     }
   };
@@ -83,12 +104,52 @@ const DepositConsultingPage: React.FC = () => {
       handleSendMessage();
     }
   };
+
+  const formatMessage = (content: string) => {
+    const sanitizedContent = DOMPurify.sanitize(content);
+    return (
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          h1: ({ node, ...props }) => <h1 className="text-2xl font-bold mb-2" {...props} />,
+          h2: ({ node, ...props }) => <h2 className="text-xl font-bold mb-2" {...props} />,
+          h3: ({ node, ...props }) => <h3 className="text-lg font-bold mb-2" {...props} />,
+          p: ({ node, ...props }) => <p className="" {...props} />,
+          ul: ({ node, ...props }) => <ul className="list-disc pl-5 mb-2" {...props} />,
+          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mb-2" {...props} />,
+          li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+          a: ({ node, ...props }) => <a className="text-blue-500 hover:underline" {...props} />,
+          strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+          em: ({ node, ...props }) => <em className="italic" {...props} />,
+          code: ({ node, inline, ...props }) =>
+            inline ? (
+              <code className="bg-gray-100 rounded px-1" {...props} />
+            ) : (
+              <code className="block bg-gray-100 rounded p-2 mb-2" {...props} />
+            ),
+        }}
+      >
+        {sanitizedContent}
+      </ReactMarkdown>
+    );
+  };
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat container whenever messages change
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages]);
+
   return (
     <div className="flex flex-col w-full h-screen">
       <div className="flex flex-col h-[72px] justify-start">
         <Navbar2 />
       </div>
-      <div className="flex flex-grow bg-[#FEFEFE]">
+      <div className="flex flex-grow bg-[#FEFEFE] overflow-hidden">
         {/* Left Container */}
         <div className="flex flex-col justify-center min-w-[23%] bg-[#FAFAFA] h-full border border-gray p-4">
           <div className="flex flex-col w-full justify-center">
@@ -202,27 +263,54 @@ const DepositConsultingPage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-start w-[77%] ml-[100px] mr-[100px]">
+        <div className="flex flex-col justify-start w-[77%] ml-[100px] mr-[100px] mt-[72px]">
           {/* Chat Container */}
-          <div className="flex flex-col w-full h-[85%] overflow-y-auto flex-grow">
+          <div
+            ref={chatContainerRef}
+            className="flex flex-col w-full h-[88%] overflow-y-auto h-[calc(100%_-_80px)] p-2"
+          >
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex flex-row ${index % 2 === 0 ? 'justify-start' : 'justify-end'} w-full p-4 space-y-4`}
+                className={`flex flex-row ${message.type === 'ai' ? 'justify-start' : 'justify-end'} w-full p-4 space-y-4`}
               >
-                {index % 2 === 0 && <img src={Avatar} alt="Logo" className="flex justify-start p-4" />}
+                {message.type === 'ai' && (
+                  <img src={Avatar} alt="Logo" className="flex justify-start w-[90px] h-[90px] p-4" />
+                )}
                 <div
-                  className={`flex max-w-[40%] py-3 px-4 rounded-2xl ${index % 2 === 0 ? 'bg-[#F5F5F5]' : 'bg-[#357FFF]'}`}
+                  className={`flex max-w-[50%] py-3 px-4 rounded-2xl ${
+                    message.type === 'ai' ? 'bg-[#F5F5F5]' : 'bg-[#357FFF]'
+                  }`}
                 >
-                  <p className={`text-lg font-[NanumSquareR] ${index % 2 === 0 ? 'text-black' : 'text-white'}`}>
-                    {message}
-                  </p>
+                  <div
+                    className={`text-lg font-[NanumSquareR] text-left ${message.type === 'ai' ? 'text-black' : 'text-white'}`}
+                  >
+                    {formatMessage(message.content)}
+                  </div>
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex flex-row justify-start w-full p-4 space-y-4">
+                <img src={Avatar} alt="Logo" className="flex justify-start w-[90px] h-[90px] p-4" />
+                <div className="flex items-center justify-center max-w-[50%] py-3 px-4 rounded-2xl bg-[#F5F5F5]">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
+                    <div
+                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+                      style={{ animationDelay: '0.2s' }}
+                    />
+                    <div
+                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+                      style={{ animationDelay: '0.4s' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           {/* Input Container */}
-          <div className="flex flex-row h-[15%] justify-center items-center p-4 bg-[#FEFEFE] border-t border-gray-300">
+          <div className="flex flex-row h-[12%] justify-center items-center p-4 bg-[#FEFEFE] border-t border-gray-300">
             <div className="flex relative min-w-[50%] max-w-[50%] items-center h-[50px] border border-gray-300 rounded-2xl font-[NanumSquareR]">
               <textarea
                 ref={textareaRef}
