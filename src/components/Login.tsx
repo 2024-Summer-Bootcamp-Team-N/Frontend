@@ -14,6 +14,13 @@ function Login({ onSignupClick, onClose }: LoginProps) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleLoginClick = () => {
+    setIsClicked(!isClicked);
+    handleLogin();
+  };
+
   const handleLogin = async () => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_KEY}/users/login`, { auth_id: id, password });
@@ -110,8 +117,10 @@ function Login({ onSignupClick, onClose }: LoginProps) {
         </div>
         <div className="flex justify-start items-center w-[362px] mx-auto mt-6 gap-4">
           <div
-            className="flex justify-center items-center flex-grow relative overflow-hidden gap-2 p-3 h-[40px] rounded-lg bg-[#00a1e7] border border-[#00a1e7] cursor-pointer hover:bg-[#357fff]"
-            onClick={handleLogin}
+            className={`flex justify-center items-center flex-grow relative overflow-hidden gap-2 p-3 h-[40px] rounded-lg bg-[#00a1e7] border border-[#00a1e7] cursor-pointer ${
+              isClicked ? 'bg-[#357fff]' : 'hover:bg-[#357fff]' 
+            }`}
+            onClick={handleLoginClick}
           >
             <p className="flex-grow-0 flex-shrink-0 text-base font-regular text-left text-neutral-100">로그인</p>
           </div>

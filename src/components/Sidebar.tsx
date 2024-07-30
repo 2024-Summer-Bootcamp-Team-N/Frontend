@@ -25,6 +25,7 @@ const Sidebar: React.FC = () => {
   const { setNewRoomInfoCounts } = useMap();
   const { isMonthlyRentActive, isDepositRentActive } = useRentContext(); // Access RentContext
   const navigate = useNavigate();
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchInfoList = async () => {
@@ -81,11 +82,13 @@ const Sidebar: React.FC = () => {
   const handleOpenSidebar2 = (info: Info) => {
     setSelectedInfo(info);
     setIsSidebar2Open(true);
+    setSelectedItemId(info.id);
   };
 
   const handleCloseSidebar2 = () => {
     setIsSidebar2Open(false);
     setSelectedInfo(null);
+    setSelectedItemId(null);
   };
 
   const handleConsultingClick = () => {
@@ -125,10 +128,12 @@ const Sidebar: React.FC = () => {
 
     return infoList.map((info) => (
       <div
-        key={info.id}
-        className="flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-auto py-4 px-2 cursor-pointer hover:bg-gray-100"
-        onClick={() => handleOpenSidebar2(info)}
-      >
+              key={info.id}
+              className={`flex flex-row justify-center items-center border-b-[1.5px] border-[#EBEBEB] w-full h-auto py-4 px-2 cursor-pointer ${
+                selectedItemId === info.id ? 'bg-gray-100 ' : 'hover:bg-gray-100'
+              }`}
+              onClick={() => handleOpenSidebar2(info)}
+            >
         <img
           src={HouseImage}
           alt="매물 사진"
@@ -147,7 +152,10 @@ const Sidebar: React.FC = () => {
           </p>
           <div className="flex justify-start mt-4">
             <button
-              onClick={handleConsultingClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleConsultingClick();
+              }}
               className="flex items-center w-[76px] h-[27px] justify-center rounded-[50px] bg-[#efefef] hover:bg-gray-200"
               style={{
                 boxShadow: '0px 2px 5px -1px rgba(50,50,93,0.25), 0px 1px 3px -1px rgba(0,0,0,0.3)',

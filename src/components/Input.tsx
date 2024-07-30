@@ -266,7 +266,7 @@ const Input = ({ onNext }) => {
 
         <div className="flex justify-start items-center w-[362px] mx-auto mt-6 gap-4">
           <div
-            className="flex justify-center items-center flex-grow relative overflow-hidden gap-2 p-3 h-[40px] rounded-lg bg-[#00a1e7] border border-[#00a1e7] cursor-pointer"
+            className="flex justify-center items-center flex-grow relative overflow-hidden gap-2 p-3 h-[40px] rounded-lg bg-[#00a1e7] border border-[#00a1e7] cursor-pointer hover:bg-[#357fff]"
             onClick={handleNext}
           >
             <p className="flex-grow-0 flex-shrink-0 text-base font-regular text-left text-neutral-100">다음</p>
