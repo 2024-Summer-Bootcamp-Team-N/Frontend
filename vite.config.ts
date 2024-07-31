@@ -9,20 +9,19 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/ws': {
-        target: 'wss://daphne:8001',
+        target: 'http://daphne:8001',
         ws: true,
         changeOrigin: true,
         secure: false,
       },
     },
-    hmr: process.env.NODE_ENV === 'development'
-      ? {
-          host: 'localhost',
-          port: 5173,
-        }
-      : false, // 배포 환경에서는 HMR을 비활성화
+    hmr: {
+      host: 'houseadvisor.site',
+      protocol: 'wss',
+      clientPort: 443,
+    },
   },
   optimizeDeps: {
-    include: ['html2canvas']
+    include: ['html2canvas'],
   },
 });
