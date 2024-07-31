@@ -7,6 +7,14 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    proxy: {
+      '/ws': {
+        target: 'ws://daphne:8001',
+        ws: true,
+        changeOrigin: true,
+        secure: false,
+      },
+    },
     hmr: process.env.NODE_ENV === 'development'
       ? {
           host: 'localhost',
@@ -18,4 +26,3 @@ export default defineConfig({
     include: ['html2canvas']
   },
 });
-
