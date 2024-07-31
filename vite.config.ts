@@ -9,7 +9,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/ws': {
-        target: 'ws://daphne:8001',
+        target: 'wss://daphne:8001',
         ws: true,
         changeOrigin: true,
         secure: false,
