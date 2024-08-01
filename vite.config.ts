@@ -14,11 +14,6 @@ export default defineConfig({
         secure: false,
       },
     },
-    hmr: {
-      host: 'houseadvisor.site',
-      protocol: 'wss',
-      clientPort: 443,
-    }
   },
   optimizeDeps: {
     include: ['html2canvas'],
