@@ -20,7 +20,7 @@ export default defineConfig({
         secure: false,
       },
     },
-    hmr: process.env.NODE_ENV === 'production' ? {
+    hmr: process.env.NODE_ENV === 'production3' ? {
       host: 'houseadvisor.site',
       protocol: 'wss',
       clientPort: 443,
