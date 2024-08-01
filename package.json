@@ -9,7 +9,6 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "dev:ec2": "NODE_ENV=production3 vite --host"
   },
   "dependencies": {
     "aos": "^2.3.4",
